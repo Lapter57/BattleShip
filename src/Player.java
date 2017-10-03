@@ -12,9 +12,10 @@ public abstract class Player {
         FRIGATE(1), DESTROYER(2), SUBMARINE(3), CARRIER(4);
         private int id;
 
-        TypeShip(int id){
+        /*TypeShip(int id){
             this.id = id;
-        }
+        }*/
+         public void setId(int id){this.id = id;}
 
         /*public static String getClassName() {
             return TypeShip.class.getName();
