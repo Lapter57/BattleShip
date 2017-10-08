@@ -6,21 +6,21 @@ public abstract class Player {
     protected Field enemyField;
     protected Field field;
     protected Ship foundShip = null;
-    protected String name = "NO_NAME";
+    protected String name;
     ArrayList<Byte> ships = new ArrayList<>(4);
-    protected enum TypeShip{
+    /*protected enum TypeShip{
         FRIGATE(1), DESTROYER(2), SUBMARINE(3), CARRIER(4);
         private int id;
 
-        /*TypeShip(int id){
+        TypeShip(int id){
             this.id = id;
-        }*/
+        }
          public void setId(int id){this.id = id;}
 
-        /*public static String getClassName() {
+        *//*public static String getClassName() {
             return TypeShip.class.getName();
-        }*/
-    }
+        }*//*
+    }*/
 
     public Player(String name){
         this.name = name;
@@ -135,8 +135,7 @@ public abstract class Player {
 
     // Method that implements a random arrangement of ships on the playing field
     public void setPlaceShipRand() {
-        byte row, col, way, shift;
-        char direction;
+        byte row, col, shift, way = 0, direction = 0;
         Coord coor1 = new Coord(), coor2 = new Coord();
         boolean OK = false;
         Ship ship;
@@ -148,7 +147,7 @@ public abstract class Player {
                     row = (byte) random.nextInt(10);
                     col = (byte) random.nextInt(10);
                     if (i > 1) {
-                        direction = (random.nextInt(2) == 0) ? (char)1 : (char)-1;
+                        direction = (random.nextInt(2) == 0) ? (byte)1 : (byte)-1;
                         way = (random.nextInt(2) == 0) ? (byte)1 : (byte)-1;
                         shift = (direction == 1) ?  col : row;
                         if (!checkC((byte)(shift + way * (i - 1)))) way *= -1;

@@ -1,5 +1,9 @@
 import coord.Coord;
+
+import java.util.Scanner;
+
 public class HumanPlayer extends Player {
+    public HumanPlayer(){super("NO_NAME");}
     public HumanPlayer(String name){
         super(name);
     }
@@ -16,12 +20,12 @@ public class HumanPlayer extends Player {
        /* system("CLS");
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         COORD coordConsole;*/
-        Coord bow, stern;
+        Coord bow, stern = new Coord();
         Ship ship;
         String bowInp = "Enter the coordinates of the BOW of the ";
         String sternInp = "Enter the coordinates of the STERN of the ";
-        String typeShip;
-        TypeShip type ;
+        String typeShip = new String();
+        //TypeShip type;
 
         for(int i = 4; i > 0; i--)
         for (int j = 1; j <= 5 - i; j++) {
@@ -29,29 +33,30 @@ public class HumanPlayer extends Player {
             SetConsoleCursorPosition(hConsole, coordConsole);
             SetConsoleTextAttribute(hConsole, 11);*/
             System.out.print(name); //cout << name_;
-            game.printShipLocation(46, 1, this);
+            game.printShipLocation((byte)46,(byte) 1, this);// числа не нужны
             /*coordConsole = { 0, 13 };
             SetConsoleCursorPosition(hConsole, coordConsole);*/
             System.out.print(bowInp);//cout << bowInp;
-            type.setId(i); //решить проблему в enum!!!!!!!!!!!
-            switch (type)
+
+           // type.setId(i); //решить проблему в enum!!!!!!!!!!!
+            switch (i)
             {
-                case CARRIER: {
+                case 4: {
                     System.out.print("CARRIER(size = 4): ");//cout << "CARRIER(size = 4): ";
                     typeShip = "CARRIER(size = 4): ";
                     break;
                 }
-                case SUBMARINE: {
+                case 3: {
                     System.out.print("SUBMARINE(size = 3): ");//cout << "SUBMARINE(size = 3): ";
                     typeShip = "SUBMARINE(size = 3): ";
                     break;
                 }
-                case DESTROYER: {
+                case 2: {
                     System.out.print("DESTROYER(size = 2): ");//cout << "DESTROYER(size = 2): ";
                     typeShip = "DESTROYER(size = 2): ";
                     break;
                 }
-                case FRIGATE: {
+                case 1: {
                     System.out.print("FRIGATE(size = 1): ");//cout << "FRIGATE(size = 1): ";
                     typeShip = "FRIGATE(size = 1): ";
                 }
@@ -104,7 +109,7 @@ public class HumanPlayer extends Player {
             }
             //system("CLS");
         } // for (unsigned char j = 1; j <= 5 - i; j++)
-        game.printShipLocation(46, 1, this);
+        game.printShipLocation((byte)46, (byte)1, this); //числа не нужны
         //system("CLS");
         field.initEmptyTiles();
     }
@@ -117,7 +122,10 @@ public class HumanPlayer extends Player {
         boolean hit = true;
 
         do {
-            (id == 0) ? game.outputFields(this, rival) : game.outputFields(rival, this);
+            if(id == 0)
+                game.outputFields(this, rival);
+            else
+                game.outputFields(rival, this);
 
             /*if (id == 0) {
                 coordConsole = { 28, 13 };
@@ -153,19 +161,19 @@ public class HumanPlayer extends Player {
                         System.out.println("*** " + name + " destroed ");//cout <<"*** " << name_ << " destroed ";
 
                         switch (foundShip.getSizeShip()) { // решить проблему с enum, как вариант отказать от него
-                            case CARRIER:
+                            case 4:
                                 System.out.println("CARRIER ");
                                 //cout << "CARRIER ";
                                 break;
-                            case SUBMARINE:
+                            case 3:
                                 System.out.println("SUBMARINE ");
                                 //cout << "SUBMARINE ";
                                 break;
-                            case DESTROYER:
+                            case 2:
                                 System.out.println("DESTROYER ");
                                 //cout << "DESTROYER ";
                                 break;
-                            case FRIGATE:
+                            case 1:
                                 System.out.println("FRIGATE ");
                                 //cout << "FRIGATE ";
                         }
@@ -189,16 +197,26 @@ public class HumanPlayer extends Player {
     // Overloaded assignment operator to change the player's name
     //void operator=(final String name) { name.this = name; }
 
+
+    private static void swap(byte a, byte b){
+        byte temp = a;
+        a = b;
+        b = temp;
+    }
     // Method for getting coordinates for a shot
     public Coord getCoord(){
-        Coord coord;
-        // Разлобраться с вводом
-        cin >> coord.first >> coord.second;
+        Coord coord = new Coord();
+        Scanner scanner = new Scanner(System.in);
+        coord.col = scanner.nextByte();
+        coord.row = scanner.nextByte();
 
         while (!(checkC(coord.col) && checkC(coord.row) && checkC(coord.col, coord.row) )) {
-            System.out.println("Coordinates are incorrect. Please enter them again: ");//cout << "Coordinates are incorrect. Please enter them again: ";
-            cin >> coord.first >> coord.second;
+            System.out.println("Coordinates are incorrect. Please enter them again: ");
+            coord.col = scanner.nextByte();
+            coord.row = scanner.nextByte();
         }
+
+        //Unicode!!!!!!!!!!
 
         if (coord.col >= 'A' && coord.col <= 'J') swap(coord.col, coord.row);
         if (coord.col >= 'a' && coord.col <= 'j') {

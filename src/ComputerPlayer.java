@@ -12,31 +12,35 @@ public class ComputerPlayer extends Player {
     private ArrayDeque<Coord> queue = new ArrayDeque<>(); // можно ли поменять?
     private Byte sizeShip = 4;
     private boolean firstHit = true;
+
     Coord firstDestTile;
 
     // Constructor and destructor
+    public ComputerPlayer(String name){
+        super(name);
+    }
     public ComputerPlayer(){
         super("Computer");
     }
 
     // Method that generates coordinates for a shot based on a diagonal strategy
     public void updateCoord(final byte search){
-        byte minD, maxD, step;
+        byte minD = 0, maxD = 0, step = 0;
 
         switch (search){ // Enum problem
-            case CARRIER: {
+            case 4: {
                 minD = 3;
                 maxD = 15;
                 step = 4;
                 break;
             }
-            case SUBMARINE: {
+            case 3: {
                 minD = 1;
                 maxD = 17;
                 step = 4;
                 break;
             }
-            case FRIGATE: {
+            case 1: {
                 minD = 0;
                 maxD = 18;
                 step = 2;
@@ -64,7 +68,7 @@ public class ComputerPlayer extends Player {
     }
 
     // Method for implementing the player's turn
-    void yourTurn(Game game, Player rival, byte id){
+    public void yourTurn(Game game, Player rival, byte id){
         /*HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         COORD coordConsole;*/
         Coord coord = new Coord();
@@ -74,7 +78,10 @@ public class ComputerPlayer extends Player {
         boolean hit = true;
 
         do {
-            (id == 0) ? game.outputFields(this, rival) : game.outputFields(rival, this);
+            if(id == 0)
+                game.outputFields(this, rival);
+            else
+                game.outputFields(rival, this);
 
            /* if (id == 0) {
                 coordConsole = { 28, 13 };
@@ -124,19 +131,19 @@ public class ComputerPlayer extends Player {
                     System.out.print("***" + name + " destroyed ");
                     //cout  <<"***"<< name_ << " destroyed ";
                     switch (foundShip.getSizeShip()) { // решить проблему с enum, как вариант отказать от него
-                        case CARRIER:
+                        case 4:
                             System.out.println("CARRIER ");
                             //cout << "CARRIER ";
                             break;
-                        case SUBMARINE:
+                        case 3:
                             System.out.println("SUBMARINE ");
                             //cout << "SUBMARINE ";
                             break;
-                        case DESTROYER:
+                        case 2:
                             System.out.println("DESTROYER ");
                             //cout << "DESTROYER ";
                             break;
-                        case FRIGATE:
+                        case 1:
                             System.out.println("FRIGATE ");
                             //cout << "FRIGATE ";
                     }
