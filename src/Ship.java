@@ -10,39 +10,39 @@ public class Ship {
     public Ship(){}
     public Ship(Byte size, Coord coord1, Coord coord2, Field field){
         sizeShip = size;
-        if (coord1.col == coord2.col) {
+        if (coord1.row == coord2.row) {
             byte colMin, colMax;
-            if (coord1.row < coord2.row) {
-                colMin = coord1.row;
-                colMax = coord2.row;
+            if (coord1.col < coord2.col) {
+                colMin = coord1.col;
+                colMax = coord2.col;
             }
             else {
-                colMin = coord2.row;
-                colMax = coord1.row;
+                colMin = coord2.col;
+                colMax = coord1.col;
             }
             Tile tile;
             for (byte i = colMin; i <= colMax; i++) {
-                tile = new Tile(coord1.col, i);
+                tile = new Tile(coord1.row, i);
                 deck.add(tile);
             }
-            fillHalo(coord1.col, (byte)(colMin - 1), size, 'h', field);
+            fillHalo(coord1.row, (byte)(colMin - 1), size, 'h', field);
         }
         else {
             byte rowMin, rowMax;
-            if (coord1.col < coord2.col) {
-                rowMin = coord1.col;
-                rowMax = coord2.col;
+            if (coord1.row < coord2.row) {
+                rowMin = coord1.row;
+                rowMax = coord2.row;
             }
             else {
-                rowMin = coord2.col;
-                rowMax = coord1.col;
+                rowMin = coord2.row;
+                rowMax = coord1.row;
             }
             Tile tile;
             for (byte i = rowMin; i <= rowMax; i++) {
-                tile = new Tile(i, coord1.row);
+                tile = new Tile(i, coord1.col);
                 deck.add(tile);
             }
-            fillHalo((byte)(rowMin - 1), coord1.row, size, 'v', field);
+            fillHalo((byte)(rowMin - 1), coord1.col, size, 'v', field);
         }
     }
 
@@ -50,9 +50,9 @@ public class Ship {
 
     public Ship(Byte size, Coord coord, Field field){
         sizeShip = size;
-        Tile tile = new Tile(coord.col, coord.row);
+        Tile tile = new Tile(coord.row, coord.col);
         deck.add(tile);
-        fillHalo((byte)(coord.col - 1), coord.row, size, 'v', field);
+        fillHalo((byte)(coord.row - 1), coord.col, size, 'v', field);
     }
 
 //-------------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ public class Ship {
 
     // Communication with the game field
     public void linkTilesWithDeck(Field field) {
-        for ( Tile el : deck) {
+        for (Tile el : deck) {
             el.linkShip(this);
             field.addTile(el);
         }

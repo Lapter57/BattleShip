@@ -4,15 +4,13 @@ import java.util.Scanner;
 
 public class HumanPlayer extends Player {
     public HumanPlayer(){super("NO_NAME");}
-    public HumanPlayer(String name){
-        super(name);
-    }
+    public HumanPlayer(String name){ super(name); }
     // Checking that the distance between the tiles is equal to the size of the ship
     public boolean checkSize(final byte size, final Coord coord1, final Coord coord2){
-        if (coord1.col - coord2.col != 0)
-            return (size == (coord1.col - coord2.col + 1) || size ==((coord2.col - coord1.col + 1)));
+        if (coord1.row - coord2.row != 0)
+            return (size == (coord1.row - coord2.row + 1) || size ==((coord2.row - coord1.row + 1)));
         else
-            return (size == (coord1.row - coord2.row + 1) || size == ((coord2.row - coord1.row + 1)));
+            return (size == (coord1.col - coord2.col + 1) || size == ((coord2.col - coord1.col + 1)));
     }
 
     // Manual placement of ships on the playing field
@@ -69,8 +67,8 @@ public class HumanPlayer extends Player {
                 stern = getCoord();
             }
             if (i > 1) {
-                while (((bow.col != stern.col) && (bow.row != stern.row)) || !checkSize((byte)i, bow, stern) || !checkCollision(bow, stern)) {
-                    if ((bow.col == stern.col) || (bow.row == stern.row))
+                while (((bow.row != stern.row) && (bow.col != stern.col)) || !checkSize((byte)i, bow, stern) || !checkCollision(bow, stern)) {
+                    if ((bow.row == stern.row) || (bow.col == stern.col))
                         if (checkSize((byte)i, bow, stern))
                             System.out.println("When placing ships, they can not touch each other with sides and corners. Please enter coordinates again: ");
                     //cout << "When placing ships, they can not touch each other with sides and corners. Please enter coordinates again: " << endl;
@@ -143,15 +141,15 @@ public class HumanPlayer extends Player {
             //cout << "Now is shoot of " << this->getName() <<": ";
             coord = getCoord();
 
-            if (enemyField.grid[coord.col][coord.row].getState() == ' ') {
-                if (enemyField.grid[coord.col][coord.row].getLinkShip() == null) {
-                    enemyField.grid[coord.col][coord.row].setState('*');
+            if (enemyField.grid[coord.row][coord.col].getState() == ' ') {
+                if (enemyField.grid[coord.row][coord.col].getLinkShip() == null) {
+                    enemyField.grid[coord.row][coord.col].setState('*');
                     hit = false;
                 }
 			else {
-                    enemyField.grid[coord.col][coord.row].setState('x');
+                    enemyField.grid[coord.row][coord.col].setState('x');
                     if (foundShip == null)
-                        foundShip = enemyField.grid[coord.col][coord.row].getLinkShip();
+                        foundShip = enemyField.grid[coord.row][coord.col].getLinkShip();
                     foundShip.setHit();
 
                     if (!foundShip.stateОk()) {
@@ -203,25 +201,25 @@ public class HumanPlayer extends Player {
         a = b;
         b = temp;
     }
-    // Method for getting coordinates for a shot
+    // Method for getting coordinates for a shot!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public Coord getCoord(){
         Coord coord = new Coord();
         Scanner scanner = new Scanner(System.in);
-        coord.col = scanner.nextByte();
         coord.row = scanner.nextByte();
+        coord.col = scanner.nextByte();
 
-        while (!(checkC(coord.col) && checkC(coord.row) && checkC(coord.col, coord.row) )) {
+        while (!(checkC(coord.row) && checkC(coord.col) && checkC(coord.row, coord.col) )) {
             System.out.println("Coordinates are incorrect. Please enter them again: ");
-            coord.col = scanner.nextByte();
             coord.row = scanner.nextByte();
+            coord.col = scanner.nextByte();
         }
 
         //Unicode!!!!!!!!!!
 
-        if (coord.col >= 'A' && coord.col <= 'J') swap(coord.col, coord.row);
-        if (coord.col >= 'a' && coord.col <= 'j') {
-            coord.col -= 32;
-            swap(coord.col, coord.row);
+        if (coord.row >= 'A' && coord.row <= 'J') swap(coord.row, coord.col);
+        if (coord.row >= 'a' && coord.row <= 'j') {
+            coord.row -= 32;
+            swap(coord.row, coord.col);
         }
         if(coord.row >= 'a' && coord.row <= 'j') coord.row -= 32;
 

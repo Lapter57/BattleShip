@@ -103,25 +103,25 @@ public class ComputerPlayer extends Player {
             else
                 if(coordForToShell.isEmpty()) coord = getCoord(); else coord = coordForToShell.get(0);
 
-            if (enemyField.grid[coord.col][coord.row].getLinkShip() == null) {
-                enemyField.grid[coord.col][coord.row].setState('*');
+            if (enemyField.grid[coord.row][coord.col].getLinkShip() == null) {
+                enemyField.grid[coord.row][coord.col].setState('*');
                 if(!coordForToShell.isEmpty())
                     coordForToShell.remove(coordForToShell.get(0));
                 hit = false;
                 if (queue.isEmpty() && !check) {
                     offset *= (-3);
-                    if (coord.col == firstDestTile.col)
-                        firstDestTile.row += offset;
-                    else
+                    if (coord.row == firstDestTile.row)
                         firstDestTile.col += offset;
+                    else
+                        firstDestTile.row += offset;
                     queue.addLast(firstDestTile); // enqueue!!!!!!
                 } // if (queue_.empty() && !check)
             } // if (enemyField_->grid_[coord.first][coord.second]->getLinkShip() == nullptr)
 		else {
-                enemyField.grid[coord.col][coord.row].setState('x');
+                enemyField.grid[coord.row][coord.col].setState('x');
 
                 if(foundShip == null)
-                    foundShip = enemyField.grid[coord.col][coord.row].getLinkShip();
+                    foundShip = enemyField.grid[coord.row][coord.col].getLinkShip();
                 foundShip.setHit();
 
                 if (!foundShip.stateОk()) {
@@ -159,18 +159,18 @@ public class ComputerPlayer extends Player {
                 } // if (!foundShip_->stateОk())
                 else {
                     if (firstHit) {
-                        tempcrd.row = coord.row;
+                        tempcrd.col = coord.col;
                         for (int i = 0; i < 2; i++) {
-                            tempcrd.col = (byte)(coord.col + offset);
-                            if (checkC(tempcrd.col) && enemyField.grid[tempcrd.col][tempcrd.row].getState() == ' ')
+                            tempcrd.row = (byte)(coord.row + offset);
+                            if (checkC(tempcrd.row) && enemyField.grid[tempcrd.row][tempcrd.col].getState() == ' ')
                             coordForToShell.add(tempcrd);
                             offset *= -1;
                         } // for (int i = 0; i < 2; i++)
 
-                        tempcrd.col = coord.col;
+                        tempcrd.row = coord.row;
                         for (int i = 0; i < 2; i++) {
-                            tempcrd.row = (byte)(coord.row + offset);
-                            if (checkC(tempcrd.row) && enemyField.grid[tempcrd.col][tempcrd.row].getState() == ' ')
+                            tempcrd.col = (byte)(coord.col + offset);
+                            if (checkC(tempcrd.col) && enemyField.grid[tempcrd.row][tempcrd.col].getState() == ' ')
                             coordForToShell.add(tempcrd);
                             offset *= -1;
                         } // for (int i = 0; i < 2; i++)
@@ -185,39 +185,39 @@ public class ComputerPlayer extends Player {
                             coordForToShell.clear();
 
                         if (queue.isEmpty()){
-                            if (coord.col == firstDestTile.col) {
-                                offset = (coord.row < firstDestTile.row) ?  (byte)-1 :(byte) 1;
+                            if (coord.row == firstDestTile.row) {
+                                offset = (coord.col < firstDestTile.col) ?  (byte)-1 :(byte) 1;
                                 if (check) {
-                                    coord.row += offset;
-                                    if (checkC(coord.row) && enemyField.grid[coord.col][coord.row].getState() == ' ')
+                                    coord.col += offset;
+                                    if (checkC(coord.col) && enemyField.grid[coord.row][coord.col].getState() == ' ')
                                     queue.addLast(coord);//enqueue
                                     offset *= -1;
                                     tempcrd = firstDestTile;
-                                    tempcrd.row += offset;
-                                    if (checkC(tempcrd.row) && enemyField.grid[tempcrd.col][tempcrd.row].getState() == ' ')
+                                    tempcrd.col += offset;
+                                    if (checkC(tempcrd.col) && enemyField.grid[tempcrd.row][tempcrd.col].getState() == ' ')
                                     queue.addLast(tempcrd);//enqueue
                                     check = false;
                                 }
                                 else {
-                                    coord.row += offset;
+                                    coord.col += offset;
                                     queue.addLast(coord);//enqueue
                                 }
                             }
                             else {
-                                offset = (coord.col < firstDestTile.col) ? (byte) -1 : (byte)1;
+                                offset = (coord.row < firstDestTile.row) ? (byte) -1 : (byte)1;
                                 if (check) {
-                                    coord.col += offset;
-                                    if (checkC(coord.col) && enemyField.grid[coord.col][coord.row].getState() == ' ')
+                                    coord.row += offset;
+                                    if (checkC(coord.row) && enemyField.grid[coord.row][coord.col].getState() == ' ')
                                     queue.addLast(coord);
                                     offset *= -1;
                                     tempcrd = firstDestTile;
-                                    tempcrd.col += offset;
-                                    if (checkC(tempcrd.col) && enemyField.grid[tempcrd.col][tempcrd.row].getState() == ' ')
+                                    tempcrd.row += offset;
+                                    if (checkC(tempcrd.row) && enemyField.grid[tempcrd.row][tempcrd.col].getState() == ' ')
                                     queue.addLast(tempcrd);
                                     check = false;
                                 }
                                 else {
-                                    coord.col += offset;
+                                    coord.row += offset;
                                     queue.addLast(coord);
                                 }
                             } // if (coord.first == firstDestTile_.first) ELSE
@@ -230,7 +230,7 @@ public class ComputerPlayer extends Player {
 
     // Method for getting coordinates for a shot
     public Coord getCoord(){
-        while (coordForStep.isEmpty() || enemyField.grid[coordForStep.get(0).col][coordForStep.get(0).row].getState() != ' ') {
+        while (coordForStep.isEmpty() || enemyField.grid[coordForStep.get(0).row][coordForStep.get(0).col].getState() != ' ') {
             if (coordForStep.isEmpty()) {
                 updateCoord(sizeShip);
                 sizeShip = (sizeShip == 4) ?  (byte)3 : (byte) 1;
