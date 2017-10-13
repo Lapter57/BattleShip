@@ -16,8 +16,8 @@ public class Game {
 
             c1.setPlaceShipRand();
             c2.setPlaceShipRand();
-            c2.setEnemyField(c1.getPointField());
-            c1.setEnemyField(c2.getPointField());
+            c2.setEnemyField(c1.getRefField());
+            c1.setEnemyField(c2.getRefField());
 
             Player curP;
             byte id = 0;
@@ -120,8 +120,8 @@ public class Game {
 
         queue.addLast(p1);
         queue.addLast(p2);
-        p2.setEnemyField(p1.getPointField());
-        p1.setEnemyField(p2.getPointField());
+        p2.setEnemyField(p1.getRefField());
+        p1.setEnemyField(p2.getRefField());
 
         Player curP;
         byte id = 0;
@@ -189,8 +189,8 @@ public class Game {
         queue.addLast(p1);
         queue.addLast(c1);
         c1.setPlaceShipRand();
-        c1.setEnemyField(p1.getPointField());
-        p1.setEnemyField(c1.getPointField());
+        c1.setEnemyField(p1.getRefField());
+        p1.setEnemyField(c1.getRefField());
 
         Player curP;
         byte id = 0;
