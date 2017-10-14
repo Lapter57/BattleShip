@@ -1,3 +1,5 @@
+package Graphics;
+
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -18,7 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
+import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -37,32 +39,47 @@ public class Main extends Application {
       catch (IOException e){
           System.out.println("Couldn't load image");
       }
-      Title title = new Title("B A T T L E S H I P");
-      title.setTranslateX(410);
-      title.setTranslateY(100);
+        Title title = new Title("B A T T L E S H I P");
+        title.setTranslateX(410);
+        title.setTranslateY(100);
         MenuItem newGame = new MenuItem("NEW GAME");
         MenuItem options = new MenuItem("STATISTICS");
         MenuItem exitGame = new MenuItem("EXIT");
         SubMenu mainMenu = new SubMenu(
                 newGame,options,exitGame
         );
-        MenuItem NG1 = new MenuItem("HUMAN VS COMPUTER");
-        MenuItem NG2 = new MenuItem("HUMAN VS HUMAN");
-        MenuItem NG3 = new MenuItem("BACK");
+        MenuItem hvC = new MenuItem("HUMAN VS COMPUTER");
+        MenuItem hvH = new MenuItem("HUMAN VS HUMAN");
+        MenuItem bck = new MenuItem("BACK");
         SubMenu newGameMenu = new SubMenu(
-                NG1,NG2,NG3
+                hvC,hvH,bck
         );
         MenuBox menuBox = new MenuBox(mainMenu);
 
         newGame.setOnMouseClicked(event->menuBox.setSubMenu(newGameMenu));
         exitGame.setOnMouseClicked(event-> System.exit(0));
-        NG3.setOnMouseClicked(event-> menuBox.setSubMenu(mainMenu));
-        root.getChildren().addAll(title, menuBox);
+        bck.setOnMouseClicked(event-> menuBox.setSubMenu(mainMenu));
+       /* hvC.setOnMouseClicked(event -> {
+            SubMenu gameHvC = new SubMenu();
+            title.setVisible(false);
+            menuBox.setSubMenu(gameHvC);
+            Game game = new Game();
+            game.humanVscomputer();
+        });*/
+        hvH.setOnMouseClicked(event -> {
+           /* SubMenu gameHvH = new SubMenu();
+            title.setVisible(false);
+            menuBox.setSubMenu(gameHvH);*/
+            /*Game game = new Game();
+            game.humanVshuman();*/
+        });
+        root.getChildren().addAll(menuBox, title);
 
-          Scene scene = new Scene(root,1280,720);
-          
+        Scene scene = new Scene(root);
+        menuBox.setVisible(true);
+        title.setVisible(true);
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.SPACE) {
+            if (event.getCode() == KeyCode.ESCAPE) {
                 FadeTransition ft1 = new FadeTransition(Duration.seconds(1),menuBox);
                 FadeTransition ft2 = new FadeTransition(Duration.seconds(1),title);
                 if (!menuBox.isVisible()) {
@@ -80,7 +97,9 @@ public class Main extends Application {
                     ft1.setToValue(0);
                     ft2.setFromValue(1);
                     ft2.setToValue(0);
-                    ft1.setOnFinished(evt -> menuBox.setVisible(false));
+                    ft1.setOnFinished(evt ->
+                        menuBox.setVisible(false)
+                    );
                     ft2.setOnFinished(evt -> title.setVisible(false));
                     ft2.play();
                     ft1.play();
@@ -88,9 +107,11 @@ public class Main extends Application {
                 }
             }
         });
-          primaryStage.setTitle("BattleShip");
-          primaryStage.setScene(scene);
-          primaryStage.show();
+        primaryStage.setTitle("BattleShip");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.sizeToScene();
+        primaryStage.show();
   }
 
 
@@ -112,7 +133,6 @@ public class Main extends Application {
 
             setAlignment(Pos.CENTER);
             getChildren().addAll(bg,text);
-            //FillTransition st = new FillTransition(Duration.seconds(0.5),bg);
             setOnMouseEntered(event -> {
                 bg.setFill(gradient);
                 text.setFill(Color.WHITE);
@@ -135,34 +155,6 @@ public class Main extends Application {
         }
     }
 
-    private static class MenuBox extends Pane{
-        static SubMenu subMenu;
-        public MenuBox(SubMenu subMenu){
-            MenuBox.subMenu = subMenu;
-
-            setVisible(false);
-            Rectangle bg = new Rectangle(1280,720,Color.LIGHTBLUE);
-            bg.setOpacity(0.3);
-            getChildren().addAll(bg, subMenu);
-        }
-        public void setSubMenu(SubMenu subMenu){
-            getChildren().remove(MenuBox.subMenu);
-            MenuBox.subMenu = subMenu;
-            getChildren().add(MenuBox.subMenu);
-        }
-    }
-
-    private static class SubMenu extends VBox{
-        public SubMenu(MenuItem...items){
-            setSpacing(15);
-            setTranslateY(250);
-            setTranslateX(420);
-            for(MenuItem item : items){
-                getChildren().addAll(item);
-            }
-        }
-    }
-
     private static class Title extends StackPane{
         public Title(String name){
             setVisible(false);
@@ -178,6 +170,37 @@ public class Main extends Application {
             getChildren().addAll(bg,text);
         }
     }
+
+    private static class MenuBox extends Pane{
+        static SubMenu subMenu;
+        public MenuBox(SubMenu subMenu){
+            MenuBox.subMenu = subMenu;
+            setVisible(false);
+            Rectangle bg = new Rectangle(1280,720,Color.LIGHTBLUE);
+            bg.setOpacity(0.3);
+            getChildren().addAll(bg, subMenu);
+        }
+        public void setSubMenu(SubMenu subMenu){
+            getChildren().remove(MenuBox.subMenu);
+            MenuBox.subMenu = subMenu;
+            getChildren().add(MenuBox.subMenu);
+        }
+
+    }
+
+    private static class SubMenu extends VBox{
+        public SubMenu(MenuItem...items){
+            setSpacing(15);
+            setTranslateY(250);
+            setTranslateX(420);
+            for(MenuItem item : items){
+                getChildren().addAll(item);
+            }
+
+        }
+    }
+
+
 }
 
 

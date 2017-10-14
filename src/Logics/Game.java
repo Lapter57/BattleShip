@@ -1,4 +1,4 @@
-import java.util.ArrayDeque;
+/*import java.util.ArrayDeque;
 import java.util.Scanner;
 
 public class Game {
@@ -46,8 +46,8 @@ public class Game {
         byte n;
         Scanner scanner = new Scanner(System.in);
 
-        /*COORD coordConsole = { 40, 0 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+        *//*COORD coordConsole = { 40, 0 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         String inp = "Player_1! Do you want to enter your name? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
@@ -59,15 +59,15 @@ public class Game {
         String name1;
         HumanPlayer p1 = new HumanPlayer("Player_1");
         if (n == 1) {
-            /*coordConsole = { 40, 1 };
-            SetConsoleCursorPosition(hConsole_, coordConsole);*/
+            *//*coordConsole = { 40, 1 };
+            SetConsoleCursorPosition(hConsole_, coordConsole);*//*
             System.out.println("Enter your name: ");
             name1 = scanner.nextLine();
             p1.name = name1;
         }
 
-        /*coordConsole = { 40, (n == 1) ? 2 : 1 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+        *//*coordConsole = { 40, (n == 1) ? 2 : 1 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         inp = "Do you want to put the ships yourself? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
@@ -82,8 +82,8 @@ public class Game {
             p1.setPlaceShipRand();
        // system("CLS");
 
-        /*coordConsole = { 40, 0 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+        *//*coordConsole = { 40, 0 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         inp = "Player_2! Do you want to enter your name? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
@@ -97,15 +97,15 @@ public class Game {
 
 
         if (n == 1) {
-           /* coordConsole = { 40, 1 };
-            SetConsoleCursorPosition(hConsole_, coordConsole);*/
+           *//* coordConsole = { 40, 1 };
+            SetConsoleCursorPosition(hConsole_, coordConsole);*//*
             System.out.println("Enter your name: ");
             name2 = scanner.nextLine();
             p2.name = name2;
         }
 
-       /* coordConsole = { 40, (n == 1) ? 2 : 1 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+       *//* coordConsole = { 40, (n == 1) ? 2 : 1 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         inp = "Do you want to put the ships yourself? (1-yes, 0-no): ";
         try {
             n = scanner.nextByte();
@@ -134,8 +134,8 @@ public class Game {
         //system("CLS");
 
         outputFields(p1, p2);
-        /*coordConsole = { 46, 6 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+        *//*coordConsole = { 46, 6 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         if(p1.gameOver())
             System.out.println("***" + p2.getName() + " WIN***");
         else
@@ -145,13 +145,14 @@ public class Game {
         else
             printShipLocation((byte)21, (byte)14, p1);//цифры не нужны так как это старвй ввывод в консоли
     }
+
     public void humanVscomputer(){
         ArrayDeque<Player> queue = new ArrayDeque<>(2);
         byte n;
         Scanner scanner = new Scanner(System.in);
 
-        /*COORD coordConsole = { 40, 0 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+        *//*COORD coordConsole = { 40, 0 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         String inp = "Do you want to enter your name? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
@@ -163,15 +164,15 @@ public class Game {
         String name;
         HumanPlayer p1 = new HumanPlayer();
         if (n == 1) {
-            /*coordConsole = { 40, 1 };
-            SetConsoleCursorPosition(hConsole_, coordConsole);*/
+            *//*coordConsole = { 40, 1 };
+            SetConsoleCursorPosition(hConsole_, coordConsole);*//*
             System.out.println("Enter your name: ");
             name = scanner.nextLine();
             p1.name = name;
         }
 
-        /*coordConsole = { 40, (n == 1) ? 2 : 1 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+        *//*coordConsole = { 40, (n == 1) ? 2 : 1 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         inp = "Do you want to put the ships yourself? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
@@ -203,8 +204,8 @@ public class Game {
        // system("CLS");
 
         outputFields(p1, c1);
-        /*coordConsole = { 48, 6 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+        *//*coordConsole = { 48, 6 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         if(p1.gameOver())
             System.out.println("***You LOSE***");
         else
@@ -217,7 +218,7 @@ public class Game {
 
     // Methods associated with the visual part(work in the console)
     public void outputFields(Player p1, Player p2){
-        /*system("CLS");
+        *//*system("CLS");
         COORD coordConsole = { 28, 0 };
         SetConsoleCursorPosition(hConsole_, coordConsole);
         SetConsoleTextAttribute(hConsole_, 11);
@@ -228,10 +229,10 @@ public class Game {
         print(21, 1, p1);
         print(69, 1, p2);
         printStats(5, 1, p1);
-        printStats(96, 1, p2);*/
+        printStats(96, 1, p2);*//*
     }
     public void print(byte col, byte row, Player player){
-       /* COORD coordConsole = { col, row };
+       *//* COORD coordConsole = { col, row };
         SetConsoleCursorPosition(hConsole_, coordConsole);
         SetConsoleTextAttribute(hConsole_, 15);
         unsigned char i, j;
@@ -272,10 +273,10 @@ public class Game {
             cout << endl;
             j = 0;
             i++;
-        }*/
+        }*//*
     }
     public void printShipLocation(byte col, byte row, Player player){
-       /* COORD coordConsole = { col, row };
+       *//* COORD coordConsole = { col, row };
         SetConsoleCursorPosition(hConsole_, coordConsole);
         SetConsoleTextAttribute(hConsole_, 15);
         unsigned char i, j;
@@ -306,10 +307,10 @@ public class Game {
             cout << endl;
             j = 0;
             i++;
-        }*/
+        }*//*
     }
     public void printStats(byte col, byte row, Player player){
-        /*COORD coordConsole;
+        *//*COORD coordConsole;
         for (unsigned char i = 4; i > 0; i--) {
             coordConsole = { col, row };
             row++;
@@ -327,7 +328,7 @@ public class Game {
                 case 1:
                     cout << "FRIGATE: " << (int)player->ships_[i-1];
             }
-        }*/
+        }*//*
     }
 
     // Input validation
@@ -338,9 +339,9 @@ public class Game {
         byte r = 0;
         do {
             byte n;
-           /* system("CLS");
+           *//* system("CLS");
             coordConsole = { 30, 0};
-            SetConsoleCursorPosition(hConsole_, coordConsole);*/
+            SetConsoleCursorPosition(hConsole_, coordConsole);*//*
             System.out.println("Incorrect data entered!");
             n = scanner.nextByte();
             if (n == 1 || n == 0) {
@@ -350,4 +351,4 @@ public class Game {
         } while(check);
         return r;
     }
-}
+}*/

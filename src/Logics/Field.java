@@ -1,8 +1,17 @@
+package Logics;
+
 import java.util.ArrayList;
 
 public class Field {
     Tile[][] grid = new Tile[10][10];
-    ArrayList<Ship> fleet;
+    ArrayList<Ship> fleet = new ArrayList<>();
+    /*{
+        for(byte i = 4; i > 0; i--){
+            for(byte j = 1; j <= 5 - i; j++ ){
+                fleet.add(new Ship(i));
+            }
+        }
+    }*/
     Byte numShipAfloat = 10;
 
     public Field() {

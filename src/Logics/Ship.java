@@ -1,4 +1,6 @@
-import coord.Coord;
+package Logics;
+
+import Logics.coord.Coord;
 import java.util.ArrayList;
 
 public class Ship {
@@ -8,6 +10,13 @@ public class Ship {
     private ArrayList<Tile> halo;
 
     public Ship(){}
+    /*public Ship(Byte size){
+        sizeShip = size;
+        for(byte i = 0; i < size; i++){
+            Tile tile = new Tile();
+            deck.add(tile);
+        }
+    }*/
     public Ship(Byte size, Coord coord1, Coord coord2, Field field){
         sizeShip = size;
         if (coord1.row == coord2.row) {
@@ -129,7 +138,7 @@ public class Ship {
     public boolean stateОk(){ return (sizeShip != hits); }
 
     // Halo filling when destroying the ship
-    public void setStateHalo() { for (Tile el: halo) if (el.getState() != '*') el.setState('*'); }
+    //public void setStateHalo() { for (Tile el: halo) if (el.getState() != '*') el.setState('*'); }
 
     // Increase in ship hits
     public void setHit(){ ++hits; }

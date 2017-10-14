@@ -1,3 +1,5 @@
+package Logics;
+
 public class Tile {
     private Byte row = null;
     private Byte col = null;
