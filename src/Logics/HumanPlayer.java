@@ -1,4 +1,4 @@
-/*
+package Logics;
 import Logics.coord.Coord;
 
 import java.util.Scanner;
@@ -16,10 +16,9 @@ public class HumanPlayer extends Player {
 
     // Manual placement of ships on the playing field
     public void setPlaceShip(Game game){
-       */
-/* system("CLS");
+       /* system("CLS");
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD coordConsole;*//*
+        COORD coordConsole;*/
 
         Coord bow, stern = new Coord();
         Ship ship;
@@ -30,16 +29,14 @@ public class HumanPlayer extends Player {
 
         for(int i = 4; i > 0; i--)
         for (int j = 1; j <= 5 - i; j++) {
-           */
-/* coordConsole = { 53, 0 };
+ /*coordConsole = { 53, 0 };
             SetConsoleCursorPosition(hConsole, coordConsole);
-            SetConsoleTextAttribute(hConsole, 11);*//*
+            SetConsoleTextAttribute(hConsole, 11);*/
 
             System.out.print(name); //cout << name_;
-            game.printShipLocation((byte)46,(byte) 1, this);// числа не нужны
-            */
+           // game.printShipLocation((byte)46,(byte) 1, this);// числа не нужны
 /*coordConsole = { 0, 13 };
-            SetConsoleCursorPosition(hConsole, coordConsole);*//*
+            SetConsoleCursorPosition(hConsole, coordConsole);*/
 
             System.out.print(bowInp);//cout << bowInp;
 
@@ -114,27 +111,25 @@ public class HumanPlayer extends Player {
             }
             //system("CLS");
         } // for (unsigned char j = 1; j <= 5 - i; j++)
-        game.printShipLocation((byte)46, (byte)1, this); //числа не нужны
+        //game.printShipLocation((byte)46, (byte)1, this); //числа не нужны
         //system("CLS");
         field.initEmptyTiles();
     }
 
     // Method for implementing the player's turn
     public void yourTurn(Game game, Player rival, byte id){
-        */
 /*HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD coordConsole;*//*
+        COORD coordConsole;*/
 
         Coord coord;
         boolean hit = true;
 
         do {
-            if(id == 0)
+           /* if(id == 0)
                 game.outputFields(this, rival);
             else
-                game.outputFields(rival, this);
+                game.outputFields(rival, this);*/
 
-            */
 /*if (id == 0) {
                 coordConsole = { 28, 13 };
                 SetConsoleCursorPosition(hConsole, coordConsole);
@@ -142,13 +137,12 @@ public class HumanPlayer extends Player {
             else {
                 coordConsole = { 76, 13 };
                 SetConsoleCursorPosition(hConsole, coordConsole);
-            }*//*
+            }*/
 
 
             System.out.print("Your turn");//cout << "Your turn";
-            */
 /*coordConsole = { 0, 14 };
-            SetConsoleCursorPosition(hConsole, coordConsole);*//*
+            SetConsoleCursorPosition(hConsole, coordConsole);*/
 
             System.out.println("Now is shoot of " + this.getName() + ": ");
             //cout << "Now is shoot of " << this->getName() <<": ";
@@ -242,4 +236,3 @@ public class HumanPlayer extends Player {
         return coord;
     };
 }
-*/

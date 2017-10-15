@@ -1,4 +1,19 @@
-/*import java.util.ArrayDeque;
+package Logics;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.ArrayDeque;
 import java.util.Scanner;
 
 public class Game {
@@ -7,89 +22,90 @@ public class Game {
     }
 
     // Three game modes
-    public void computerVscomputer(){
-            ArrayDeque<Player> queue = new ArrayDeque<>(2);
-            ComputerPlayer c1 = new ComputerPlayer("Computer_1");
-            queue.addLast(c1);
-            ComputerPlayer c2 = new ComputerPlayer("Computer_2");
-            queue.addLast(c2);
+   /* public void computerVscomputer() {
+        ArrayDeque<Player> queue = new ArrayDeque<>(2);
+        ComputerPlayer c1 = new ComputerPlayer("Computer_1");
+        queue.addLast(c1);
+        ComputerPlayer c2 = new ComputerPlayer("Computer_2");
+        queue.addLast(c2);
 
-            c1.setPlaceShipRand();
-            c2.setPlaceShipRand();
-            c2.setEnemyField(c1.getRefField());
-            c1.setEnemyField(c2.getRefField());
+        c1.setPlaceShipRand();
+        c2.setPlaceShipRand();
+        c2.setEnemyField(c1.getRefField());
+        c1.setEnemyField(c2.getRefField());
 
-            Player curP;
-            byte id = 0;
-            while (!c1.gameOver() && !c2.gameOver()) {
-                curP = queue.pop();
-                curP.yourTurn(this, queue.getFirst(), id);
-                id = (id == 0) ? id++ : id--;
-                queue.addLast(curP);
-            }
+        Player curP;
+        byte id = 0;
+        while (!c1.gameOver() && !c2.gameOver()) {
+            curP = queue.pop();
+            curP.yourTurn(this, queue.getFirst(), id);
+            id = (id == 0) ? id++ : id--;
+            queue.addLast(curP);
+        }
 
-            //system("CLS");
-            outputFields(c1, c2);
-            //COORD coordConsole = { 46, 6 };
-            //SetConsoleCursorPosition(hConsole_, coordConsole);
-            if(c1.gameOver()) //!!!!! Вывод
-                System.out.println("***Computer_2 WIN***");
-            else
-                System.out.println("***Computer_1 WIN***");
-            if(id == 0)
-                printShipLocation((byte)69, (byte)14, c2);
-            else
-                printShipLocation((byte)21, (byte)14, c1);
+        //system("CLS");
+        outputFields(c1, c2);
+        //COORD coordConsole = { 46, 6 };
+        //SetConsoleCursorPosition(hConsole_, coordConsole);
+        if (c1.gameOver()) //!!!!! Вывод
+            System.out.println("***Computer_2 WIN***");
+        else
+            System.out.println("***Computer_1 WIN***");
+        if (id == 0)
+            printShipLocation((byte) 69, (byte) 14, c2);
+        else
+            printShipLocation((byte) 21, (byte) 14, c1);
     }
-    public void humanVshuman(){
+
+    public void humanVshuman() {
         ArrayDeque<Player> queue = new ArrayDeque<>(2);
         byte n;
         Scanner scanner = new Scanner(System.in);
 
-        *//*COORD coordConsole = { 40, 0 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
+        COORD coordConsole = { 40, 0 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);
         String inp = "Player_1! Do you want to enter your name? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
             n = scanner.nextByte();
-            if(n > 1) n = inputValid(inp);
-        }catch (NumberFormatException e){
+            if (n > 1) n = inputValid(inp);
+        } catch (NumberFormatException e) {
             n = inputValid(inp);
         }
         String name1;
         HumanPlayer p1 = new HumanPlayer("Player_1");
         if (n == 1) {
-            *//*coordConsole = { 40, 1 };
+           *//*coordConsole = { 40, 1 };
             SetConsoleCursorPosition(hConsole_, coordConsole);*//*
             System.out.println("Enter your name: ");
             name1 = scanner.nextLine();
             p1.name = name1;
         }
 
-        *//*coordConsole = { 40, (n == 1) ? 2 : 1 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
+       coordConsole = { 40, (n == 1) ? 2 : 1 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);
         inp = "Do you want to put the ships yourself? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
             n = scanner.nextByte();
-            if(n > 1) n = inputValid(inp);
-        }catch (NumberFormatException e){
+            if (n > 1) n = inputValid(inp);
+        } catch (NumberFormatException e) {
             n = inputValid(inp);
         }
-        if(n==1)
+        if (n == 1)
             p1.setPlaceShip(this);
         else
             p1.setPlaceShipRand();
-       // system("CLS");
+        // system("CLS");
 
-        *//*coordConsole = { 40, 0 };
+       *//*coordConsole = { 40, 0 };
         SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         inp = "Player_2! Do you want to enter your name? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
             n = scanner.nextByte();
-            if(n > 1) n = inputValid(inp);
-        }catch (NumberFormatException e){
+            if (n > 1) n = inputValid(inp);
+        } catch (NumberFormatException e) {
             n = inputValid(inp);
         }
         String name2;
@@ -97,23 +113,23 @@ public class Game {
 
 
         if (n == 1) {
-           *//* coordConsole = { 40, 1 };
-            SetConsoleCursorPosition(hConsole_, coordConsole);*//*
+          coordConsole = { 40, 1 };
+            SetConsoleCursorPosition(hConsole_, coordConsole);
             System.out.println("Enter your name: ");
             name2 = scanner.nextLine();
             p2.name = name2;
         }
 
-       *//* coordConsole = { 40, (n == 1) ? 2 : 1 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
+       coordConsole = { 40, (n == 1) ? 2 : 1 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);
         inp = "Do you want to put the ships yourself? (1-yes, 0-no): ";
         try {
             n = scanner.nextByte();
-            if(n > 1) n = inputValid(inp);
-        }catch (NumberFormatException e){
+            if (n > 1) n = inputValid(inp);
+        } catch (NumberFormatException e) {
             n = inputValid(inp);
         }
-        if(n==1)
+        if (n == 1)
             p2.setPlaceShip(this);
         else
             p2.setPlaceShipRand();
@@ -134,26 +150,53 @@ public class Game {
         //system("CLS");
 
         outputFields(p1, p2);
-        *//*coordConsole = { 46, 6 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
-        if(p1.gameOver())
+        coordConsole = { 46, 6 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);
+        if (p1.gameOver())
             System.out.println("***" + p2.getName() + " WIN***");
         else
             System.out.println("***" + p1.getName() + " WIN***");
-        if(id == 0)
-            printShipLocation((byte)69, (byte)14, p2); //цифры не нужны так как это старвй ввывод в консоли
+        if (id == 0)
+            printShipLocation((byte) 69, (byte) 14, p2); //цифры не нужны так как это старвй ввывод в консоли
         else
-            printShipLocation((byte)21, (byte)14, p1);//цифры не нужны так как это старвй ввывод в консоли
+            printShipLocation((byte) 21, (byte) 14, p1);//цифры не нужны так как это старвй ввывод в консоли
     }
+*/
+    public void humanVscomputer(Pane root, Main.MenuBox menuBox, Scene scene) {
+        HumanPlayer p1 = new HumanPlayer();
+        TextField namePlayer = new TextField();
+        namePlayer.setPromptText("Enter your nickname");
+        namePlayer.setFocusTraversable(false);
+        namePlayer.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD,26));
+        namePlayer.setPrefSize(400,50);
+        StackPane st = new StackPane(namePlayer);
+        st.setTranslateX(800);
+        st.setTranslateY(550);
+        namePlayer.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER){
+                if(!namePlayer.getText().isEmpty())
+                    p1.name = namePlayer.getText();
+                st.requestFocus();
+            }
+        });
 
-    public void humanVscomputer(){
+        root.getChildren().add(st);
+        Main.MenuItem autoChoice = new Main.MenuItem("AUTO");
+        Main.MenuItem clear = new Main.MenuItem("CLEAR");
+        VBox deployMenu = new VBox(
+                autoChoice,clear
+        );
+        deployMenu.setSpacing(15);
+        deployMenu.setTranslateX(200);
+        deployMenu.setTranslateY(550);
+        menuBox.setSubMenu(deployMenu);
         ArrayDeque<Player> queue = new ArrayDeque<>(2);
         byte n;
         Scanner scanner = new Scanner(System.in);
 
-        *//*COORD coordConsole = { 40, 0 };
-        SetConsoleCursorPosition(hConsole_, coordConsole);*//*
-        String inp = "Do you want to enter your name? (1-yes, 0-no): ";
+        /*COORD coordConsole = { 40, 0 };
+        SetConsoleCursorPosition(hConsole_, coordConsole);*/
+        /*String inp = "Do you want to enter your name? (1-yes, 0-no): ";
         System.out.println(inp);
         try {
             n = scanner.nextByte();
@@ -164,14 +207,13 @@ public class Game {
         String name;
         HumanPlayer p1 = new HumanPlayer();
         if (n == 1) {
-            *//*coordConsole = { 40, 1 };
-            SetConsoleCursorPosition(hConsole_, coordConsole);*//*
+
             System.out.println("Enter your name: ");
             name = scanner.nextLine();
             p1.name = name;
         }
 
-        *//*coordConsole = { 40, (n == 1) ? 2 : 1 };
+       *//* coordConsole = { 40, (n == 1) ? 2 : 1 };
         SetConsoleCursorPosition(hConsole_, coordConsole);*//*
         inp = "Do you want to put the ships yourself? (1-yes, 0-no): ";
         System.out.println(inp);
@@ -184,9 +226,9 @@ public class Game {
         if(n==1)
             p1.setPlaceShip(this);
         else
-            p1.setPlaceShipRand();
+            p1.setPlaceShipRand();*/
 
-        ComputerPlayer c1 = new ComputerPlayer("Computer");
+       /* ComputerPlayer c1 = new ComputerPlayer("Computer");
         queue.addLast(p1);
         queue.addLast(c1);
         c1.setPlaceShipRand();
@@ -201,24 +243,24 @@ public class Game {
             id = (id == 0) ? id++ : id--;
             queue.addLast(curP);
         }
-       // system("CLS");
+        // system("CLS");
 
         outputFields(p1, c1);
-        *//*coordConsole = { 48, 6 };
+      *//*  coordConsole = { 48, 6 };
         SetConsoleCursorPosition(hConsole_, coordConsole);*//*
-        if(p1.gameOver())
+        if (p1.gameOver())
             System.out.println("***You LOSE***");
         else
             System.out.println("***You WIN***");
-        if(id == 0)
-            printShipLocation((byte)69, (byte)14, c1); //цифры не нужны так как это старвй ввывод в консоли
+        if (id == 0)
+            printShipLocation((byte) 69, (byte) 14, c1); //цифры не нужны так как это старвй ввывод в консоли
         else
-            printShipLocation((byte)21, (byte)14, p1);//цифры не нужны так как это старвй ввывод в консоли
+            printShipLocation((byte) 21, (byte) 14, p1);//цифры не нужны так как это старвй ввывод в консоли*/
     }
-
-    // Methods associated with the visual part(work in the console)
+}
+    /*// Methods associated with the visual part(work in the console)
     public void outputFields(Player p1, Player p2){
-        *//*system("CLS");
+        system("CLS");
         COORD coordConsole = { 28, 0 };
         SetConsoleCursorPosition(hConsole_, coordConsole);
         SetConsoleTextAttribute(hConsole_, 11);
@@ -229,10 +271,10 @@ public class Game {
         print(21, 1, p1);
         print(69, 1, p2);
         printStats(5, 1, p1);
-        printStats(96, 1, p2);*//*
+        printStats(96, 1, p2);
     }
     public void print(byte col, byte row, Player player){
-       *//* COORD coordConsole = { col, row };
+        COORD coordConsole = { col, row };
         SetConsoleCursorPosition(hConsole_, coordConsole);
         SetConsoleTextAttribute(hConsole_, 15);
         unsigned char i, j;
@@ -273,10 +315,10 @@ public class Game {
             cout << endl;
             j = 0;
             i++;
-        }*//*
+        }
     }
     public void printShipLocation(byte col, byte row, Player player){
-       *//* COORD coordConsole = { col, row };
+        COORD coordConsole = { col, row };
         SetConsoleCursorPosition(hConsole_, coordConsole);
         SetConsoleTextAttribute(hConsole_, 15);
         unsigned char i, j;
@@ -307,10 +349,10 @@ public class Game {
             cout << endl;
             j = 0;
             i++;
-        }*//*
+        }
     }
     public void printStats(byte col, byte row, Player player){
-        *//*COORD coordConsole;
+        COORD coordConsole;
         for (unsigned char i = 4; i > 0; i--) {
             coordConsole = { col, row };
             row++;
@@ -328,7 +370,7 @@ public class Game {
                 case 1:
                     cout << "FRIGATE: " << (int)player->ships_[i-1];
             }
-        }*//*
+        }
     }
 
     // Input validation
@@ -339,7 +381,7 @@ public class Game {
         byte r = 0;
         do {
             byte n;
-           *//* system("CLS");
+          *//* system("CLS");
             coordConsole = { 30, 0};
             SetConsoleCursorPosition(hConsole_, coordConsole);*//*
             System.out.println("Incorrect data entered!");
@@ -352,3 +394,29 @@ public class Game {
         return r;
     }
 }*/
+
+
+/* namePlayer.focusedProperty().addListener((obs,oldValue,newValue) ->{
+            if(newValue){
+                System.out.println("in");
+            }else{
+                System.out.println("out");
+                st.requestFocus();
+            }
+
+        });*/
+       /* ChangeListener<Boolean> focusLossListener = (observable, wasFocused, isFocused) -> {
+            if (!isFocused) {
+                st.requestFocus();
+            }
+        };
+        namePlayer.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                namePlayer.focusedProperty().removeListener(focusLossListener);
+                if(newValue){
+                  namePlayer.focusedProperty().addListener(focusLossListener);
+                    namePlayer.requestFocus();
+                }
+            }
+        });*/

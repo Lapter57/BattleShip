@@ -138,7 +138,7 @@ public class Ship {
     public boolean stateОk(){ return (sizeShip != hits); }
 
     // Halo filling when destroying the ship
-    //public void setStateHalo() { for (Tile el: halo) if (el.getState() != '*') el.setState('*'); }
+    public void setStateHalo() { for (Tile el: halo) if (el.getState() != '*') el.setState('*'); }
 
     // Increase in ship hits
     public void setHit(){ ++hits; }

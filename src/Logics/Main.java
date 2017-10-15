@@ -1,10 +1,11 @@
-package Graphics;
+package Logics;
 
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -21,6 +22,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import javafx.stage.StageStyle;
+
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -56,16 +59,18 @@ public class Main extends Application {
         );
         MenuBox menuBox = new MenuBox(mainMenu);
 
+        Scene scene = new Scene(root);
         newGame.setOnMouseClicked(event->menuBox.setSubMenu(newGameMenu));
         exitGame.setOnMouseClicked(event-> System.exit(0));
         bck.setOnMouseClicked(event-> menuBox.setSubMenu(mainMenu));
-       /* hvC.setOnMouseClicked(event -> {
-            SubMenu gameHvC = new SubMenu();
+       hvC.setOnMouseClicked(event -> {
+            /*SubMenu gameHvC = new SubMenu();
             title.setVisible(false);
-            menuBox.setSubMenu(gameHvC);
+            menuBox.setSubMenu(gameHvC);*/
+            title.setVisible(false);
             Game game = new Game();
-            game.humanVscomputer();
-        });*/
+            game.humanVscomputer(root,menuBox,scene);
+        });
         hvH.setOnMouseClicked(event -> {
            /* SubMenu gameHvH = new SubMenu();
             title.setVisible(false);
@@ -75,10 +80,9 @@ public class Main extends Application {
         });
         root.getChildren().addAll(menuBox, title);
 
-        Scene scene = new Scene(root);
         menuBox.setVisible(true);
         title.setVisible(true);
-        scene.setOnKeyPressed(event -> {
+        /*scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 FadeTransition ft1 = new FadeTransition(Duration.seconds(1),menuBox);
                 FadeTransition ft2 = new FadeTransition(Duration.seconds(1),title);
@@ -106,7 +110,7 @@ public class Main extends Application {
 
                 }
             }
-        });
+        });*/
         primaryStage.setTitle("BattleShip");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
@@ -116,7 +120,7 @@ public class Main extends Application {
 
 
 
-    private static class MenuItem extends StackPane{
+    static class MenuItem extends StackPane{
         public  MenuItem(String name){
             LinearGradient gradient = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, new Stop[]{
                     new Stop(0, Color.valueOf("#A93927")),
@@ -155,7 +159,9 @@ public class Main extends Application {
         }
     }
 
-    private static class Title extends StackPane{
+
+
+    static class Title extends StackPane{
         public Title(String name){
             setVisible(false);
             Rectangle bg = new Rectangle(420,100);
@@ -171,16 +177,16 @@ public class Main extends Application {
         }
     }
 
-    private static class MenuBox extends Pane{
-        static SubMenu subMenu;
-        public MenuBox(SubMenu subMenu){
+    static class MenuBox extends Pane{
+        static VBox subMenu;
+        public MenuBox(VBox subMenu){
             MenuBox.subMenu = subMenu;
             setVisible(false);
             Rectangle bg = new Rectangle(1280,720,Color.LIGHTBLUE);
             bg.setOpacity(0.3);
             getChildren().addAll(bg, subMenu);
         }
-        public void setSubMenu(SubMenu subMenu){
+        public void setSubMenu(VBox subMenu){
             getChildren().remove(MenuBox.subMenu);
             MenuBox.subMenu = subMenu;
             getChildren().add(MenuBox.subMenu);
@@ -188,7 +194,7 @@ public class Main extends Application {
 
     }
 
-    private static class SubMenu extends VBox{
+    static class SubMenu extends VBox{
         public SubMenu(MenuItem...items){
             setSpacing(15);
             setTranslateY(250);

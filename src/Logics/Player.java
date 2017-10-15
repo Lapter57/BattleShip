@@ -1,7 +1,8 @@
-/*
+package Logics;
 import java.util.ArrayList;
 import java.util.Random;
 import Logics.coord.Coord;
+
 
 public abstract class Player {
     protected Field enemyField;
@@ -9,8 +10,8 @@ public abstract class Player {
     protected Ship foundShip = null;
     protected String name;
     ArrayList<Byte> ships = new ArrayList<>(4);
-    */
-/*protected enum TypeShip{
+
+  protected enum TypeShip{
         FRIGATE(1), DESTROYER(2), SUBMARINE(3), CARRIER(4);
         private int id;
 
@@ -19,22 +20,21 @@ public abstract class Player {
         }
          public void setId(int id){this.id = id;}
 
-        *//*
-*/
-/*public static String getClassName() {
+
+
+public static String getClassName() {
             return TypeShip.class.getName();
-        }*//*
-*/
-/*
-    }*//*
+        }
+
+    }
 
 
     public Player(String name){
         this.name = name;
         byte j = 4;
-        */
-/*for(int i = 0; i < 4; i++)
-            ships.add(j--);*//*
+
+for(int i = 0; i < 4; i++)
+            ships.add(j--);
 
         for (Byte el: ships)
             el = j--; // проверить работает или нет
@@ -203,4 +203,4 @@ public abstract class Player {
             } // for (unsigned char j = 1; j <= (5 - i); j++)
         field.initEmptyTiles();
     }
-}*/
+}

@@ -1,4 +1,6 @@
-/*import java.util.AbstractQueue;
+package Logics;
+
+import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.ArrayDeque;
@@ -69,8 +71,8 @@ public class ComputerPlayer extends Player {
 
     // Method for implementing the player's turn
     public void yourTurn(Game game, Player rival, byte id){
-        *//*HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        COORD coordConsole;*//*
+      /*  HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        COORD coordConsole;*/
         Coord coord = new Coord();
         Coord tempcrd = new Coord();
         byte offset = 1;
@@ -78,25 +80,25 @@ public class ComputerPlayer extends Player {
         boolean hit = true;
 
         do {
-            if(id == 0)
+            /*if(id == 0)
                 game.outputFields(this, rival);
             else
-                game.outputFields(rival, this);
+                game.outputFields(rival, this);*/
 
-           *//* if (id == 0) {
+           /* if (id == 0) {
                 coordConsole = { 28, 13 };
                 SetConsoleCursorPosition(hConsole, coordConsole);
             }
             else {
                 coordConsole = { 76, 13 };
                 SetConsoleCursorPosition(hConsole, coordConsole);
-            }*//*
+            }*/
 
             System.out.print("Your turn");
             //cout << "Your turn";
             //Sleep(1000);!!!!!!
-           *//* coordConsole = { 0, 14 };
-            SetConsoleCursorPosition(hConsole, coordConsole);*//*
+           /* coordConsole = { 0, 14 };
+            SetConsoleCursorPosition(hConsole, coordConsole);*/
 
             if (!queue.isEmpty())
                 coord = queue.pop();
@@ -242,4 +244,4 @@ public class ComputerPlayer extends Player {
         coordForStep.remove(coordForStep.get(0));
         return coord;
     }
-}*/
+}
