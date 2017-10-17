@@ -2,8 +2,10 @@ package Logics;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -11,6 +13,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import javafx.scene.image.ImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayDeque;
@@ -183,17 +191,77 @@ public class Game {
         root.getChildren().add(st);
         Main.MenuItem autoChoice = new Main.MenuItem("AUTO");
         Main.MenuItem clear = new Main.MenuItem("CLEAR");
+        Main.MenuItem ready = new Main.MenuItem("BATTLE!");
+        ready.setTranslateX(800);
+        ready.setTranslateY(615);
+        root.getChildren().add(ready);
         VBox deployMenu = new VBox(
                 autoChoice,clear
         );
         deployMenu.setSpacing(15);
-        deployMenu.setTranslateX(200);
+        deployMenu.setTranslateX(175);
         deployMenu.setTranslateY(550);
         menuBox.setSubMenu(deployMenu);
-        ArrayDeque<Player> queue = new ArrayDeque<>(2);
-        byte n;
-        Scanner scanner = new Scanner(System.in);
 
+        GridPane board = new GridPane();
+        GridPane shipsToBeBoard = new GridPane();
+        ImageView[][] water = new ImageView[10][10];
+        for(int i = 0; i < 10; i++)
+            for(int j = 0; j < 10; j++) {
+                try(InputStream is = Files.newInputStream(Paths.get("res/images/Ordinary_Tile_2.png"))) {
+                    water[i][j] = new ImageView(new Image(is));
+                    water[i][j].setPreserveRatio(true);
+                    water[i][j].setFitHeight(45);
+                    water[i][j].setFitWidth(45);
+                    board.add(water[i][j],i,j);
+                }
+                catch (IOException e) {
+                    System.out.println("Couldn't load image");
+                }
+        }
+        board.setTranslateX(150);
+        board.setTranslateY(70);
+
+        try(InputStream is = Files.newInputStream(Paths.get("res/images/Num_Board.png"))) {
+            ImageView numB = new ImageView(new Image(is));
+            numB.setFitHeight(450);
+            numB.setFitWidth(45);
+            numB.setTranslateX(105);
+            numB.setTranslateY(70);
+            root.getChildren().add(numB);
+        }
+        catch (IOException e){
+            System.out.println("Couldn't load image");
+        }
+        try(InputStream is = Files.newInputStream(Paths.get("res/images/Let_Board.png"))) {
+            ImageView letB = new ImageView(new Image(is));
+            letB.setFitHeight(45);
+            letB.setFitWidth(450);
+            letB.setTranslateX(150);
+            letB.setTranslateY(25);
+            root.getChildren().add(letB);
+        }
+        catch (IOException e){
+            System.out.println("Couldn't load image");
+        }
+        root.getChildren().add(board);
+        ArrayDeque<Player> queue = new ArrayDeque<>(2);
+        /*ComputerPlayer c1 = new ComputerPlayer("Computer");
+        queue.addLast(p1);
+        queue.addLast(c1);
+        c1.setPlaceShipRand();
+        c1.setEnemyField(p1.getRefField());
+        p1.setEnemyField(c1.getRefField());
+
+        Player curP;
+        byte id = 0;
+        while (!p1.gameOver() && !c1.gameOver()) {
+            curP = queue.pop();
+            curP.yourTurn(this, queue.getFirst(), id);
+            id = (id == 0) ? id++ : id--;
+            queue.addLast(curP);
+        }
+*/
         /*COORD coordConsole = { 40, 0 };
         SetConsoleCursorPosition(hConsole_, coordConsole);*/
         /*String inp = "Do you want to enter your name? (1-yes, 0-no): ";
