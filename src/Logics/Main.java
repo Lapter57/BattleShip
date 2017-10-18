@@ -45,15 +45,15 @@ public class Main extends Application {
         Title title = new Title("B A T T L E S H I P");
         title.setTranslateX(410);
         title.setTranslateY(100);
-        MenuItem newGame = new MenuItem("NEW GAME");
-        MenuItem options = new MenuItem("STATISTICS");
-        MenuItem exitGame = new MenuItem("EXIT");
+        MenuItem newGame = new MenuItem("NEW GAME",400,50);
+        MenuItem options = new MenuItem("STATISTICS",400,50);
+        MenuItem exitGame = new MenuItem("EXIT",400,50);
         SubMenu mainMenu = new SubMenu(
                 newGame,options,exitGame
         );
-        MenuItem hvC = new MenuItem("HUMAN VS COMPUTER");
-        MenuItem hvH = new MenuItem("HUMAN VS HUMAN");
-        MenuItem bck = new MenuItem("BACK");
+        MenuItem hvC = new MenuItem("HUMAN VS COMPUTER",400,50);
+        MenuItem hvH = new MenuItem("HUMAN VS HUMAN",400,50);
+        MenuItem bck = new MenuItem("BACK",400,50);
         SubMenu newGameMenu = new SubMenu(
                 hvC,hvH,bck
         );
@@ -68,7 +68,7 @@ public class Main extends Application {
             title.setVisible(false);
             menuBox.setSubMenu(gameHvC);*/
             title.setVisible(false);
-            Game game = new Game();
+            Game game = new Game(root);
             game.humanVscomputer(root,menuBox,scene);
         });
         hvH.setOnMouseClicked(event -> {
@@ -121,14 +121,14 @@ public class Main extends Application {
 
 
     static class MenuItem extends StackPane{
-        public  MenuItem(String name){
+        public  MenuItem(String name,int x,int y){
             LinearGradient gradient = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, new Stop[]{
                     new Stop(0, Color.valueOf("#A93927")),
                     new Stop(0.1, Color.BLACK),
                     new Stop(0.9, Color.BLACK),
                     new Stop(1, Color.valueOf("#A93927")),
             });
-            Rectangle bg = new Rectangle(400,50);
+            Rectangle bg = new Rectangle(x,y);
             bg.setOpacity(0.5);
 
             Text text = new Text(name);

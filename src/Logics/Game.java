@@ -1,19 +1,20 @@
 package Logics;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,13 +22,148 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.sql.PreparedStatement;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Game {
-    // Constructor and destructor
-    public Game() {//hConsole_ = GetStdHandle(STD_OUTPUT_HANDLE);}
+  HashMap<String,Image> map_img = new HashMap<>();
+  ArrayList<ImageView> ships_img = new ArrayList<>();
+  Boolean clearBut = false;
+  GridPane board = new GridPane();
+  StackPane all_fleet = new StackPane();
+  Pane fleet_h = new Pane();
+  Pane fleet_v = new Pane();
+  StackPane[][] water = new StackPane[10][10];
+
+    public Game(Pane root) {
+        try(InputStream ot = Files.newInputStream(Paths.get("res/images/Ordinary_Tile_2.png"));
+            InputStream us = Files.newInputStream(Paths.get("res/images/Unbroken_Ship_2.png"));
+            InputStream ft = Files.newInputStream(Paths.get("res/images/Focus_Tile.png"));
+            InputStream dt = Files.newInputStream(Paths.get("res/images/Dead_Tile_2.png"));
+            InputStream ds = Files.newInputStream(Paths.get("res/images/Destroyed_Ship_3.png"));
+            InputStream nb = Files.newInputStream(Paths.get("res/images/Num_Board.png"));
+            InputStream lb = Files.newInputStream(Paths.get("res/images/Let_Board.png"));
+            InputStream car_h = Files.newInputStream(Paths.get("res/images/ships/Car_hor.png"));
+            InputStream car_v = Files.newInputStream(Paths.get("res/images/ships/Car_ver.png"));
+            InputStream des_h = Files.newInputStream(Paths.get("res/images/ships/Des_hor.png"));
+            InputStream des_v = Files.newInputStream(Paths.get("res/images/ships/Des_ver.png"));
+            InputStream sub_h = Files.newInputStream(Paths.get("res/images/ships/Sub_hor.png"));
+            InputStream sub_v = Files.newInputStream(Paths.get("res/images/ships/Sub_ver.png"));
+            InputStream frig = Files.newInputStream(Paths.get("res/images/ships/Frigate.png"))) {
+            map_img.put("ot",new Image(ot));
+            map_img.put("dt",new Image(dt));
+            map_img.put("ft",new Image(ft));
+            map_img.put("us",new Image(us));
+            map_img.put("ds",new Image(ds));
+            map_img.put("nb",new Image(nb));
+            map_img.put("lb",new Image(lb));
+
+            Image ch = new Image(car_h);
+            Image cv = new Image(car_v);
+            Image sh = new Image(sub_h);
+            Image sv = new Image(sub_v);
+            Image dh = new Image(des_h);
+            Image dv = new Image(des_v);
+            Image fr = new Image(frig);
+
+            ships_img.add(new ImageView(ch));
+            ships_img.add(new ImageView(sh));
+            ships_img.add(new ImageView(sh));
+            ships_img.add(new ImageView(dh));
+            ships_img.add(new ImageView(dh));
+            ships_img.add(new ImageView(dh));
+
+            ships_img.add(new ImageView(cv));
+            ships_img.add(new ImageView(sv));
+            ships_img.add(new ImageView(sv));
+            ships_img.add(new ImageView(dv));
+            ships_img.add(new ImageView(dv));
+            ships_img.add(new ImageView(dv));
+
+            ships_img.add(new ImageView(fr));
+            ships_img.add(new ImageView(fr));
+            ships_img.add(new ImageView(fr));
+            ships_img.add(new ImageView(fr));
+        }
+        catch (IOException e) {
+            System.out.println("Couldn't load image");
+        }
+        for(int i = 0; i < 10; i++)
+            for(int j = 0; j < 10; j++) {
+                water[i][j] = new StackPane();
+                ImageView img_ot = new ImageView(map_img.get("ot"));
+                ImageView img_us = new ImageView(map_img.get("us"));
+                water[i][j].getChildren().add(img_us);
+                water[i][j].getChildren().add(img_ot);
+                board.add(water[i][j],j,i);
+            }
+        board.setTranslateX(150);
+        board.setTranslateY(70);
+
+        Rectangle fl_h = new Rectangle(450,450, Color.valueOf("#EFF0F1"));
+        fl_h.setOpacity(0.5);
+        fleet_h.setTranslateX(750);
+        fleet_h.setTranslateY(70);
+        fleet_h.getChildren().add(fl_h);
+        Rectangle fl_v = new Rectangle(450,450, Color.valueOf("#EFF0F1"));
+        fl_v.setOpacity(0.5);
+        fleet_v.getChildren().add(fl_v);
+        fleet_v.setTranslateX(750);
+        fleet_v.setTranslateY(70);
+        fleet_h.setVisible(false);
+
+
+        fleet_h.getChildren().add(ships_img.get(0));
+        ships_img.get(0).setLayoutX(225);
+        ships_img.get(0).setLayoutY(45);
+        int i;
+        int shift = 270;
+        for(i = 1; i < 3; i++){
+            fleet_h.getChildren().add(ships_img.get(i));
+            ships_img.get(i).setLayoutX(shift);
+            ships_img.get(i).setLayoutY(135);
+            shift -= 180;
+        }
+
+        shift = 315;
+        for(; i < 6; i++){
+            fleet_h.getChildren().add(ships_img.get(i));
+            ships_img.get(i).setLayoutX(shift);
+            ships_img.get(i).setLayoutY(225);
+            shift -= 135;
+        }
+        shift = 360;
+        for(i = 12;i < 16; i++){
+            fleet_h.getChildren().add(ships_img.get(i));
+            ships_img.get(i).setLayoutX(shift);
+            ships_img.get(i).setLayoutY(315);
+            shift -= 90;
+        }
+
+        fleet_v.getChildren().add(ships_img.get(6));
+        ships_img.get(6).setLayoutX(45);
+        ships_img.get(6).setLayoutY(225);
+        shift = 270;
+        for(i = 7; i < 9; i++){
+            fleet_v.getChildren().add(ships_img.get(i));
+            ships_img.get(i).setLayoutX(135);
+            ships_img.get(i).setLayoutY(shift);
+            shift -= 180;
+        }
+
+        shift = 315;
+        for(; i < 12; i++){
+            fleet_v.getChildren().add(ships_img.get(i));
+            ships_img.get(i).setLayoutX(225);
+            ships_img.get(i).setLayoutY(shift);
+            shift -= 135;
+        }
+        all_fleet.getChildren().addAll(fleet_v,fleet_h);
     }
+
 
     // Three game modes
    /* public void computerVscomputer() {
@@ -170,8 +306,75 @@ public class Game {
             printShipLocation((byte) 21, (byte) 14, p1);//цифры не нужны так как это старвй ввывод в консоли
     }
 */
-    public void humanVscomputer(Pane root, Main.MenuBox menuBox, Scene scene) {
-        HumanPlayer p1 = new HumanPlayer();
+    //private void prepareShips(){
+
+
+        /*carrier.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Dragboard db = fleet.getChildren().get(1).startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                db.setDragView(((ImageView) fleet.getChildren().get(1)).getImage(),20,20);
+                content.putImage( ((ImageView) fleet.getChildren().get(1)).getImage());
+                db.setContent(content);
+                event.consume();
+            }
+        });
+        board.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if(db.hasImage()){
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
+                event.consume();
+            }
+        });
+
+        board.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if(db.hasImage()){
+                    Node node = event.getPickResult().getIntersectedNode();
+                    int row = 0;
+                    int col= 0;
+                    boolean f = false;
+                    while(row < 10 && !f){
+                        col = 0;
+                        while(col < 10 && !f){
+                            if (node == water[row][col].getChildren().get(2))
+                                f = true;
+                            else
+                                col++;
+                        }
+                        if(!f)
+                            row++;
+                    }
+                    int cnt = col + 4;
+                    for(int j = col; j < cnt; j++)
+                        water[row][j].getChildren().get(2).setVisible(false);
+                    event.setDropCompleted(true);
+                }
+                else{
+                    event.setDropCompleted(false);
+                }
+            }
+        });
+
+        carrier.setOnDragDone(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                TransferMode modeUsed = event.getTransferMode();
+                if(modeUsed == TransferMode.MOVE){
+                    fleet.getChildren().remove(1);
+                }
+            }
+        });*/
+    //}
+
+    private void prepareForBattle(Pane root, Main.MenuBox menuBox,HumanPlayer hp){
+        root.getChildren().addAll(board,all_fleet);
         TextField namePlayer = new TextField();
         namePlayer.setPromptText("Enter your nickname");
         namePlayer.setFocusTraversable(false);
@@ -183,15 +386,15 @@ public class Game {
         namePlayer.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER){
                 if(!namePlayer.getText().isEmpty())
-                    p1.name = namePlayer.getText();
+                    hp.name = namePlayer.getText();
                 st.requestFocus();
             }
         });
 
         root.getChildren().add(st);
-        Main.MenuItem autoChoice = new Main.MenuItem("AUTO");
-        Main.MenuItem clear = new Main.MenuItem("CLEAR");
-        Main.MenuItem ready = new Main.MenuItem("BATTLE!");
+        Main.MenuItem autoChoice = new Main.MenuItem("AUTO",400,50);
+        Main.MenuItem clear = new Main.MenuItem("CLEAR",400,50);
+        Main.MenuItem ready = new Main.MenuItem("BATTLE!",400,50);
         ready.setTranslateX(800);
         ready.setTranslateY(615);
         root.getChildren().add(ready);
@@ -203,49 +406,42 @@ public class Game {
         deployMenu.setTranslateY(550);
         menuBox.setSubMenu(deployMenu);
 
-        GridPane board = new GridPane();
-        GridPane shipsToBeBoard = new GridPane();
-        ImageView[][] water = new ImageView[10][10];
-        for(int i = 0; i < 10; i++)
-            for(int j = 0; j < 10; j++) {
-                try(InputStream is = Files.newInputStream(Paths.get("res/images/Ordinary_Tile_2.png"))) {
-                    water[i][j] = new ImageView(new Image(is));
-                    water[i][j].setPreserveRatio(true);
-                    water[i][j].setFitHeight(45);
-                    water[i][j].setFitWidth(45);
-                    board.add(water[i][j],i,j);
-                }
-                catch (IOException e) {
-                    System.out.println("Couldn't load image");
-                }
-        }
-        board.setTranslateX(150);
-        board.setTranslateY(70);
+        ImageView numB = new ImageView(map_img.get("nb"));
+        numB.setFitHeight(450);
+        numB.setFitWidth(45);
+        numB.setTranslateX(105);
+        numB.setTranslateY(70);
+        root.getChildren().add(numB);
+        ImageView letB = new ImageView(map_img.get("lb"));
+        letB.setFitHeight(45);
+        letB.setFitWidth(450);
+        letB.setTranslateX(150);
+        letB.setTranslateY(25);
+        root.getChildren().add(letB);
 
-        try(InputStream is = Files.newInputStream(Paths.get("res/images/Num_Board.png"))) {
-            ImageView numB = new ImageView(new Image(is));
-            numB.setFitHeight(450);
-            numB.setFitWidth(45);
-            numB.setTranslateX(105);
-            numB.setTranslateY(70);
-            root.getChildren().add(numB);
-        }
-        catch (IOException e){
-            System.out.println("Couldn't load image");
-        }
-        try(InputStream is = Files.newInputStream(Paths.get("res/images/Let_Board.png"))) {
-            ImageView letB = new ImageView(new Image(is));
-            letB.setFitHeight(45);
-            letB.setFitWidth(450);
-            letB.setTranslateX(150);
-            letB.setTranslateY(25);
-            root.getChildren().add(letB);
-        }
-        catch (IOException e){
-            System.out.println("Couldn't load image");
-        }
-        root.getChildren().add(board);
-        ArrayDeque<Player> queue = new ArrayDeque<>(2);
+        Main.MenuItem rot90 = new Main.MenuItem("Rot90",90,90);
+        root.getChildren().add(rot90);
+        rot90.setTranslateX(660);
+        rot90.setTranslateY(70);
+        rot90.setOnMouseClicked(event -> {
+            if(fleet_h.isVisible()){
+                fleet_h.setVisible(false);
+                fleet_v.setVisible(true);
+            }
+            else{
+                fleet_h.setVisible(true);
+                fleet_v.setVisible(false);
+            }
+        });
+
+
+    }
+    public void humanVscomputer(Pane root, Main.MenuBox menuBox, Scene scene) {
+        HumanPlayer p1 = new HumanPlayer();
+       prepareForBattle(root,menuBox,p1);
+
+
+        //ArrayDeque<Player> queue = new ArrayDeque<>(2);
         /*ComputerPlayer c1 = new ComputerPlayer("Computer");
         queue.addLast(p1);
         queue.addLast(c1);
