@@ -68,7 +68,7 @@ public class Main extends Application {
             title.setVisible(false);
             menuBox.setSubMenu(gameHvC);*/
             title.setVisible(false);
-            Game game = new Game(root);
+            Game game = new Game();
             game.humanVscomputer(root,menuBox,scene);
         });
         hvH.setOnMouseClicked(event -> {

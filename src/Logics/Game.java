@@ -33,12 +33,13 @@ public class Game {
   ArrayList<ImageView> ships_img = new ArrayList<>();
   Boolean clearBut = false;
   GridPane board = new GridPane();
+    {board.setPrefSize(10, 10);}
   StackPane all_fleet = new StackPane();
   Pane fleet_h = new Pane();
   Pane fleet_v = new Pane();
   StackPane[][] water = new StackPane[10][10];
 
-    public Game(Pane root) {
+    public Game() {
         try(InputStream ot = Files.newInputStream(Paths.get("res/images/Ordinary_Tile_2.png"));
             InputStream us = Files.newInputStream(Paths.get("res/images/Unbroken_Ship_2.png"));
             InputStream ft = Files.newInputStream(Paths.get("res/images/Focus_Tile.png"));
@@ -113,8 +114,7 @@ public class Game {
         fleet_v.getChildren().add(fl_v);
         fleet_v.setTranslateX(750);
         fleet_v.setTranslateY(70);
-        fleet_h.setVisible(false);
-
+        fleet_v.setVisible(false);
 
         fleet_h.getChildren().add(ships_img.get(0));
         ships_img.get(0).setLayoutX(225);
@@ -309,68 +309,7 @@ public class Game {
     //private void prepareShips(){
 
 
-        /*carrier.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Dragboard db = fleet.getChildren().get(1).startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-                db.setDragView(((ImageView) fleet.getChildren().get(1)).getImage(),20,20);
-                content.putImage( ((ImageView) fleet.getChildren().get(1)).getImage());
-                db.setContent(content);
-                event.consume();
-            }
-        });
-        board.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if(db.hasImage()){
-                    event.acceptTransferModes(TransferMode.MOVE);
-                }
-                event.consume();
-            }
-        });
 
-        board.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if(db.hasImage()){
-                    Node node = event.getPickResult().getIntersectedNode();
-                    int row = 0;
-                    int col= 0;
-                    boolean f = false;
-                    while(row < 10 && !f){
-                        col = 0;
-                        while(col < 10 && !f){
-                            if (node == water[row][col].getChildren().get(2))
-                                f = true;
-                            else
-                                col++;
-                        }
-                        if(!f)
-                            row++;
-                    }
-                    int cnt = col + 4;
-                    for(int j = col; j < cnt; j++)
-                        water[row][j].getChildren().get(2).setVisible(false);
-                    event.setDropCompleted(true);
-                }
-                else{
-                    event.setDropCompleted(false);
-                }
-            }
-        });
-
-        carrier.setOnDragDone(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                TransferMode modeUsed = event.getTransferMode();
-                if(modeUsed == TransferMode.MOVE){
-                    fleet.getChildren().remove(1);
-                }
-            }
-        });*/
     //}
 
     private void prepareForBattle(Pane root, Main.MenuBox menuBox,HumanPlayer hp){
@@ -433,13 +372,77 @@ public class Game {
                 fleet_v.setVisible(false);
             }
         });
+        board.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                System.out.println("innnnnn");
+                if (db.hasImage()) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
+                event.consume();
+            }
+        });
 
+        board.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasImage()) {
+                    Node node = event.getPickResult().getIntersectedNode();
+                    int row = 0;
+                    int col = 0;
+                    boolean f = false;
+                    while (row < 10 && !f) {
+                        col = 0;
+                        while (col < 10 && !f) {
+                            if (node == water[row][col].getChildren().get(2))
+                                f = true;
+                            else
+                                col++;
+                        }
+                        if (!f)
+                            row++;
+                    }
+                    int cnt = col + 4;
+                    for (int j = col; j < cnt; j++)
+                        water[row][j].getChildren().get(2).setVisible(false);
+                    event.setDropCompleted(true);
+                } else {
+                    event.setDropCompleted(false);
+                }
+            }
+        });
 
+        for(ImageView ship: ships_img) {
+            ship.setOnDragDetected(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    Dragboard db = ship.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    db.setDragView(ship.getImage(), 20, 20);
+                    content.putImage(ship.getImage());
+                    db.setContent(content);
+                    event.consume();
+                }
+            });
+            ship.setOnDragDone(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    TransferMode modeUsed = event.getTransferMode();
+                    if (modeUsed == TransferMode.MOVE) {
+                        ship.setVisible(false);
+                        //all_fleet.getChildren().remove(1);
+                    }
+                }
+            });
+        }
     }
     public void humanVscomputer(Pane root, Main.MenuBox menuBox, Scene scene) {
         HumanPlayer p1 = new HumanPlayer();
-       prepareForBattle(root,menuBox,p1);
+        prepareForBattle(root,menuBox,p1);
 
+        }
 
         //ArrayDeque<Player> queue = new ArrayDeque<>(2);
         /*ComputerPlayer c1 = new ComputerPlayer("Computer");
@@ -520,7 +523,6 @@ public class Game {
             printShipLocation((byte) 69, (byte) 14, c1); //цифры не нужны так как это старвй ввывод в консоли
         else
             printShipLocation((byte) 21, (byte) 14, p1);//цифры не нужны так как это старвй ввывод в консоли*/
-    }
 }
     /*// Methods associated with the visual part(work in the console)
     public void outputFields(Player p1, Player p2){
