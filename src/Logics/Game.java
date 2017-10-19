@@ -1,4 +1,5 @@
 package Logics;
+import Logics.coord.Coord;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -38,6 +39,8 @@ public class Game {
   Pane fleet_h = new Pane();
   Pane fleet_v = new Pane();
   StackPane[][] water = new StackPane[10][10];
+  private byte cur_sizeS;
+  private char cur_dir;
 
     public Game() {
         try(InputStream ot = Files.newInputStream(Paths.get("res/images/Ordinary_Tile_2.png"));
@@ -391,10 +394,10 @@ public class Game {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
-                if (db.hasImage()) {
+                if (db.hasImage() && hp.estabShip != 10) {
                     Node node = event.getPickResult().getIntersectedNode();
-                    int row = 0;
-                    int col = 0;
+                    byte row = 0;
+                    byte col = 0;
                     boolean f = false;
                     while (row < 10 && !f) {
                         col = 0;
@@ -407,10 +410,42 @@ public class Game {
                         if (!f)
                             row++;
                     }
-                    int cnt = col + 4;
-                    for (int j = col; j < cnt; j++)
-                        water[row][j].getChildren().get(2).setVisible(false);
-                    event.setDropCompleted(true);
+                    Coord crd1 = new Coord(row,col);
+                    Coord crd2 = new Coord((cur_dir == 'h')?row:(byte)(row+ cur_sizeS - 1),(cur_dir == 'v')?col:(byte)(col +cur_sizeS-1));
+
+                    if(hp.checkCollision(crd1,crd2)){
+                        if (cur_sizeS > 1) {
+                            Ship ship = new Ship(cur_sizeS, crd1, crd2, hp.field);
+                            ship.linkTilesWithDeck(hp.field);
+                            ship.linkTilesWithHalo(hp.field);
+                            hp.field.fleet.add(ship);
+                        }
+                        else {
+                            Ship ship = new Ship(cur_sizeS, crd1, hp.field);
+                            ship.linkTilesWithDeck(hp.field);
+                            ship.linkTilesWithHalo(hp.field);
+                            hp.field.fleet.add(ship);
+                        }
+                        hp.estabShip++;
+                        int shift;
+                        if(cur_dir == 'h'){
+                            shift = col + cur_sizeS;
+                            for(int j = col; j < shift; j++){
+                                water[row][j].getChildren().get(1).setVisible(false);
+                            }
+                        }
+                        else {
+                            shift = row + cur_sizeS;
+                            for(int i = row; i < shift; i++){
+                                water[i][col].getChildren().get(1).setVisible(false);
+                            }
+                        }
+                        event.setDropCompleted(true);
+                    }
+                    else {
+                        event.setDropCompleted(false);
+                    }
+
                 } else {
                     event.setDropCompleted(false);
                 }
@@ -421,6 +456,35 @@ public class Game {
             ship.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
+                    int i = 0;
+                    while(ships_img.get(i) != ship ) {
+                        i++;
+                    }
+                    switch (i){
+                        case 0:
+                        case 6:
+                            cur_sizeS = 4;
+                            break;
+                        case 1:
+                        case 2:
+                        case 7:
+                        case 8:
+                            cur_sizeS = 3;
+                            break;
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 15:
+                            cur_sizeS = 1;
+                            break;
+                        default:
+                            cur_sizeS = 2;
+
+                    }
+                    if(i < 6 || (i > 11 && i < 16))
+                        cur_dir = 'h';
+                    else
+                        cur_dir = 'v';
                     Dragboard db = ship.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
                     db.setDragView(ship.getImage(), 20, 20);
@@ -434,7 +498,46 @@ public class Game {
                 public void handle(DragEvent event) {
                     TransferMode modeUsed = event.getTransferMode();
                     if (modeUsed == TransferMode.MOVE) {
-                        ship.setVisible(false);
+                        if(cur_sizeS == 1)
+                            ship.setVisible(false);
+                        else{
+                            int i = 0;
+                            while(ships_img.get(i) != ship ) {
+                                i++;
+                            }
+                            switch (i) {
+                                case 0:
+                                case 6:
+                                    ships_img.get(0).setVisible(false);
+                                    ships_img.get(6).setVisible(false);
+                                    break;
+                                case 1:
+                                case 7:
+                                    ships_img.get(1).setVisible(false);
+                                    ships_img.get(7).setVisible(false);
+                                    break;
+                                case 2:
+                                case 8:
+                                    ships_img.get(2).setVisible(false);
+                                    ships_img.get(8).setVisible(false);
+                                    break;
+                                case 3:
+                                case 9:
+                                    ships_img.get(3).setVisible(false);
+                                    ships_img.get(9).setVisible(false);
+                                    break;
+                                case 4:
+                                case 10:
+                                    ships_img.get(4).setVisible(false);
+                                    ships_img.get(10).setVisible(false);
+                                    break;
+                                case 5:
+                                case 11:
+                                    ships_img.get(5).setVisible(false);
+                                    ships_img.get(11).setVisible(false);
+                                    break;
+                            }
+                        }
                         //all_fleet.getChildren().remove(1);
                     }
                 }

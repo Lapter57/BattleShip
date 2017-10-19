@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Ship {
     private Byte sizeShip = 0;
     private Byte hits = 0;
-    private ArrayList<Tile> deck;
-    private ArrayList<Tile> halo;
+    private ArrayList<Tile> deck = new ArrayList<>();
+    private ArrayList<Tile> halo = new ArrayList<>();
 
     public Ship(){}
     /*public Ship(Byte size){

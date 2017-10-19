@@ -5,9 +5,10 @@ import Logics.coord.Coord;
 
 
 public abstract class Player {
-    protected Field enemyField;
-    protected Field field;
+    protected Field enemyField = new Field();
+    protected Field field = new Field();
     protected Ship foundShip = null;
+    protected Byte estabShip = 0;
     protected String name;
     ArrayList<Byte> ships = new ArrayList<>(4);
 
@@ -41,9 +42,9 @@ for(int i = 0; i < 4; i++)
     }
 
     // Checking the correctness of coordinates input
-    public boolean checkC(final byte check){ return((check >= '0' && check <= '9') || (check >= 'A' && check <= 'J') || (check >= 'a' && check <= 'j') || ((check >=  0 && check <= 9))); }
+    public boolean checkC(final byte check){ return(check >=0 && check < 10); }
     public boolean checkC(final byte check1, final byte check2){
-        return ( ((check1 >= '0' && check1 <= '9') && ((check2 >= 'A' && check2 <= 'J') || (check2 >= 'a' && check2 <= 'j'))) || ((check2 >= '0' && check2 <= '9') && ((check1 >= 'A' && check1 <= 'J') || (check1 >= 'a' && check1 <= 'j'))) );
+        return ( check1 >=0 && check1 < 10 && check2 >=0 && check2 < 10);
     }
 
     // Checking that the tile has not yet been shot
@@ -103,24 +104,32 @@ for(int i = 0; i < 4; i++)
             }
         }
 
-        boolean check = true;
-        byte i = checkStart;
-        while (check && i <= checkEnd) {
-            if (checkC(i)) {
-                if (disription == 'h') {
-                    if (field.grid[coord1.row][i] != null && field.grid[coord1.row][i].getLinkShip() != null) check = false;
-                    if (check && checkC((byte)(coord1.row + 1)) && field.grid[coord1.row + 1][i] != null && field.grid[coord1.row + 1][i].getLinkShip() != null) check = false;
-                    if (check && checkC((byte)(coord1.row - 1)) && field.grid[coord1.row - 1][i] != null && field.grid[coord1.row - 1][i].getLinkShip() != null) check = false;
-                }
-                else {
-                    if (field.grid[i][coord1.col] != null && field.grid[i][coord1.col].getLinkShip() != null) check = false;
-                    if (check && checkC((byte)(coord1.col + 1)) && field.grid[i][coord1.col + 1] != null && field.grid[i][coord1.col + 1].getLinkShip() != null) check = false;
-                    if (check && checkC((byte)(coord1.col - 1)) && field.grid[i][coord1.col - 1] != null && field.grid[i][coord1.col - 1].getLinkShip() != null) check = false;
-                }
-            } // if (checkC(i))
-            i++;
-        } // while (check && i <= checkEnd)
-        return check;
+        if(checkC(coord1.col,coord1.row) && checkC(coord2.col,coord2.row)) {
+            boolean check = true;
+            byte i = checkStart;
+            while (check && i <= checkEnd) {
+                if (checkC(i)) {
+                    if (disription == 'h') {
+                        if (field.grid[coord1.row][i] != null && field.grid[coord1.row][i].getLinkShip() != null)
+                            check = false;
+                        if (check && checkC((byte) (coord1.row + 1)) && field.grid[coord1.row + 1][i] != null && field.grid[coord1.row + 1][i].getLinkShip() != null)
+                            check = false;
+                        if (check && checkC((byte) (coord1.row - 1)) && field.grid[coord1.row - 1][i] != null && field.grid[coord1.row - 1][i].getLinkShip() != null)
+                            check = false;
+                    } else {
+                        if (field.grid[i][coord1.col] != null && field.grid[i][coord1.col].getLinkShip() != null)
+                            check = false;
+                        if (check && checkC((byte) (coord1.col + 1)) && field.grid[i][coord1.col + 1] != null && field.grid[i][coord1.col + 1].getLinkShip() != null)
+                            check = false;
+                        if (check && checkC((byte) (coord1.col - 1)) && field.grid[i][coord1.col - 1] != null && field.grid[i][coord1.col - 1].getLinkShip() != null)
+                            check = false;
+                    }
+                } // if (checkC(i))
+                i++;
+            } // while (check && i <= checkEnd)
+            return check;
+        }
+        return false;
     }
 
     //-------------------------------------------------------------------------------------
