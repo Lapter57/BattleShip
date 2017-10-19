@@ -106,14 +106,14 @@ public class Game {
 
         Rectangle fl_h = new Rectangle(450,450, Color.valueOf("#EFF0F1"));
         fl_h.setOpacity(0.5);
-        fleet_h.setTranslateX(750);
-        fleet_h.setTranslateY(70);
+        /*fleet_h.setTranslateX(750);
+        fleet_h.setTranslateY(70);*/
         fleet_h.getChildren().add(fl_h);
         Rectangle fl_v = new Rectangle(450,450, Color.valueOf("#EFF0F1"));
         fl_v.setOpacity(0.5);
         fleet_v.getChildren().add(fl_v);
-        fleet_v.setTranslateX(750);
-        fleet_v.setTranslateY(70);
+       /* fleet_v.setTranslateX(750);
+        fleet_v.setTranslateY(70);*/
         fleet_v.setVisible(false);
 
         fleet_h.getChildren().add(ships_img.get(0));
@@ -162,6 +162,8 @@ public class Game {
             shift -= 135;
         }
         all_fleet.getChildren().addAll(fleet_v,fleet_h);
+        all_fleet.setMaxWidth(450);
+        all_fleet.setMinHeight(450);
     }
 
 
@@ -314,6 +316,8 @@ public class Game {
 
     private void prepareForBattle(Pane root, Main.MenuBox menuBox,HumanPlayer hp){
         root.getChildren().addAll(board,all_fleet);
+        all_fleet.setTranslateY(70);
+        all_fleet.setTranslateX(750);
         TextField namePlayer = new TextField();
         namePlayer.setPromptText("Enter your nickname");
         namePlayer.setFocusTraversable(false);
@@ -376,7 +380,6 @@ public class Game {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
-                System.out.println("innnnnn");
                 if (db.hasImage()) {
                     event.acceptTransferModes(TransferMode.MOVE);
                 }
@@ -396,7 +399,7 @@ public class Game {
                     while (row < 10 && !f) {
                         col = 0;
                         while (col < 10 && !f) {
-                            if (node == water[row][col].getChildren().get(2))
+                            if (node == water[row][col].getChildren().get(1))
                                 f = true;
                             else
                                 col++;
