@@ -1,9 +1,12 @@
 package Logics;
 import Logics.coord.Coord;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -17,6 +20,7 @@ import javafx.scene.paint.Color;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +47,8 @@ public class Game {
   private byte cur_sizeS;
   private char cur_dir;
   Boolean first_click_auto = true;
+  StackPane pointer = new StackPane();
+    TextField namePlayer = new TextField();
 
     public Game() {
         try(InputStream ot = Files.newInputStream(Paths.get("res/images/Ordinary_Tile_2.png"));
@@ -58,7 +64,9 @@ public class Game {
             InputStream des_v = Files.newInputStream(Paths.get("res/images/ships/Des_ver.png"));
             InputStream sub_h = Files.newInputStream(Paths.get("res/images/ships/Sub_hor.png"));
             InputStream sub_v = Files.newInputStream(Paths.get("res/images/ships/Sub_ver.png"));
-            InputStream frig = Files.newInputStream(Paths.get("res/images/ships/Frigate.png"))) {
+            InputStream frig = Files.newInputStream(Paths.get("res/images/ships/Frigate.png"));
+            InputStream gr_p = Files.newInputStream(Paths.get("res/images/Green_Pointer.png"));
+            InputStream red_p = Files.newInputStream(Paths.get("res/images/Red_Pointer.png"))) {
             map_img.put("ot",new Image(ot));
             map_img.put("dt",new Image(dt));
             map_img.put("ft",new Image(ft));
@@ -66,6 +74,8 @@ public class Game {
             map_img.put("ds",new Image(ds));
             map_img.put("nb",new Image(nb));
             map_img.put("lb",new Image(lb));
+            map_img.put("gp",new Image(gr_p));
+            map_img.put("rp",new Image(red_p));
 
             Image ch = new Image(car_h);
             Image cv = new Image(car_v);
@@ -101,8 +111,10 @@ public class Game {
             for(int j = 0; j < 10; j++) {
                 water[i][j] = new StackPane();
                 ImageView img_ot = new ImageView(map_img.get("ot"));
+//              ImageView img_ft = new ImageView(map_img.get("ft"));
                 ImageView img_us = new ImageView(map_img.get("us"));
                 water[i][j].getChildren().add(img_us);
+//              water[i][j].getChildren().add(img_ft);
                 water[i][j].getChildren().add(img_ot);
                 board.add(water[i][j],j,i);
             }
@@ -111,14 +123,10 @@ public class Game {
 
         Rectangle fl_h = new Rectangle(450,450, Color.valueOf("#EFF0F1"));
         fl_h.setOpacity(0.5);
-        /*fleet_h.setTranslateX(750);
-        fleet_h.setTranslateY(70);*/
         fleet_h.getChildren().add(fl_h);
         Rectangle fl_v = new Rectangle(450,450, Color.valueOf("#EFF0F1"));
         fl_v.setOpacity(0.5);
         fleet_v.getChildren().add(fl_v);
-       /* fleet_v.setTranslateX(750);
-        fleet_v.setTranslateY(70);*/
         fleet_v.setVisible(false);
 
         fleet_h.getChildren().add(ships_img.get(0));
@@ -319,7 +327,7 @@ public class Game {
 
     //}
 
-    private void clearBoard(HumanPlayer hp){
+    private void clearBoard(Player pl){
         for(int i = 0; i < 10; i++)
             for(int j = 0; j < 10; j++)
                 water[i][j].getChildren().get(1).setVisible(true);
@@ -327,35 +335,28 @@ public class Game {
         for(ImageView img: ships_img){
             img.setVisible(true);
         }
+            pl.field.clearField();
+            pl.ships.clear();
 
-        hp.field.clearField();
-        hp.ships.clear();
     }
 
-    private void prepareForBattle(Pane root, Main.MenuBox menuBox,HumanPlayer hp){
-        root.getChildren().addAll(board,all_fleet);
+    private void prepareForBattle(HumanPlayer hp, Pane gameHvH, MainStPain msp) {
+        gameHvH.getChildren().addAll(board, all_fleet);
         all_fleet.setTranslateY(70);
         all_fleet.setTranslateX(750);
-        TextField namePlayer = new TextField();
+
         namePlayer.setPromptText("Enter your nickname");
         namePlayer.setFocusTraversable(false);
-        namePlayer.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD,26));
-        namePlayer.setPrefSize(400,50);
+        namePlayer.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 26));
+        namePlayer.setPrefSize(400, 50);
         StackPane st = new StackPane(namePlayer);
         st.setTranslateX(800);
         st.setTranslateY(550);
-        namePlayer.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER){
-                if(!namePlayer.getText().isEmpty())
-                    hp.name = namePlayer.getText();
-                st.requestFocus();
-            }
-        });
 
-        root.getChildren().add(st);
+        gameHvH.getChildren().add(st);
         Main.MenuItem autoChoice = new Main.MenuItem("AUTO",400,50);
         autoChoice.setOnMouseClicked(event -> {
-            if(!first_click_auto) {
+            if(false == first_click_auto) {
                 clearBoard(hp);
             }
             hp.setPlaceShipRand();
@@ -375,33 +376,41 @@ public class Game {
         clear.setOnMouseClicked(event -> {
             clearBoard(hp);
         });
-        Main.MenuItem ready = new Main.MenuItem("BATTLE!",400,50);
-        ready.setTranslateX(800);
-        ready.setTranslateY(615);
-        root.getChildren().add(ready);
         VBox deployMenu = new VBox(
                 autoChoice,clear
         );
+
+        Main.MenuItem bck = new Main.MenuItem("BACK",90,90);
+        bck.setTranslateX(0);
+        bck.setTranslateY(630);
+        gameHvH.getChildren().add(bck);
+        bck.setOnMouseClicked(event -> {
+            clearBoard(hp);
+            gameHvH.setVisible(false);
+            msp.menuBox.setVisible(true);
+            msp.title.setVisible(true);
+        });
+
         deployMenu.setSpacing(15);
         deployMenu.setTranslateX(175);
         deployMenu.setTranslateY(550);
-        menuBox.setSubMenu(deployMenu);
+        gameHvH.getChildren().add(deployMenu);
 
         ImageView numB = new ImageView(map_img.get("nb"));
         numB.setFitHeight(450);
         numB.setFitWidth(45);
         numB.setTranslateX(105);
         numB.setTranslateY(70);
-        root.getChildren().add(numB);
+        gameHvH.getChildren().add(numB);
         ImageView letB = new ImageView(map_img.get("lb"));
         letB.setFitHeight(45);
         letB.setFitWidth(450);
         letB.setTranslateX(150);
         letB.setTranslateY(25);
-        root.getChildren().add(letB);
+        gameHvH.getChildren().add(letB);
 
         Main.MenuItem rot90 = new Main.MenuItem("Rot90",90,90);
-        root.getChildren().add(rot90);
+        gameHvH.getChildren().add(rot90);
         rot90.setTranslateX(660);
         rot90.setTranslateY(70);
         rot90.setOnMouseClicked(event -> {
@@ -579,11 +588,129 @@ public class Game {
             });
         }
     }
-    public void humanVscomputer(Pane root, Main.MenuBox menuBox, Scene scene) {
-        HumanPlayer p1 = new HumanPlayer();
-        prepareForBattle(root,menuBox,p1);
 
-        }
+    private void createPlayingfields(Player pl, MainStPain msp, Pane playingFields, int b_x, int b_y){
+
+        for(int i = 0; i < 10; i++)
+            for(int j = 0; j < 10; j++) {
+                pl.water[i][j] = new StackPane();
+                ImageView img_ot = new ImageView(map_img.get("ot"));
+                ImageView img_us = new ImageView(map_img.get("us"));
+                ImageView img_dt = new ImageView(map_img.get("dt"));
+                ImageView img_ds = new ImageView(map_img.get("ds"));
+                pl.water[i][j].getChildren().add(img_us);
+                pl.water[i][j].getChildren().add(img_ds);
+                pl.water[i][j].getChildren().add(img_dt);
+                pl.water[i][j].getChildren().add(img_ot);
+                pl.board.add(pl.water[i][j],j,i);
+            }
+        pl.board.setTranslateX(b_x);
+        pl.board.setTranslateY(b_y);
+        playingFields.getChildren().add(pl.board);
+
+        ImageView numB = new ImageView(map_img.get("nb"));
+        numB.setFitHeight(450);
+        numB.setFitWidth(45);
+        numB.setTranslateX((b_x == 150)?105:705+495);
+        numB.setTranslateY(115);
+        playingFields.getChildren().add(numB);
+        ImageView letB = new ImageView(map_img.get("lb"));
+        letB.setFitHeight(45);
+        letB.setFitWidth(450);
+        letB.setTranslateX((b_x == 150)?150:750);
+        letB.setTranslateY(70);
+        playingFields.getChildren().add(letB);
+
+
+        Rectangle sa = new Rectangle(360,135, Color.valueOf("#EFF0F1"));
+        sa.setOpacity(0.5);
+        sa.setArcHeight(20);
+        sa.setArcWidth(20);
+        pl.stat_area.setLayoutX((b_x == 150)?195:795);
+        pl.stat_area.setLayoutY(565);
+        pl.stat_area.setAlignment(Pos.CENTER);
+        pl.stat_area.getChildren().addAll(sa, pl.cur_stat);
+        pl.cur_stat.setTranslateY(17);
+
+        Rectangle na = new Rectangle(225,45, Color.valueOf("#EFF0F1"));
+        na.setOpacity(0.5);
+        na.setArcHeight(20);
+        na.setArcWidth(20);
+        pl.name_area.setLayoutX((b_x == 150)?150:750);
+        pl.name_area.setLayoutY(20);
+        Text name = new Text(pl.name.toString());
+        name.setFill(Color.valueOf("#455760"));
+        name.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD,30));
+        pl.name_area.getChildren().addAll(na,name);
+        name.setTranslateX(-25);
+        playingFields.getChildren().addAll(pl.stat_area, pl.name_area);
+
+
+    }
+    public void humanVscomputer(Pane gameHvH, MainStPain msp) {
+        HumanPlayer hp = new HumanPlayer();
+        prepareForBattle(hp,gameHvH, msp);
+        Main.MenuItem ready = new Main.MenuItem("BATTLE!",400,50);
+        ready.setTranslateX(800);
+        ready.setTranslateY(615);
+        gameHvH.getChildren().add(ready);
+
+        Pane playingFields = new Pane();
+        playingFields.setVisible(true);
+        playingFields.setMaxHeight(720);
+        playingFields.setMaxWidth(1280);
+
+        ready.setOnMouseClicked(event -> {
+            if(hp.field.fleet.size() == 10) {
+                if(!namePlayer.getText().isEmpty()) {
+                    hp.name.delete(0, hp.name.length());
+                    hp.name.append(namePlayer.getText());
+                    System.out.println(hp.name.toString());
+                    if(hp.name.length() > 15){
+                        hp.name.delete(15, hp.name.length());
+                    }
+                }
+                ArrayDeque<Player> queue = new ArrayDeque<>(2);
+                ComputerPlayer cp = new ComputerPlayer();
+                queue.addLast(hp);
+                queue.addLast(cp);
+                ImageView rp = new ImageView(map_img.get("rp"));
+                ImageView gp = new ImageView(map_img.get("gp"));
+                rp.setVisible(false);
+                pointer.getChildren().addAll(rp,gp);
+                msp.getChildren().add(pointer);
+                pointer.setMaxWidth(150);
+                pointer.setMaxHeight(225);
+                pointer.setLayoutX(600);
+                pointer.setLayoutY(295);
+                rp.setTranslateX(45);
+                rp.setTranslateY(-20);
+                gp.setTranslateX(45);
+                gp.setTranslateY(-20);
+                cp.setPlaceShipRand();
+                gameHvH.setVisible(false);
+
+                cp.setEnemyField(hp.getRefField());
+                hp.setEnemyField(cp.getRefField());
+
+                msp.getChildren().add(playingFields);
+                createPlayingfields(hp, msp, playingFields, 150, 115);
+                createPlayingfields(cp, msp, playingFields, 750, 115);
+            /*Player curP;
+            byte id = 0;
+            while (!hp.gameOver() && !cp.gameOver()) {
+                curP = queue.pop();
+                curP.yourTurn(this, queue.getFirst(), id);
+                id = (id == 0) ? id++ : id--;
+                queue.addLast(curP);
+            }
+            if(hp.gameOver()){
+
+            }*/
+            }
+        });
+
+    }
 
         //ArrayDeque<Player> queue = new ArrayDeque<>(2);
         /*ComputerPlayer c1 = new ComputerPlayer("Computer");

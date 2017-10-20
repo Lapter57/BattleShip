@@ -18,11 +18,11 @@ public class ComputerPlayer extends Player {
     Coord firstDestTile;
 
     // Constructor and destructor
-    public ComputerPlayer(String name){
+    public ComputerPlayer(StringBuilder name){
         super(name);
     }
     public ComputerPlayer(){
-        super("Computer");
+        super(new StringBuilder("Computer"));
     }
 
     // Method that generates coordinates for a shot based on a diagonal strategy

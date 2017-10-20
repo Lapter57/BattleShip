@@ -1,15 +1,31 @@
 package Logics;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import Logics.coord.Coord;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 
 public abstract class Player {
+    protected GridPane board = new GridPane();
+    {board.setPrefSize(10, 10);}
+    protected StackPane[][] water = new StackPane[10][10];
+    protected StackPane name_area = new StackPane();
+    protected StackPane stat_area = new StackPane();
+    {   stat_area.setMinHeight(135);
+        stat_area.setMaxWidth(360);
+    }
+    protected Text cur_stat;
     protected Field enemyField = new Field();
     protected Field field = new Field();
     protected Ship foundShip = null;
     protected Byte estabShip = 0;
-    protected String name;
+    protected StringBuilder name;
     ArrayList<Byte> ships = new ArrayList<>(4);
 
   protected enum TypeShip{
@@ -30,17 +46,21 @@ public static String getClassName() {
     }
 
 
-    public Player(String name){
+    public Player(StringBuilder name){
         this.name = name;
         byte j = 4;
-
-for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 4; i++)
             ships.add(j--);
-
-        for (Byte el: ships)
-            el = j--; // проверить работает или нет
+        String str = "CARRIER: " + ships.get(3) + "\n" + "SUBMARINE: " + ships.get(2) + "\n" + "DESTROYED: " + ships.get(1) + "\n" + "FRIGATE: " + ships.get(0) + "\n";
+        cur_stat = new Text(str);
+        cur_stat.setFill(Color.valueOf("#455760"));
+        cur_stat.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD,30));
     }
 
+    public void updateCurStat(){
+        String str = "CARRIER: " + ships.get(3) + "\n" + "SUBMARINE: " + ships.get(2) + "\n" + "DESTROYED: " + ships.get(1) + "\n" +  "FRIGATE: " + ships.get(0) + "\n";
+        cur_stat.setText(str);
+    }
     // Checking the correctness of coordinates input
     public boolean checkC(final byte check){ return(check >=0 && check < 10); }
     public boolean checkC(final byte check1, final byte check2){
@@ -72,7 +92,7 @@ for(int i = 0; i < 4; i++)
     Field getRefField() { return field; }
 
     // Getting the player's name
-    public String getName() { return name; }
+    public StringBuilder getName() { return name; }
 
     //-------------------------------------------------------------------------------------
 

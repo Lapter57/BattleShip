@@ -30,58 +30,40 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage primaryStage){
-      Pane root = new Pane();
-      try(InputStream is = Files.newInputStream(Paths.get("res/images/BattleShip.jpg"))) {
-          ImageView img = new ImageView(new Image(is));
-          img.setFitHeight(720);
-          img.setFitWidth(1280);
-          root.getChildren().add(img);
-      }
-      catch (IOException e){
-          System.out.println("Couldn't load image");
-      }
-        Title title = new Title("B A T T L E S H I P");
-        title.setTranslateX(410);
-        title.setTranslateY(100);
-        MenuItem newGame = new MenuItem("NEW GAME",400,50);
-        MenuItem options = new MenuItem("STATISTICS",400,50);
-        MenuItem exitGame = new MenuItem("EXIT",400,50);
-        SubMenu mainMenu = new SubMenu(
-                newGame,options,exitGame
-        );
-        MenuItem hvC = new MenuItem("HUMAN VS COMPUTER",400,50);
-        MenuItem hvH = new MenuItem("HUMAN VS HUMAN",400,50);
-        MenuItem bck = new MenuItem("BACK",400,50);
-        SubMenu newGameMenu = new SubMenu(
-                hvC,hvH,bck
-        );
-        MenuBox menuBox = new MenuBox(mainMenu);
+        MainStPain msp = new MainStPain();
 
-        Scene scene = new Scene(root);
-        newGame.setOnMouseClicked(event->menuBox.setSubMenu(newGameMenu));
-        exitGame.setOnMouseClicked(event-> System.exit(0));
-        bck.setOnMouseClicked(event-> menuBox.setSubMenu(mainMenu));
-       hvC.setOnMouseClicked(event -> {
-            /*SubMenu gameHvC = new SubMenu();
-            title.setVisible(false);
-            menuBox.setSubMenu(gameHvC);*/
-            title.setVisible(false);
-            Game game = new Game();
-            game.humanVscomputer(root,menuBox,scene);
+
+        Scene scene = new Scene(msp);
+        msp.newGame.setOnMouseClicked(event->msp.menuBox.setSubMenu(msp.newGameMenu));
+        msp.exitGame.setOnMouseClicked(event-> System.exit(0));
+        msp.bck.setOnMouseClicked(event-> {
+            msp.menuBox.setSubMenu(msp.mainMenu);
+            msp.title.setVisible(true);
         });
-        hvH.setOnMouseClicked(event -> {
+        msp.hvC.setOnMouseClicked(event -> {
+            Pane gameHvH = new Pane();
+            msp.getChildren().add(gameHvH);
+            gameHvH.setVisible(true);
+            gameHvH.setMaxHeight(720);
+            gameHvH.setMaxWidth(1280);
+            msp.menuBox.setVisible(false);
+            msp.title.setVisible(false);
+            Game game = new Game();
+            game.humanVscomputer(gameHvH,msp);
+        });
+        msp.hvH.setOnMouseClicked(event -> {
            /* SubMenu gameHvH = new SubMenu();
             title.setVisible(false);
             menuBox.setSubMenu(gameHvH);*/
             /*Game game = new Game();
             game.humanVshuman();*/
         });
-        root.getChildren().addAll(menuBox, title);
 
-        menuBox.setVisible(true);
-        title.setVisible(true);
+        msp.menuBox.setVisible(true);
+        msp.title.setVisible(true);
         /*scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 FadeTransition ft1 = new FadeTransition(Duration.seconds(1),menuBox);
@@ -130,7 +112,8 @@ public class Main extends Application {
             });
             Rectangle bg = new Rectangle(x,y);
             bg.setOpacity(0.5);
-
+            bg.setArcHeight(20);
+            bg.setArcWidth(20);
             Text text = new Text(name);
             text.setFill(Color.DARKGRAY);
             text.setFont(Font.font("Tw Cen MT Condensed",FontWeight.SEMI_BOLD,26));
@@ -182,9 +165,7 @@ public class Main extends Application {
         public MenuBox(VBox subMenu){
             MenuBox.subMenu = subMenu;
             setVisible(false);
-            Rectangle bg = new Rectangle(1280,720,Color.LIGHTBLUE);
-            bg.setOpacity(0.3);
-            getChildren().addAll(bg, subMenu);
+            getChildren().addAll(subMenu);
         }
         public void setSubMenu(VBox subMenu){
             getChildren().remove(MenuBox.subMenu);
