@@ -1,5 +1,6 @@
 package Logics;
 import Logics.coord.Coord;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -41,6 +42,7 @@ public class Game {
   StackPane[][] water = new StackPane[10][10];
   private byte cur_sizeS;
   private char cur_dir;
+  Boolean first_click_auto = true;
 
     public Game() {
         try(InputStream ot = Files.newInputStream(Paths.get("res/images/Ordinary_Tile_2.png"));
@@ -317,6 +319,19 @@ public class Game {
 
     //}
 
+    private void clearBoard(HumanPlayer hp){
+        for(int i = 0; i < 10; i++)
+            for(int j = 0; j < 10; j++)
+                water[i][j].getChildren().get(1).setVisible(true);
+
+        for(ImageView img: ships_img){
+            img.setVisible(true);
+        }
+
+        hp.field.clearField();
+        hp.ships.clear();
+    }
+
     private void prepareForBattle(Pane root, Main.MenuBox menuBox,HumanPlayer hp){
         root.getChildren().addAll(board,all_fleet);
         all_fleet.setTranslateY(70);
@@ -339,7 +354,27 @@ public class Game {
 
         root.getChildren().add(st);
         Main.MenuItem autoChoice = new Main.MenuItem("AUTO",400,50);
+        autoChoice.setOnMouseClicked(event -> {
+            if(!first_click_auto) {
+                clearBoard(hp);
+            }
+            hp.setPlaceShipRand();
+            for (int i = 0; i < 10; i++)
+                for (int j = 0; j < 10; j++) {
+                    if (hp.field.grid[i][j].getLinkShip() != null) {
+                        water[i][j].getChildren().get(1).setVisible(false);
+                    }
+                }
+            for (ImageView img : ships_img) {
+                img.setVisible(false);
+            }
+            first_click_auto = false;
+
+        });
         Main.MenuItem clear = new Main.MenuItem("CLEAR",400,50);
+        clear.setOnMouseClicked(event -> {
+            clearBoard(hp);
+        });
         Main.MenuItem ready = new Main.MenuItem("BATTLE!",400,50);
         ready.setTranslateX(800);
         ready.setTranslateY(615);

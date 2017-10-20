@@ -29,9 +29,8 @@ public class Ship {
                 colMin = coord2.col;
                 colMax = coord1.col;
             }
-            Tile tile;
             for (byte i = colMin; i <= colMax; i++) {
-                tile = new Tile(coord1.row, i);
+                Tile tile = new Tile(coord1.row, i);
                 deck.add(tile);
             }
             fillHalo(coord1.row, (byte)(colMin - 1), size, 'h', field);
@@ -46,9 +45,8 @@ public class Ship {
                 rowMin = coord2.row;
                 rowMax = coord1.row;
             }
-            Tile tile;
             for (byte i = rowMin; i <= rowMax; i++) {
-                tile = new Tile(i, coord1.col);
+                Tile tile = new Tile(i, coord1.col);
                 deck.add(tile);
             }
             fillHalo((byte)(rowMin - 1), coord1.col, size, 'v', field);
@@ -80,11 +78,10 @@ public class Ship {
         }
 
         byte max_path = (byte)(size * 2 + 6);
-        Tile tile;
         for (int i = 1; i <= (max_path); i++) {
             if (checkCoord(trav_width) && checkCoord(trav_length)) {
                 if (((direction == 'h') && field.grid[trav_width][trav_length] == null) || ((direction == 'v') && field.grid[trav_length][trav_width] == null)) {
-                    tile = new Tile();
+                    Tile tile = new Tile();
                     if (direction == 'h') {
                         tile.setRow(trav_width);
                         tile.setCol(trav_length);

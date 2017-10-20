@@ -15,30 +15,36 @@ public class Field {
     Byte numShipAfloat = 10;
 
     public Field() {
-        for (Tile[] el1 : grid)
-            for (Tile el2 :el1){
+        for (Tile[] el1 : grid) {
+            for (Tile el2 : el1) {
                 el2 = null;
             }
+        }
     }
 
     //-------------------------------------------------------------------------------------
 
     // Method of filling the playing field
     public void initEmptyTiles() {
-        Tile tile;
-        byte i, j;
-        i = j = 0;
+       // Tile tile;
+        byte i = 0, j = 0;
         for (Tile[] el1 : grid) {
             for (Tile el2 : el1) {
                 if (el2 == null) {
-                    tile = new Tile(i, j);
-                    el2 = tile;
+                    addTile(new Tile(i, j));
                 }
                 j++;
             }
             j = 0;
             i++;
         }
+    }
+
+    public void clearField(){
+        for(int i = 0; i < 10;i++)
+            for(int j = 0; j < 10; j++)
+                grid[i][j] = null;
+        fleet.clear();
     }
 
     // Methods of filling the playing field
