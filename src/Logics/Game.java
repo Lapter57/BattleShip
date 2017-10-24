@@ -1,5 +1,6 @@
 package Logics;
 import Logics.coord.Coord;
+import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -13,6 +14,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -43,6 +46,7 @@ public class Game {
             InputStream ft = Files.newInputStream(Paths.get("res/images/Focus_Tile.png"));
             InputStream dt = Files.newInputStream(Paths.get("res/images/Dead_Tile_2.png"));
             InputStream ds = Files.newInputStream(Paths.get("res/images/Destroyed_Ship_3.png"));
+            InputStream hs = Files.newInputStream(Paths.get("res/images/Hurt_Ship.png"));
             InputStream nb = Files.newInputStream(Paths.get("res/images/Num_Board.png"));
             InputStream lb = Files.newInputStream(Paths.get("res/images/Let_Board.png"));
             InputStream car_h = Files.newInputStream(Paths.get("res/images/ships/Car_hor.png"));
@@ -58,6 +62,7 @@ public class Game {
             map_img.put("dt",new Image(dt));
             map_img.put("ft",new Image(ft));
             map_img.put("us",new Image(us));
+            map_img.put("hs",new Image(hs));
             map_img.put("ds",new Image(ds));
             map_img.put("nb",new Image(nb));
             map_img.put("lb",new Image(lb));
@@ -583,10 +588,12 @@ public class Game {
                 pl.water[i][j] = new StackPane();
                 ImageView img_ot = new ImageView(map_img.get("ot"));
                 ImageView img_us = new ImageView(map_img.get("us"));
+                ImageView img_hs = new ImageView(map_img.get("hs"));
                 ImageView img_dt = new ImageView(map_img.get("dt"));
                 ImageView img_ds = new ImageView(map_img.get("ds"));
                 pl.water[i][j].getChildren().add(img_us);
                 pl.water[i][j].getChildren().add(img_ds);
+                pl.water[i][j].getChildren().add(img_hs);
                 pl.water[i][j].getChildren().add(img_dt);
                 pl.water[i][j].getChildren().add(img_ot);
                 pl.board.add(pl.water[i][j],j,i);
@@ -638,23 +645,24 @@ public class Game {
     void createPointer(Pane playingFields){
         ImageView rp = new ImageView(map_img.get("rp"));
         ImageView gp = new ImageView(map_img.get("gp"));
-        rp.setVisible(false);
         pointer.getChildren().addAll(rp,gp);
         playingFields.getChildren().add(pointer);
         pointer.setMaxWidth(150);
         pointer.setMaxHeight(225);
         pointer.setLayoutX(600);
         pointer.setLayoutY(295);
-        rp.setTranslateX(45);
+        rp.setTranslateX(25);
         rp.setTranslateY(-20);
         gp.setTranslateX(45);
         gp.setTranslateY(-20);
+        rp.setVisible(false);
     }
 
     void printShipLocation(Player pl){
         for(int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if(pl.field.grid[i][j].getLinkShip() != null && pl.field.grid[i][j].getState() != 'x'){
+                    pl.water[i][j].getChildren().get(4).setVisible(false);
                     pl.water[i][j].getChildren().get(3).setVisible(false);
                     pl.water[i][j].getChildren().get(2).setVisible(false);
                     pl.water[i][j].getChildren().get(1).setVisible(false);
@@ -663,7 +671,7 @@ public class Game {
         }
     }
 
-    public void humanVscomputer(Pane gameHvH, MainStPain msp) {
+    public void humanVscomputer(Pane gameHvH, MainStPain msp){
         HumanPlayer hp = new HumanPlayer();
         prepareForBattle(hp,gameHvH, msp);
         Main.MenuItem ready = new Main.MenuItem("BATTLE!",400,50);
@@ -709,7 +717,7 @@ public class Game {
                                 while (row < 10 && !f) {
                                     col = 0;
                                     while (col < 10 && !f) {
-                                        if (node == cp.water[row][col].getChildren().get(3))
+                                        if (node == cp.water[row][col].getChildren().get(4))
                                             f = true;
                                         else
                                             col++;
@@ -721,11 +729,15 @@ public class Game {
                                     coord = new Coord(row, col);
                                     if (false == hp.yourTurn(this, cp, coord)) {
                                         pointer.getChildren().get(1).setVisible(false);
+                                        pointer.getChildren().get(0).setVisible(true);
                                         if (cp.gameOver()) {
 
                                         } else {
-                                            pointer.getChildren().get(0).setVisible(true);
-                                            cp.yourTurn(this, hp);
+                                           /* PauseTransition pause = new PauseTransition(Duration.millis(400));
+                                            pause.play();
+                                            pause.setOnFinished(event2 -> {*/
+                                                cp.yourTurn(this, hp);
+                                         //  });
                                             pointer.getChildren().get(0).setVisible(false);
                                             pointer.getChildren().get(1).setVisible(true);
                                         }

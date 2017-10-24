@@ -23,9 +23,9 @@ public abstract class Player {
     protected Text cur_stat;
     protected Field enemyField = new Field();
     protected Field field = new Field();
-    protected Ship foundShip = null;
     protected Byte estabShip = 0;
     protected StringBuilder name;
+    protected Ship foundShip = null;
     ArrayList<Byte> ships = new ArrayList<>(4);
 
   /*protected enum TypeShip{

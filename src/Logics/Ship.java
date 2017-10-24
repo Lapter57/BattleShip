@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Ship {
     private Byte sizeShip = 0;
     private Byte hits = 0;
-    private ArrayList<Tile> deck = new ArrayList<>();
+    ArrayList<Tile> deck = new ArrayList<>();
     ArrayList<Tile> halo = new ArrayList<>();
 
     public Ship(){}
@@ -141,7 +141,7 @@ public class Ship {
         for (int i = 0; i < halo.size(); i++)
             if (halo.get(i).getState() != '*') {
                 halo.get(i).setState('*');
-                water[halo.get(i).getRow()][halo.get(i).getCol()].getChildren().get(3).setVisible(false);
+                water[halo.get(i).getRow()][halo.get(i).getCol()].getChildren().get(4).setVisible(false);
             }
     }
 
