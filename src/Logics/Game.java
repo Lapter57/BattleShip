@@ -634,6 +634,35 @@ public class Game {
 
 
     }
+
+    void createPointer(Pane playingFields){
+        ImageView rp = new ImageView(map_img.get("rp"));
+        ImageView gp = new ImageView(map_img.get("gp"));
+        rp.setVisible(false);
+        pointer.getChildren().addAll(rp,gp);
+        playingFields.getChildren().add(pointer);
+        pointer.setMaxWidth(150);
+        pointer.setMaxHeight(225);
+        pointer.setLayoutX(600);
+        pointer.setLayoutY(295);
+        rp.setTranslateX(45);
+        rp.setTranslateY(-20);
+        gp.setTranslateX(45);
+        gp.setTranslateY(-20);
+    }
+
+    void printShipLocation(Player pl){
+        for(int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if(pl.field.grid[i][j].getLinkShip() != null && pl.field.grid[i][j].getState() != 'x'){
+                    pl.water[i][j].getChildren().get(3).setVisible(false);
+                    pl.water[i][j].getChildren().get(2).setVisible(false);
+                    pl.water[i][j].getChildren().get(1).setVisible(false);
+                }
+            }
+        }
+    }
+
     public void humanVscomputer(Pane gameHvH, MainStPain msp) {
         HumanPlayer hp = new HumanPlayer();
         prepareForBattle(hp,gameHvH, msp);
@@ -657,23 +686,7 @@ public class Game {
                         hp.name.delete(15, hp.name.length());
                     }
                 }
-                ArrayDeque<Player> queue = new ArrayDeque<>(2);
                 ComputerPlayer cp = new ComputerPlayer();
-                queue.addLast(hp);
-                queue.addLast(cp);
-                ImageView rp = new ImageView(map_img.get("rp"));
-                ImageView gp = new ImageView(map_img.get("gp"));
-                rp.setVisible(false);
-                pointer.getChildren().addAll(rp,gp);
-                msp.getChildren().add(pointer);
-                pointer.setMaxWidth(150);
-                pointer.setMaxHeight(225);
-                pointer.setLayoutX(600);
-                pointer.setLayoutY(295);
-                rp.setTranslateX(45);
-                rp.setTranslateY(-20);
-                gp.setTranslateX(45);
-                gp.setTranslateY(-20);
                 cp.setPlaceShipRand();
                 gameHvH.setVisible(false);
 
@@ -681,19 +694,48 @@ public class Game {
                 hp.setEnemyField(cp.getRefField());
 
                 msp.getChildren().add(playingFields);
+                createPointer(playingFields);
                 createPlayingfields(hp, msp, playingFields, 150, 115);
                 createPlayingfields(cp, msp, playingFields, 750, 115);
-            /*Player curP;
-            byte id = 0;
-            while (!hp.gameOver() && !cp.gameOver()) {
-                curP = queue.pop();
-                curP.yourTurn(this, queue.getFirst(), id);
-                id = (id == 0) ? id++ : id--;
-                queue.addLast(curP);
-            }
-            if(hp.gameOver()){
 
-            }*/
+                        cp.board.setOnMouseClicked(event1 -> {
+                            boolean f = false;
+                            byte row;
+                            byte col;
+                            Coord coord;
+                                Node node = event1.getPickResult().getIntersectedNode();
+                                row = 0;
+                                col = 0;
+                                while (row < 10 && !f) {
+                                    col = 0;
+                                    while (col < 10 && !f) {
+                                        if (node == cp.water[row][col].getChildren().get(3))
+                                            f = true;
+                                        else
+                                            col++;
+                                    }
+                                    if (!f)
+                                        row++;
+                                }
+                                if(f == true) {
+                                    coord = new Coord(row, col);
+                                    if (false == hp.yourTurn(this, cp, coord)) {
+                                        pointer.getChildren().get(1).setVisible(false);
+                                        if (cp.gameOver()) {
+
+                                        } else {
+                                            pointer.getChildren().get(0).setVisible(true);
+                                            cp.yourTurn(this, hp);
+                                            pointer.getChildren().get(0).setVisible(false);
+                                            pointer.getChildren().get(1).setVisible(true);
+                                        }
+                                        if (hp.gameOver()) {
+                                            printShipLocation(cp);
+                                        }
+                                    }
+                                }
+                        });
+
             }
         });
 

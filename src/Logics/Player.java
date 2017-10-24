@@ -12,12 +12,12 @@ import javafx.scene.text.Text;
 
 
 public abstract class Player {
-    protected GridPane board = new GridPane();
-    {board.setPrefSize(10, 10);}
+    protected GridPane board = new GridPane(); {board.setPrefSize(10, 10);}
     protected StackPane[][] water = new StackPane[10][10];
     protected StackPane name_area = new StackPane();
     protected StackPane stat_area = new StackPane();
-    {   stat_area.setMinHeight(135);
+    {
+        stat_area.setMinHeight(135);
         stat_area.setMaxWidth(360);
     }
     protected Text cur_stat;
@@ -28,7 +28,7 @@ public abstract class Player {
     protected StringBuilder name;
     ArrayList<Byte> ships = new ArrayList<>(4);
 
-  protected enum TypeShip{
+  /*protected enum TypeShip{
         FRIGATE(1), DESTROYER(2), SUBMARINE(3), CARRIER(4);
         private int id;
 
@@ -43,7 +43,7 @@ public static String getClassName() {
             return TypeShip.class.getName();
         }
 
-    }
+    }*/
 
 
     public Player(StringBuilder name){
@@ -75,10 +75,6 @@ public static String getClassName() {
 
     // Abstract method for implementing the player's turn
 
-    public abstract void yourTurn(Game game, Player rival, byte id);
-
-    // Abstract method for getting coordinates for a shot
-    public abstract Coord getCoord();
 
     // Communication with the enemy field
     public void setEnemyField(Field field) { enemyField = field; }
@@ -218,13 +214,13 @@ public static String getClassName() {
 
 
                 if (i > 1) {
-                    ship = new Ship(i, coor1, coor2, field);
+                    ship = new Ship(i, new Coord(coor1),new Coord(coor2), field);
                     ship.linkTilesWithDeck(field);
                     ship.linkTilesWithHalo(field);
                     field.fleet.add(ship);
                 }
                 else {
-                    ship = new Ship(i, coor1, field);
+                    ship = new Ship(i, new Coord(coor1), field);
                     ship.linkTilesWithDeck(field);
                     ship.linkTilesWithHalo(field);
                     field.fleet.add(ship);

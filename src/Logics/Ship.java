@@ -1,13 +1,15 @@
 package Logics;
 
 import Logics.coord.Coord;
+import javafx.scene.layout.StackPane;
+
 import java.util.ArrayList;
 
 public class Ship {
     private Byte sizeShip = 0;
     private Byte hits = 0;
     private ArrayList<Tile> deck = new ArrayList<>();
-    private ArrayList<Tile> halo = new ArrayList<>();
+    ArrayList<Tile> halo = new ArrayList<>();
 
     public Ship(){}
     /*public Ship(Byte size){
@@ -113,9 +115,9 @@ public class Ship {
 
     // Communication with the game field
     public void linkTilesWithDeck(Field field) {
-        for (Tile el : deck) {
-            el.linkShip(this);
-            field.addTile(el);
+        for(int i = 0; i < deck.size(); i++) {
+            deck.get(i).linkShip(this);
+            field.addTile( deck.get(i));
         }
     }
 
@@ -123,9 +125,9 @@ public class Ship {
 
     // Communication with the game field
     public void linkTilesWithHalo(Field field) {
-        for (Tile el : halo)
-            if(field.grid[el.getRow()][el.getCol()] == null)
-                field.addTile(el);
+        for(int i = 0; i < halo.size(); i++)
+            if(field.grid[halo.get(i).getRow()][halo.get(i).getCol()] == null)
+                field.addTile(halo.get(i));
     }
 
     // Checking the coordinates for belonging to the range of the playing field
@@ -135,7 +137,13 @@ public class Ship {
     public boolean stateОk(){ return (sizeShip != hits); }
 
     // Halo filling when destroying the ship
-    public void setStateHalo() { for (Tile el: halo) if (el.getState() != '*') el.setState('*'); }
+    public void setStateHalo(StackPane[][] water) {
+        for (int i = 0; i < halo.size(); i++)
+            if (halo.get(i).getState() != '*') {
+                halo.get(i).setState('*');
+                water[halo.get(i).getRow()][halo.get(i).getCol()].getChildren().get(3).setVisible(false);
+            }
+    }
 
     // Increase in ship hits
     public void setHit(){ ++hits; }

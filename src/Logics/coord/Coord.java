@@ -8,4 +8,8 @@ public class Coord {
         this.row = row;
         this.col = col;
     }
+    public Coord(Coord crd){
+        row = crd.row;
+        col = crd.col;
+    }
 }
