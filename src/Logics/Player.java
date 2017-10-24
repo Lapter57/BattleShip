@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import Logics.coord.Coord;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -26,7 +27,8 @@ public abstract class Player {
     protected Byte estabShip = 0;
     protected StringBuilder name;
     protected Ship foundShip = null;
-    ArrayList<Byte> ships = new ArrayList<>(4);
+    protected ArrayList<Byte> ships = new ArrayList<>(4);
+    protected TextField namePlayer = new TextField();
 
   /*protected enum TypeShip{
         FRIGATE(1), DESTROYER(2), SUBMARINE(3), CARRIER(4);

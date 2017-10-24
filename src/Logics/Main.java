@@ -1,12 +1,8 @@
 package Logics;
 
-import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.image.*;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -19,15 +15,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import javafx.stage.StageStyle;
-
-import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class Main extends Application {
 
@@ -43,23 +30,28 @@ public class Main extends Application {
             msp.menuBox.setSubMenu(msp.mainMenu);
             msp.title.setVisible(true);
         });
+        Game game = new Game();
         msp.hvC.setOnMouseClicked(event -> {
             Pane gameHvH = new Pane();
-            msp.getChildren().add(gameHvH);
-            gameHvH.setVisible(true);
             gameHvH.setMaxHeight(720);
             gameHvH.setMaxWidth(1280);
+            msp.getChildren().add(gameHvH);
+
+            gameHvH.setVisible(true);
             msp.menuBox.setVisible(false);
             msp.title.setVisible(false);
-            Game game = new Game();
             game.humanVscomputer(gameHvH,msp);
         });
         msp.hvH.setOnMouseClicked(event -> {
-           /* SubMenu gameHvH = new SubMenu();
-            title.setVisible(false);
-            menuBox.setSubMenu(gameHvH);*/
-            /*Game game = new Game();
-            game.humanVshuman();*/
+            Pane gameHvC = new Pane();
+            gameHvC.setMaxHeight(720);
+            gameHvC.setMaxWidth(1280);
+            msp.getChildren().add(gameHvC);
+
+            gameHvC.setVisible(true);
+            msp.menuBox.setVisible(false);
+            msp.title.setVisible(false);
+            game.humanVsHuman(gameHvC,msp);
         });
 
         msp.menuBox.setVisible(true);
