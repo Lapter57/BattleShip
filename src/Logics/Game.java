@@ -50,6 +50,7 @@ class Game {
              InputStream hs = Files.newInputStream(Paths.get("res/images/Hurt_Ship.png"));
              InputStream nb = Files.newInputStream(Paths.get("res/images/Num_Board.png"));
              InputStream lb = Files.newInputStream(Paths.get("res/images/Let_Board.png"));
+             InputStream ss = Files.newInputStream(Paths.get("res/images/Surviving_Ships.png"));
              InputStream car_h = Files.newInputStream(Paths.get("res/images/ships/Car_hor.png"));
              InputStream car_v = Files.newInputStream(Paths.get("res/images/ships/Car_ver.png"));
              InputStream des_h = Files.newInputStream(Paths.get("res/images/ships/Des_hor.png"));
@@ -67,6 +68,7 @@ class Game {
             map_img.put("ds", new Image(ds));
             map_img.put("nb", new Image(nb));
             map_img.put("lb", new Image(lb));
+            map_img.put("ss", new Image(ss));
             map_img.put("gp", new Image(gr_p));
             map_img.put("rp", new Image(red_p));
 
@@ -180,6 +182,7 @@ class Game {
             img.setVisible(true);
         }
         pl.field.clearField();
+        pl.estabShip = 0;
 
     }
 
@@ -271,7 +274,7 @@ class Game {
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
                 if (db.hasImage()) {
-                    event.acceptTransferModes(TransferMode.MOVE);
+                    event.acceptTransferModes(TransferMode.COPY);
                 }
                 event.consume();
             }
@@ -369,7 +372,7 @@ class Game {
                         cur_dir = 'h';
                     else
                         cur_dir = 'v';
-                    Dragboard db = ship.startDragAndDrop(TransferMode.MOVE);
+                    Dragboard db = ship.startDragAndDrop(TransferMode.COPY);
                     ClipboardContent content = new ClipboardContent();
                     db.setDragView(ship.getImage(), 20, 20);
                     content.putImage(ship.getImage());
@@ -381,7 +384,7 @@ class Game {
                 @Override
                 public void handle(DragEvent event) {
                     TransferMode modeUsed = event.getTransferMode();
-                    if (modeUsed == TransferMode.MOVE) {
+                    if (modeUsed == TransferMode.COPY) {
                         if (cur_sizeS == 1)
                             ship.setVisible(false);
                         else {
@@ -528,10 +531,12 @@ class Game {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (pl.field.grid[i][j].getLinkShip() != null && pl.field.grid[i][j].getState() != 'x') {
-                    pl.water[i][j].getChildren().get(4).setVisible(false);
+                    ImageView img_ss = new ImageView(map_img.get("ss"));
+                    pl.water[i][j].getChildren().add(img_ss);
+                  /*  pl.water[i][j].getChildren().get(4).setVisible(false);
                     pl.water[i][j].getChildren().get(3).setVisible(false);
                     pl.water[i][j].getChildren().get(2).setVisible(false);
-                    pl.water[i][j].getChildren().get(1).setVisible(false);
+                    pl.water[i][j].getChildren().get(1).setVisible(false);*/
                 }
             }
         }
@@ -547,6 +552,9 @@ class Game {
 
 
         ready.setOnMouseClicked(event -> {
+            if(!first_click_auto) {
+                hp.field.initEmptyTiles();
+            }
             Pane playingFields = new Pane();
             playingFields.setMaxHeight(720);
             playingFields.setMaxWidth(1280);
@@ -597,7 +605,8 @@ class Game {
                             pointer.getChildren().get(1).setVisible(false);
                             pointer.getChildren().get(0).setVisible(true);
                             if (cp.gameOver()) {
-
+                                printShipLocation(hp);
+                                cp.board.setDisable(true);
                             } else {
                                            /* PauseTransition pause = new PauseTransition(Duration.millis(400));
                                             pause.play();
@@ -609,6 +618,7 @@ class Game {
                             }
                             if (hp.gameOver()) {
                                 printShipLocation(cp);
+                                cp.board.setDisable(true);
                             }
                         }
                     }
@@ -630,6 +640,9 @@ class Game {
 
         Pane gameHvH2 = new Pane();
         next.setOnMouseClicked(event -> {
+            if(!first_click_auto) {
+                hp1.field.initEmptyTiles();
+            }
             first_click_auto = true;
             if (hp1.field.fleet.size() == 10) {
                 gameHvH.setVisible(false);
@@ -672,6 +685,9 @@ class Game {
 
 
                 ready.setOnMouseClicked(event2 -> {
+                    if(!first_click_auto) {
+                        hp2.field.initEmptyTiles();
+                    }
                     Pane playingFields = new Pane();
                     playingFields.setMaxHeight(720);
                     playingFields.setMaxWidth(1280);
@@ -704,15 +720,11 @@ class Game {
                     createPointer(playingFields, msp, hp1, hp2);
                     createPlayingFields(hp1, playingFields, 150, 115);
                     createPlayingFields(hp2, playingFields, 750, 115);
-                   /* Rectangle invis = new Rectangle(450,450);
-                    invis.setOpacity(0);
-                    invis.setVisible(false);
-                    playingFields.getChildren().add(invis);*/
+                    hp2.board.setDisable(false);
+                    hp1.board.setDisable(true);
 
 
                         hp2.board.setOnMouseClicked(event1 -> {
-                            /*invis.setTranslateX(150);
-                            invis.setTranslateY(115);*/
                             boolean f = false;
                             byte row;
                             byte col;
@@ -739,11 +751,13 @@ class Game {
                                     pointer.getChildren().get(0).setVisible(true);
                                     if (hp2.gameOver()) {
                                         printShipLocation(hp1);
+                                        hp1.board.setDisable(true);
+                                        hp2.board.setDisable(true);
                                     }
                                     else{
+                                        hp1.board.setDisable(false);
+                                        hp2.board.setDisable(true);
                                         hp1.board.setOnMouseClicked(event3 -> {
-                                         /*   invis.setLayoutX(750);
-                                            invis.setLayoutY(115);*/
                                             boolean f2 = false;
                                             byte r;
                                             byte c;
@@ -768,8 +782,12 @@ class Game {
                                                 if (false == hp2.yourTurn(this, hp1, crd)) {
                                                     pointer.getChildren().get(0).setVisible(false);
                                                     pointer.getChildren().get(1).setVisible(true);
+                                                    hp2.board.setDisable(false);
+                                                    hp1.board.setDisable(true);
                                                     if (hp1.gameOver()) {
                                                         printShipLocation(hp2);
+                                                        hp1.board.setDisable(true);
+                                                        hp2.board.setDisable(true);
                                                     }
                                                 }
                                             }

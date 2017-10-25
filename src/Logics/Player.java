@@ -175,16 +175,16 @@ public static String getClassName() {
         Coord coor1 = new Coord(), coor2 = new Coord();
         boolean OK = false;
         Ship ship;
-        final Random random = new Random();
+        //final Random random = new Random();
 
         for (byte i = 4; i > 0; i--)
             for (byte j = 1; j <= (5 - i); j++) {
                 do {
-                    row = (byte) random.nextInt(10);
-                    col = (byte) random.nextInt(10);
+                    row = (byte) new Random().nextInt(10);
+                    col = (byte) new Random().nextInt(10);
                     if (i > 1) {
-                        direction = (random.nextInt(2) == 0) ? (byte)1 : (byte)-1;
-                        way = (random.nextInt(2) == 0) ? (byte)1 : (byte)-1;
+                        direction = (new Random().nextInt(2) == 0) ? (byte)1 : (byte)-1;
+                        way = (new Random().nextInt(2) == 0) ? (byte)1 : (byte)-1;
                         shift = (direction == 1) ?  col : row;
                         if (!checkC((byte)(shift + way * (i - 1)))) way *= -1;
                     }

@@ -23,8 +23,8 @@ public class MainStPain extends StackPane{
     Main.SubMenu mainMenu = new Main.SubMenu(
             newGame, options, exitGame
     );
-    Main.MenuItem hvC = new Main.MenuItem("HUMAN VS COMPUTER", 400, 50);
-    Main.MenuItem hvH = new Main.MenuItem("HUMAN VS HUMAN", 400, 50);
+    Main.MenuItem hvC = new Main.MenuItem("     HUMAN     VS     COMPUTER", 400, 50);
+    Main.MenuItem hvH = new Main.MenuItem("HUMAN     VS     HUMAN", 400, 50);
     Main.MenuItem bck = new Main.MenuItem("BACK", 400, 50);
     Main.SubMenu newGameMenu = new Main.SubMenu(
             hvC, hvH, bck

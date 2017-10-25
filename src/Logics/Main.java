@@ -56,35 +56,6 @@ public class Main extends Application {
 
         msp.menuBox.setVisible(true);
         msp.title.setVisible(true);
-        /*scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                FadeTransition ft1 = new FadeTransition(Duration.seconds(1),menuBox);
-                FadeTransition ft2 = new FadeTransition(Duration.seconds(1),title);
-                if (!menuBox.isVisible()) {
-                    ft1.setFromValue(0);
-                    ft1.setToValue(1);
-                    ft2.setFromValue(0);
-                    ft2.setToValue(1);
-                    ft1.play();
-                    ft2.play();
-                    menuBox.setVisible(true);
-                    title.setVisible(true);
-                }
-                else{
-                    ft1.setFromValue(1);
-                    ft1.setToValue(0);
-                    ft2.setFromValue(1);
-                    ft2.setToValue(0);
-                    ft1.setOnFinished(evt ->
-                        menuBox.setVisible(false)
-                    );
-                    ft2.setOnFinished(evt -> title.setVisible(false));
-                    ft2.play();
-                    ft1.play();
-
-                }
-            }
-        });*/
         primaryStage.setTitle("BattleShip");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
