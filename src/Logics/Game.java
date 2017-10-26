@@ -1,5 +1,6 @@
 package Logics;
 import Logics.coord.Coord;
+import loading.Loading;
 
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -27,11 +28,6 @@ class Game {
     private HashMap<String, Image> map_img = new HashMap<>();
     private ArrayList<ImageView> ships_img = new ArrayList<>();
     private GridPane board = new GridPane();
-
-    {
-        board.setPrefSize(10, 10);
-    }
-
     private StackPane all_fleet = new StackPane();
     private Pane fleet_h = new Pane();
     private Pane fleet_v = new Pane();
@@ -42,135 +38,9 @@ class Game {
     private StackPane pointer = new StackPane();
 
     Game() {
-        try (InputStream ot = Files.newInputStream(Paths.get("res/images/Ordinary_Tile_2.png"));
-             InputStream us = Files.newInputStream(Paths.get("res/images/Unbroken_Ship_2.png"));
-             InputStream ft = Files.newInputStream(Paths.get("res/images/Focus_Tile.png"));
-             InputStream dt = Files.newInputStream(Paths.get("res/images/Dead_Tile_2.png"));
-             InputStream ds = Files.newInputStream(Paths.get("res/images/Destroyed_Ship_3.png"));
-             InputStream hs = Files.newInputStream(Paths.get("res/images/Hurt_Ship.png"));
-             InputStream nb = Files.newInputStream(Paths.get("res/images/Num_Board.png"));
-             InputStream lb = Files.newInputStream(Paths.get("res/images/Let_Board.png"));
-             InputStream ss = Files.newInputStream(Paths.get("res/images/Surviving_Ships.png"));
-             InputStream car_h = Files.newInputStream(Paths.get("res/images/ships/Car_hor.png"));
-             InputStream car_v = Files.newInputStream(Paths.get("res/images/ships/Car_ver.png"));
-             InputStream des_h = Files.newInputStream(Paths.get("res/images/ships/Des_hor.png"));
-             InputStream des_v = Files.newInputStream(Paths.get("res/images/ships/Des_ver.png"));
-             InputStream sub_h = Files.newInputStream(Paths.get("res/images/ships/Sub_hor.png"));
-             InputStream sub_v = Files.newInputStream(Paths.get("res/images/ships/Sub_ver.png"));
-             InputStream frig = Files.newInputStream(Paths.get("res/images/ships/Frigate.png"));
-             InputStream gr_p = Files.newInputStream(Paths.get("res/images/Green_Pointer.png"));
-             InputStream red_p = Files.newInputStream(Paths.get("res/images/Red_Pointer.png"))) {
-            map_img.put("ot", new Image(ot));
-            map_img.put("dt", new Image(dt));
-            map_img.put("ft", new Image(ft));
-            map_img.put("us", new Image(us));
-            map_img.put("hs", new Image(hs));
-            map_img.put("ds", new Image(ds));
-            map_img.put("nb", new Image(nb));
-            map_img.put("lb", new Image(lb));
-            map_img.put("ss", new Image(ss));
-            map_img.put("gp", new Image(gr_p));
-            map_img.put("rp", new Image(red_p));
-
-            Image ch = new Image(car_h);
-            Image cv = new Image(car_v);
-            Image sh = new Image(sub_h);
-            Image sv = new Image(sub_v);
-            Image dh = new Image(des_h);
-            Image dv = new Image(des_v);
-            Image fr = new Image(frig);
-
-            ships_img.add(new ImageView(ch));
-            ships_img.add(new ImageView(sh));
-            ships_img.add(new ImageView(sh));
-            ships_img.add(new ImageView(dh));
-            ships_img.add(new ImageView(dh));
-            ships_img.add(new ImageView(dh));
-
-            ships_img.add(new ImageView(cv));
-            ships_img.add(new ImageView(sv));
-            ships_img.add(new ImageView(sv));
-            ships_img.add(new ImageView(dv));
-            ships_img.add(new ImageView(dv));
-            ships_img.add(new ImageView(dv));
-
-            ships_img.add(new ImageView(fr));
-            ships_img.add(new ImageView(fr));
-            ships_img.add(new ImageView(fr));
-            ships_img.add(new ImageView(fr));
-        } catch (IOException e) {
-            System.out.println("Couldn't load image");
-        }
-        for (int i = 0; i < 10; i++)
-            for (int j = 0; j < 10; j++) {
-                water[i][j] = new StackPane();
-                ImageView img_ot = new ImageView(map_img.get("ot"));
-//              ImageView img_ft = new ImageView(map_img.get("ft"));
-                ImageView img_us = new ImageView(map_img.get("us"));
-                water[i][j].getChildren().add(img_us);
-//              water[i][j].getChildren().add(img_ft);
-                water[i][j].getChildren().add(img_ot);
-                board.add(water[i][j], j, i);
-            }
-        board.setTranslateX(150);
-        board.setTranslateY(70);
-
-        Rectangle fl_h = new Rectangle(450, 450, Color.valueOf("#EFF0F1"));
-        fl_h.setOpacity(0.5);
-        fleet_h.getChildren().add(fl_h);
-        Rectangle fl_v = new Rectangle(450, 450, Color.valueOf("#EFF0F1"));
-        fl_v.setOpacity(0.5);
-        fleet_v.getChildren().add(fl_v);
-        fleet_v.setVisible(false);
-
-        fleet_h.getChildren().add(ships_img.get(0));
-        ships_img.get(0).setLayoutX(225);
-        ships_img.get(0).setLayoutY(45);
-        int i;
-        int shift = 270;
-        for (i = 1; i < 3; i++) {
-            fleet_h.getChildren().add(ships_img.get(i));
-            ships_img.get(i).setLayoutX(shift);
-            ships_img.get(i).setLayoutY(135);
-            shift -= 180;
-        }
-
-        shift = 315;
-        for (; i < 6; i++) {
-            fleet_h.getChildren().add(ships_img.get(i));
-            ships_img.get(i).setLayoutX(shift);
-            ships_img.get(i).setLayoutY(225);
-            shift -= 135;
-        }
-        shift = 360;
-        for (i = 12; i < 16; i++) {
-            fleet_h.getChildren().add(ships_img.get(i));
-            ships_img.get(i).setLayoutX(shift);
-            ships_img.get(i).setLayoutY(315);
-            shift -= 90;
-        }
-
-        fleet_v.getChildren().add(ships_img.get(6));
-        ships_img.get(6).setLayoutX(45);
-        ships_img.get(6).setLayoutY(225);
-        shift = 270;
-        for (i = 7; i < 9; i++) {
-            fleet_v.getChildren().add(ships_img.get(i));
-            ships_img.get(i).setLayoutX(135);
-            ships_img.get(i).setLayoutY(shift);
-            shift -= 180;
-        }
-
-        shift = 315;
-        for (; i < 12; i++) {
-            fleet_v.getChildren().add(ships_img.get(i));
-            ships_img.get(i).setLayoutX(225);
-            ships_img.get(i).setLayoutY(shift);
-            shift -= 135;
-        }
-        all_fleet.getChildren().addAll(fleet_v, fleet_h);
-        all_fleet.setMaxWidth(450);
-        all_fleet.setMinHeight(450);
+        board.setPrefSize(10, 10);
+        Loading.loadIMG(map_img, ships_img);
+        Loading.loadPaneOfLocOfShips(water, map_img, ships_img, board, fleet_h, fleet_v, all_fleet);
     }
 
     private void clearBoard(Player pl) {
@@ -533,16 +403,27 @@ class Game {
                 if (pl.field.grid[i][j].getLinkShip() != null && pl.field.grid[i][j].getState() != 'x') {
                     ImageView img_ss = new ImageView(map_img.get("ss"));
                     pl.water[i][j].getChildren().add(img_ss);
-                  /*  pl.water[i][j].getChildren().get(4).setVisible(false);
-                    pl.water[i][j].getChildren().get(3).setVisible(false);
-                    pl.water[i][j].getChildren().get(2).setVisible(false);
-                    pl.water[i][j].getChildren().get(1).setVisible(false);*/
                 }
             }
         }
     }
 
-    void humanVscomputer(Pane gameHvC, MainStPain msp) {
+    private void showLocationOfShips(HumanPlayer hp){
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                if(hp.field.grid[i][j].getLinkShip() != null ) {
+                    hp.water[i][j].getChildren().get(0).setVisible(true);
+                    hp.water[i][j].getChildren().get(1).setVisible(false);
+                    hp.water[i][j].getChildren().get(2).setVisible(false);
+                    hp.water[i][j].getChildren().get(3).setVisible(false);
+                    hp.water[i][j].getChildren().get(4).setVisible(false);
+                }
+
+            }
+        }
+    }
+
+    void humanVsComputer(Pane gameHvC, MainStPain msp) {
         HumanPlayer hp = new HumanPlayer();
         prepareForBattle(hp, gameHvC, msp);
         Main.MenuItem ready = new Main.MenuItem("BATTLE!", 400, 50);
@@ -552,9 +433,10 @@ class Game {
 
 
         ready.setOnMouseClicked(event -> {
-            if(!first_click_auto) {
+            if(first_click_auto) {
                 hp.field.initEmptyTiles();
             }
+
             Pane playingFields = new Pane();
             playingFields.setMaxHeight(720);
             playingFields.setMaxWidth(1280);
@@ -579,6 +461,7 @@ class Game {
                 createPointer(playingFields, msp, hp, cp);
                 createPlayingFields(hp, playingFields, 150, 115);
                 createPlayingFields(cp, playingFields, 750, 115);
+                showLocationOfShips(hp);
 
                 cp.board.setOnMouseClicked(event1 -> {
                     boolean f = false;
@@ -601,7 +484,7 @@ class Game {
                     }
                     if (f == true) {
                         coord = new Coord(row, col);
-                        if (false == hp.yourTurn(this, cp, coord)) {
+                        if (false == hp.yourTurn(this, cp, coord) || cp.gameOver()) {
                             pointer.getChildren().get(1).setVisible(false);
                             pointer.getChildren().get(0).setVisible(true);
                             if (cp.gameOver()) {
@@ -640,7 +523,7 @@ class Game {
 
         Pane gameHvH2 = new Pane();
         next.setOnMouseClicked(event -> {
-            if(!first_click_auto) {
+            if(first_click_auto) {
                 hp1.field.initEmptyTiles();
             }
             first_click_auto = true;
@@ -685,7 +568,7 @@ class Game {
 
 
                 ready.setOnMouseClicked(event2 -> {
-                    if(!first_click_auto) {
+                    if(first_click_auto) {
                         hp2.field.initEmptyTiles();
                     }
                     Pane playingFields = new Pane();

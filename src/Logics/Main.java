@@ -40,7 +40,7 @@ public class Main extends Application {
             gameHvH.setVisible(true);
             msp.menuBox.setVisible(false);
             msp.title.setVisible(false);
-            game.humanVscomputer(gameHvH,msp);
+            game.humanVsComputer(gameHvH,msp);
         });
         msp.hvH.setOnMouseClicked(event -> {
             Pane gameHvC = new Pane();

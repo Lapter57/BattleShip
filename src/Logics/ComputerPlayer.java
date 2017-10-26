@@ -20,6 +20,17 @@ public class ComputerPlayer extends Player {
     private ArrayDeque<Coord> queue = new ArrayDeque<>(); // можно ли поменять?
     private Byte sizeShip = 4;
     private boolean firstHit = true;
+    private byte rs = 0;
+    private ArrayList<Coord> randomSteps = new ArrayList<>();
+    {
+        for(byte i = 0; i < 10; i++){
+            for(byte j = 0; j < 10; j++){
+                randomSteps.add(new Coord(i,j));
+            }
+        }
+        Collections.shuffle(randomSteps);
+    }
+
 
     Coord firstDestTile;
 
@@ -95,6 +106,7 @@ public class ComputerPlayer extends Player {
             if (enemyField.grid[coord.row][coord.col].getLinkShip() == null) {
                 enemyField.grid[coord.row][coord.col].setState('*');
                 rival.water[coord.row][coord.col].getChildren().get(4).setVisible(false);
+                rival.water[coord.row][coord.col].getChildren().get(3).setVisible(true);
                 if(false == coordForToShell.isEmpty())
                     coordForToShell.remove(0);
                 hit = false;
@@ -112,6 +124,7 @@ public class ComputerPlayer extends Player {
                 enemyField.grid[coord.row][coord.col].setState('x');
                 rival.water[coord.row][coord.col].getChildren().get(4).setVisible(false);
                 rival.water[coord.row][coord.col].getChildren().get(3).setVisible(false);
+                rival.water[coord.row][coord.col].getChildren().get(2).setVisible(true);
                     if (foundShip == null)
                         foundShip = enemyField.grid[coord.row][coord.col].getLinkShip();
                     foundShip.setHit();
@@ -121,6 +134,7 @@ public class ComputerPlayer extends Player {
                             byte row = foundShip.deck.get(i).getRow();
                             byte col = foundShip.deck.get(i).getCol();
                             rival.water[row][col].getChildren().get(2).setVisible(false);
+                            rival.water[row][col].getChildren().get(1).setVisible(true);
                         }
                         enemyField.shipDestroy();
                         foundShip.setStateHalo(rival.water);
@@ -205,18 +219,28 @@ public class ComputerPlayer extends Player {
 
     // Method for getting coordinates for a shot
     public Coord getCoord(){
-        while (coordForStep.isEmpty() || enemyField.grid[coordForStep.get(0).row][coordForStep.get(0).col].getState() != ' ') {
-            if (coordForStep.isEmpty()) {
-                updateCoord(sizeShip);
-                sizeShip = (sizeShip == 4) ?  (byte)3 : (byte) 1;
-            }
-            else
-                coordForStep.remove(0);
-        }
         Coord coord = new Coord();
-        coord.row = coordForStep.get(0).row;
-        coord.col = coordForStep.get(0).col;
-        coordForStep.remove(0);
+        if(rs < 2) {
+            while (coordForStep.isEmpty() || enemyField.grid[coordForStep.get(0).row][coordForStep.get(0).col].getState() != ' ') {
+                if (coordForStep.isEmpty()) {
+                    updateCoord(sizeShip);
+                    sizeShip = (sizeShip == 4) ? (byte) 3 : (byte) 1;
+                } else
+                    coordForStep.remove(0);
+            }
+            coord.row = coordForStep.get(0).row;
+            coord.col = coordForStep.get(0).col;
+            coordForStep.remove(0);
+            rs++;
+        }
+        else{
+            while (enemyField.grid[randomSteps.get(0).row][randomSteps.get(0).col].getState() != ' '){
+                randomSteps.remove(0);
+            }
+            coord.row = randomSteps.get(0).row;
+            coord.col = randomSteps.get(0).col;
+            rs = 0;
+        }
         return coord;
     }
 }
