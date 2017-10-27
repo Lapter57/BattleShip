@@ -36,9 +36,21 @@ class Game {
     private char cur_dir;
     private Boolean first_click_auto = true;
     private StackPane pointer = new StackPane();
+/*    private ArrayList<ImageView> focusTiles = new ArrayList<>();
+    private ImageView focus;*/
+    private ArrayList<Rectangle> focusTiles = new ArrayList<>();
 
     Game() {
         board.setPrefSize(10, 10);
+        /*focus = new ImageView(map_img.get("ft"));
+        for(int i = 0; i < 4; i++){
+            final ImageView img_ft = new ImageView(map_img.get("ft"));
+            focusTiles.add(img_ft);
+        }*/
+        for(int i = 0; i < 4; i++){
+            Rectangle rec = new Rectangle(45,45,Color.LIGHTGREEN);
+            focusTiles.add(rec);
+        }
         Loading.loadIMG(map_img, ships_img);
         Loading.loadPaneOfLocOfShips(water, map_img, ships_img, board, fleet_h, fleet_v, all_fleet);
     }
@@ -139,12 +151,73 @@ class Game {
                 fleet_v.setVisible(false);
             }
         });
+
+        board.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                for(int k = 0; k < 4; k++) {
+                    focusTiles.get(k).setVisible(false);
+                }
+               /* boolean check;
+                for(int i = 0; i < 10; i++){
+                    for (int j = 0; j < 10; j++) {
+                        check = false;
+                        for(int k = 0; k < 4 && !check; k++){
+                            if(water[i][j].getChildren().contains(focusTiles.get(k))){
+                                check = true;
+                            }
+                        }
+                        if(check){
+                            water[i][j].getChildren().get(2).setVisible(false);
+                        }
+                    }
+                }*/
+            }
+        });
         board.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
                 if (db.hasImage()) {
                     event.acceptTransferModes(TransferMode.COPY);
+                    Node node = event.getPickResult().getIntersectedNode();
+                    byte row = 0;
+                    byte col = 0;
+                    boolean f = false;
+                    while (row < 10 && !f) {
+                        col = 0;
+                        while (col < 10 && !f) {
+                            if (node == water[row][col].getChildren().get(1))
+                                f = true;
+                            else
+                                if(water[row][col].getChildren().size() == 3 && node == water[row][col].getChildren().get(2) && node != focusTiles.get(0))
+                                    f = true;
+                            else
+                                col++;
+                        }
+                        if (!f)
+                            row++;
+                    }
+                    if (f) {
+                        Coord crd1 = new Coord(row, col);
+                        Coord crd2 = new Coord((cur_dir == 'h') ? row : (byte) (row + cur_sizeS - 1), (cur_dir == 'v') ? col : (byte) (col + cur_sizeS - 1));
+                        if (hp.checkCollision(crd1, crd2)) {
+                            int shift;
+                            if (cur_dir == 'h') {
+                                shift = col + cur_sizeS;
+                                for (int j = col; j < shift; j++) {
+                                    water[row][j].getChildren().add(focusTiles.get(j - col));
+                                    water[row][j].getChildren().get(2).setVisible(true);
+                                }
+                            } else {
+                                shift = row + cur_sizeS;
+                                for (int i = row; i < shift; i++) {
+                                    water[i][col].getChildren().add(focusTiles.get(i - row));
+                                    water[i][col].getChildren().get(2).setVisible(true);
+                                }
+                            }
+                        }
+                    }
                 }
                 event.consume();
             }
@@ -162,7 +235,7 @@ class Game {
                     while (row < 10 && !f) {
                         col = 0;
                         while (col < 10 && !f) {
-                            if (node == water[row][col].getChildren().get(1))
+                            if (water[row][col].getChildren().size() == 3 && node == water[row][col].getChildren().get(2))
                                 f = true;
                             else
                                 col++;
@@ -170,10 +243,10 @@ class Game {
                         if (!f)
                             row++;
                     }
-                    Coord crd1 = new Coord(row, col);
-                    Coord crd2 = new Coord((cur_dir == 'h') ? row : (byte) (row + cur_sizeS - 1), (cur_dir == 'v') ? col : (byte) (col + cur_sizeS - 1));
+                    if (f) {
+                        Coord crd1 = new Coord(row, col);
+                        Coord crd2 = new Coord((cur_dir == 'h') ? row : (byte) (row + cur_sizeS - 1), (cur_dir == 'v') ? col : (byte) (col + cur_sizeS - 1));
 
-                    if (hp.checkCollision(crd1, crd2)) {
                         if (cur_sizeS > 1) {
                             Ship ship = new Ship(cur_sizeS, crd1, crd2, hp.field);
                             ship.linkTilesWithDeck(hp.field);
@@ -187,24 +260,26 @@ class Game {
                         }
                         hp.estabShip++;
                         int shift;
+                        for (int k = 0; k < cur_sizeS; k++) {
+                            focusTiles.get(k).setVisible(false);
+                        }
                         if (cur_dir == 'h') {
                             shift = col + cur_sizeS;
                             for (int j = col; j < shift; j++) {
                                 water[row][j].getChildren().get(1).setVisible(false);
+                                water[row][j].getChildren().get(0).setVisible(true);
                             }
                         } else {
                             shift = row + cur_sizeS;
                             for (int i = row; i < shift; i++) {
                                 water[i][col].getChildren().get(1).setVisible(false);
+                                water[i][col].getChildren().get(0).setVisible(true);
                             }
                         }
                         event.setDropCompleted(true);
                     } else {
                         event.setDropCompleted(false);
                     }
-
-                } else {
-                    event.setDropCompleted(false);
                 }
             }
         });
@@ -394,6 +469,7 @@ class Game {
 
     private void removePane(Pane pane) {
         pane.getChildren().clear();
+
         pane = null;
     }
 

@@ -89,10 +89,10 @@ public class Loading {
             for (int j = 0; j < 10; j++) {
                 water[i][j] = new StackPane();
                 ImageView img_ot = new ImageView(map_img.get("ot"));
-//              ImageView img_ft = new ImageView(map_img.get("ft"));
+//                ImageView img_ft = new ImageView(map_img.get("ft"));
                 ImageView img_us = new ImageView(map_img.get("us"));
                 water[i][j].getChildren().add(img_us);
-//              water[i][j].getChildren().add(img_ft);
+//                water[i][j].getChildren().add(img_ft);
                 water[i][j].getChildren().add(img_ot);
                 board.add(water[i][j], j, i);
             }
