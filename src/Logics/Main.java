@@ -32,17 +32,6 @@ public class Main extends Application {
         });
         Game game = new Game();
         msp.hvC.setOnMouseClicked(event -> {
-            Pane gameHvH = new Pane();
-            gameHvH.setMaxHeight(720);
-            gameHvH.setMaxWidth(1280);
-            msp.getChildren().add(gameHvH);
-
-            gameHvH.setVisible(true);
-            msp.menuBox.setVisible(false);
-            msp.title.setVisible(false);
-            game.humanVsComputer(gameHvH,msp);
-        });
-        msp.hvH.setOnMouseClicked(event -> {
             Pane gameHvC = new Pane();
             gameHvC.setMaxHeight(720);
             gameHvC.setMaxWidth(1280);
@@ -51,7 +40,18 @@ public class Main extends Application {
             gameHvC.setVisible(true);
             msp.menuBox.setVisible(false);
             msp.title.setVisible(false);
-            game.humanVsHuman(gameHvC,msp);
+            game.humanVsComputer(gameHvC,msp);
+        });
+        msp.hvH.setOnMouseClicked(event -> {
+            Pane gameHvH = new Pane();
+            gameHvH.setMaxHeight(720);
+            gameHvH.setMaxWidth(1280);
+            msp.getChildren().add(gameHvH);
+
+            gameHvH.setVisible(true);
+            msp.menuBox.setVisible(false);
+            msp.title.setVisible(false);
+            game.humanVsHuman(gameHvH,msp);
         });
 
         msp.menuBox.setVisible(true);

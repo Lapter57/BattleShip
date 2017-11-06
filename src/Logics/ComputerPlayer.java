@@ -107,7 +107,7 @@ public class ComputerPlayer extends Player {
                 enemyField.grid[coord.row][coord.col].setState('*');
                 rival.water[coord.row][coord.col].getChildren().get(4).setVisible(false);
                 rival.water[coord.row][coord.col].getChildren().get(3).setVisible(true);
-                if(false == coordForToShell.isEmpty())
+                if(!coordForToShell.isEmpty())
                     coordForToShell.remove(0);
                 hit = false;
                 if (queue.isEmpty() && !check) {
@@ -129,7 +129,7 @@ public class ComputerPlayer extends Player {
                         foundShip = enemyField.grid[coord.row][coord.col].getLinkShip();
                     foundShip.setHit();
 
-                    if (false == foundShip.stateОk()) {
+                    if (!foundShip.stateОk()) {
                         for (int i = 0; i < foundShip.deck.size(); i++) {
                             byte row = foundShip.deck.get(i).getRow();
                             byte col = foundShip.deck.get(i).getCol();
@@ -143,8 +143,8 @@ public class ComputerPlayer extends Player {
                         foundShip = null;
                         firstHit = true;
                         check = true;
-                        if (false == queue.isEmpty()) queue.clear();
-                        if (false == coordForToShell.isEmpty())
+                        if (!queue.isEmpty()) queue.clear();
+                        if (!coordForToShell.isEmpty())
                             coordForToShell.clear();
                     } // if (!foundShip_->stateОk())
                     else {
@@ -171,7 +171,7 @@ public class ComputerPlayer extends Player {
                             firstHit = false;
                         } // if (firstHit_)
                         else {
-                            if (false == coordForToShell.isEmpty())
+                            if (!coordForToShell.isEmpty())
                                 coordForToShell.clear();
 
                             if (queue.isEmpty()) {

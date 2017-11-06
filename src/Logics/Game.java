@@ -36,17 +36,10 @@ class Game {
     private char cur_dir;
     private Boolean first_click_auto = true;
     private StackPane pointer = new StackPane();
-/*    private ArrayList<ImageView> focusTiles = new ArrayList<>();
-    private ImageView focus;*/
     private ArrayList<Rectangle> focusTiles = new ArrayList<>();
 
     Game() {
         board.setPrefSize(10, 10);
-        /*focus = new ImageView(map_img.get("ft"));
-        for(int i = 0; i < 4; i++){
-            final ImageView img_ft = new ImageView(map_img.get("ft"));
-            focusTiles.add(img_ft);
-        }*/
         for(int i = 0; i < 4; i++){
             Rectangle rec = new Rectangle(45,45,Color.LIGHTGREEN);
             focusTiles.add(rec);
@@ -84,9 +77,7 @@ class Game {
         gameArea.getChildren().add(st);
         Main.MenuItem autoChoice = new Main.MenuItem("AUTO", 400, 50);
         autoChoice.setOnMouseClicked(event -> {
-            if (false == first_click_auto) {
-                clearBoard(hp);
-            }
+            clearBoard(hp);
             hp.setPlaceShipRand();
             for (int i = 0; i < 10; i++)
                 for (int j = 0; j < 10; j++) {
@@ -158,20 +149,6 @@ class Game {
                 for(int k = 0; k < 4; k++) {
                     focusTiles.get(k).setVisible(false);
                 }
-               /* boolean check;
-                for(int i = 0; i < 10; i++){
-                    for (int j = 0; j < 10; j++) {
-                        check = false;
-                        for(int k = 0; k < 4 && !check; k++){
-                            if(water[i][j].getChildren().contains(focusTiles.get(k))){
-                                check = true;
-                            }
-                        }
-                        if(check){
-                            water[i][j].getChildren().get(2).setVisible(false);
-                        }
-                    }
-                }*/
             }
         });
         board.setOnDragOver(new EventHandler<DragEvent>() {
@@ -206,15 +183,25 @@ class Game {
                             if (cur_dir == 'h') {
                                 shift = col + cur_sizeS;
                                 for (int j = col; j < shift; j++) {
-                                    water[row][j].getChildren().add(focusTiles.get(j - col));
+                                    if(water[row][j].getChildren().size() != 3) {
+                                        water[row][j].getChildren().add(focusTiles.get(j - col));
+                                    }
                                     water[row][j].getChildren().get(2).setVisible(true);
+
                                 }
                             } else {
                                 shift = row + cur_sizeS;
                                 for (int i = row; i < shift; i++) {
-                                    water[i][col].getChildren().add(focusTiles.get(i - row));
+                                    if(water[i][col].getChildren().size() != 3) {
+                                        water[i][col].getChildren().add(focusTiles.get(i - row));
+                                    }
                                     water[i][col].getChildren().get(2).setVisible(true);
                                 }
+                            }
+                        }
+                        else{
+                            for(int k = 0; k < 4; k++) {
+                                focusTiles.get(k).setVisible(false);
                             }
                         }
                     }
@@ -439,19 +426,27 @@ class Game {
     }
 
     private void createPointer(Pane playingFields, MainStPain msp, Player p1, Player p2) {
-        ImageView rp = new ImageView(map_img.get("rp"));
-        ImageView gp = new ImageView(map_img.get("gp"));
-        pointer.getChildren().addAll(rp, gp);
-        playingFields.getChildren().add(pointer);
-        pointer.setMaxWidth(150);
-        pointer.setMaxHeight(225);
-        pointer.setLayoutX(600);
-        pointer.setLayoutY(295);
-        rp.setTranslateX(25);
-        rp.setTranslateY(-20);
-        gp.setTranslateX(45);
-        gp.setTranslateY(-20);
-        rp.setVisible(false);
+        if(pointer.getChildren().size() == 0) {
+            ImageView rp = new ImageView(map_img.get("rp"));
+            ImageView gp = new ImageView(map_img.get("gp"));
+            pointer.getChildren().addAll(rp, gp);
+            playingFields.getChildren().add(pointer);
+            pointer.setMaxWidth(150);
+            pointer.setMaxHeight(225);
+            pointer.setLayoutX(600);
+            pointer.setLayoutY(295);
+            rp.setTranslateX(25);
+            rp.setTranslateY(-20);
+            gp.setTranslateX(45);
+            gp.setTranslateY(-20);
+            pointer.getChildren().get(0).setVisible(false);
+            pointer.getChildren().get(1).setVisible(true);
+        }
+        else{
+            playingFields.getChildren().add(pointer);
+            pointer.getChildren().get(0).setVisible(false);
+            pointer.getChildren().get(1).setVisible(true);
+        }
 
         Main.MenuItem bck = new Main.MenuItem("BACK", 90, 90);
         bck.setTranslateX(0);
@@ -460,7 +455,6 @@ class Game {
         bck.setOnMouseClicked(event -> {
             clearBoard(p1);
             clearBoard(p2);
-            playingFields.setVisible(false);
             removePane(playingFields);
             msp.menuBox.setVisible(true);
             msp.title.setVisible(true);
@@ -469,7 +463,7 @@ class Game {
 
     private void removePane(Pane pane) {
         pane.getChildren().clear();
-
+        pane.setVisible(false);
         pane = null;
     }
 
@@ -539,6 +533,29 @@ class Game {
                 createPlayingFields(cp, playingFields, 750, 115);
                 showLocationOfShips(hp);
 
+                for(int i = 0; i < 10; i++){
+                    for(int j = 0; j < 10; j++){
+                        int row = i;
+                        int col = j;
+                        cp.water[i][j].setOnMouseEntered(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                focusTiles.get(0).setVisible(true);
+                                if (cp.water[row][col].getChildren().get(4).isVisible() && !cp.water[row][col].getChildren().contains(focusTiles.get(0)))
+                                    cp.water[row][col].getChildren().add(focusTiles.get(0));
+                                else
+                                    focusTiles.get(0).setVisible(false);
+                            }
+                        });
+                        cp.water[i][j].setOnMouseExited(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                focusTiles.get(0).setVisible(false);
+                            }
+                        });
+                    }
+                }
+
                 cp.board.setOnMouseClicked(event1 -> {
                     boolean f = false;
                     byte row;
@@ -550,23 +567,23 @@ class Game {
                     while (row < 10 && !f) {
                         col = 0;
                         while (col < 10 && !f) {
-                            if (node == cp.water[row][col].getChildren().get(4))
+                            if (cp.water[row][col].getChildren().size() == 6 && node == cp.water[row][col].getChildren().get(5)) {
+                                focusTiles.get(0).setVisible(false);
                                 f = true;
+                            }
                             else
                                 col++;
                         }
                         if (!f)
                             row++;
                     }
-                    if (f == true) {
+                    if (f) {
                         coord = new Coord(row, col);
-                        if (false == hp.yourTurn(this, cp, coord) || cp.gameOver()) {
+                        if (!hp.yourTurn(this, cp, coord)) {
                             pointer.getChildren().get(1).setVisible(false);
                             pointer.getChildren().get(0).setVisible(true);
-                            if (cp.gameOver()) {
-                                printShipLocation(hp);
-                                cp.board.setDisable(true);
-                            } else {
+
+
                                            /* PauseTransition pause = new PauseTransition(Duration.millis(400));
                                             pause.play();
                                             pause.setOnFinished(event2 -> {*/
@@ -574,9 +591,15 @@ class Game {
                                 //  });
                                 pointer.getChildren().get(0).setVisible(false);
                                 pointer.getChildren().get(1).setVisible(true);
-                            }
+
                             if (hp.gameOver()) {
                                 printShipLocation(cp);
+                                cp.board.setDisable(true);
+                            }
+                        }
+                        else{
+                            if (cp.gameOver()) {
+                                printShipLocation(hp);
                                 cp.board.setDisable(true);
                             }
                         }
@@ -613,11 +636,8 @@ class Game {
                 }
                 gameHvH2.setMaxHeight(720);
                 gameHvH2.setMaxWidth(1280);
-                if (false == msp.getChildren().contains(gameHvH2)) {
-                    gameHvH2.getChildren().clear();
-                    gameHvH2.setVisible(true);
-                    msp.getChildren().add(gameHvH2);
-                }
+                msp.getChildren().add(gameHvH2);
+
                 HumanPlayer hp2 = new HumanPlayer();
                 prepareForBattle(hp2, gameHvH2, msp);
                 Main.MenuItem ready = new Main.MenuItem("BATTLE!", 400, 50);
@@ -634,9 +654,7 @@ class Game {
                 bck.setOnMouseClicked(event1 -> {
                     clearBoard(hp1);
                     clearBoard(hp2);
-                    gameHvH.setVisible(false);
                     removePane(gameHvH);
-                    gameHvH2.setVisible(false);
                     removePane(gameHvH2);
                     msp.menuBox.setVisible(true);
                     msp.title.setVisible(true);
@@ -675,13 +693,51 @@ class Game {
 
                     hp1.setEnemyField(hp2.getRefField());
                     hp2.setEnemyField(hp1.getRefField());
-
                     createPointer(playingFields, msp, hp1, hp2);
                     createPlayingFields(hp1, playingFields, 150, 115);
                     createPlayingFields(hp2, playingFields, 750, 115);
                     hp2.board.setDisable(false);
                     hp1.board.setDisable(true);
 
+                    for(int i = 0; i < 10; i++){
+                        for(int j = 0; j < 10; j++){
+                            int row = i;
+                            int col = j;
+                            hp1.water[i][j].setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent event) {
+                                    focusTiles.get(0).setVisible(true);
+                                    if (hp1.water[row][col].getChildren().get(4).isVisible() && !hp1.water[row][col].getChildren().contains(focusTiles.get(0)))
+                                        hp1.water[row][col].getChildren().add(focusTiles.get(0));
+                                    else
+                                        focusTiles.get(0).setVisible(false);
+                                }
+                            });
+                            hp1.water[i][j].setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent event) {
+                                    focusTiles.get(0).setVisible(false);
+                                }
+                            });
+
+                            hp2.water[i][j].setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent event) {
+                                    focusTiles.get(0).setVisible(true);
+                                    if (hp2.water[row][col].getChildren().get(4).isVisible() && !hp2.water[row][col].getChildren().contains(focusTiles.get(0)))
+                                        hp2.water[row][col].getChildren().add(focusTiles.get(0));
+                                    else
+                                        focusTiles.get(0).setVisible(false);
+                                }
+                            });
+                            hp2.water[i][j].setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent event) {
+                                    focusTiles.get(0).setVisible(false);
+                                }
+                            });
+                        }
+                    }
 
                         hp2.board.setOnMouseClicked(event1 -> {
                             boolean f = false;
@@ -694,63 +750,70 @@ class Game {
                             while (row < 10 && !f) {
                                 col = 0;
                                 while (col < 10 && !f) {
-                                    if (node == hp2.water[row][col].getChildren().get(4))
+                                    if (hp2.water[row][col].getChildren().size() == 6 && node == hp2.water[row][col].getChildren().get(5)) {
+                                        focusTiles.get(0).setVisible(false);
                                         f = true;
+                                    }
                                     else
                                         col++;
                                 }
                                 if (!f)
                                     row++;
                             }
-                            if (f == true) {
+                            if (f) {
                                 coord = new Coord(row, col);
 
-                                if (false == hp1.yourTurn(this, hp2, coord)) {
+                                if (!hp1.yourTurn(this, hp2, coord)) {
                                     pointer.getChildren().get(1).setVisible(false);
                                     pointer.getChildren().get(0).setVisible(true);
+
+                                    hp1.board.setDisable(false);
+                                    hp2.board.setDisable(true);
+                                    hp1.board.setOnMouseClicked(event3 -> {
+                                        boolean f2 = false;
+                                        byte r;
+                                        byte c;
+                                        Coord crd;
+                                        Node nde = event3.getPickResult().getIntersectedNode();
+                                        r = 0;
+                                        c = 0;
+                                        while (r < 10 && !f2) {
+                                            c = 0;
+                                            while (c < 10 && !f2) {
+                                                if (hp1.water[r][c].getChildren().size() == 6 && nde == hp1.water[r][c].getChildren().get(5)) {
+                                                    focusTiles.get(0).setVisible(false);
+                                                    f2 = true;
+                                                }
+                                                else
+                                                    c++;
+                                            }
+                                            if (!f2)
+                                                r++;
+                                        }
+                                        if (f2) {
+                                            crd = new Coord(r, c);
+
+                                            if (!hp2.yourTurn(this, hp1, crd)) {
+                                                pointer.getChildren().get(0).setVisible(false);
+                                                pointer.getChildren().get(1).setVisible(true);
+                                                hp2.board.setDisable(false);
+                                                hp1.board.setDisable(true);
+                                            }
+                                            else{
+                                                if (hp1.gameOver()) {
+                                                    printShipLocation(hp2);
+                                                    hp1.board.setDisable(true);
+                                                    hp2.board.setDisable(true);
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                                else{
                                     if (hp2.gameOver()) {
                                         printShipLocation(hp1);
                                         hp1.board.setDisable(true);
                                         hp2.board.setDisable(true);
-                                    }
-                                    else{
-                                        hp1.board.setDisable(false);
-                                        hp2.board.setDisable(true);
-                                        hp1.board.setOnMouseClicked(event3 -> {
-                                            boolean f2 = false;
-                                            byte r;
-                                            byte c;
-                                            Coord crd;
-                                            Node nde = event3.getPickResult().getIntersectedNode();
-                                            r = 0;
-                                            c = 0;
-                                            while (r < 10 && !f2) {
-                                                c = 0;
-                                                while (c < 10 && !f2) {
-                                                    if (nde == hp1.water[r][c].getChildren().get(4))
-                                                        f2 = true;
-                                                    else
-                                                        c++;
-                                                }
-                                                if (!f2)
-                                                    r++;
-                                            }
-                                            if (f2 == true) {
-                                                crd = new Coord(r, c);
-
-                                                if (false == hp2.yourTurn(this, hp1, crd)) {
-                                                    pointer.getChildren().get(0).setVisible(false);
-                                                    pointer.getChildren().get(1).setVisible(true);
-                                                    hp2.board.setDisable(false);
-                                                    hp1.board.setDisable(true);
-                                                    if (hp1.gameOver()) {
-                                                        printShipLocation(hp2);
-                                                        hp1.board.setDisable(true);
-                                                        hp2.board.setDisable(true);
-                                                    }
-                                                }
-                                            }
-                                        });
                                     }
                                 }
                             }

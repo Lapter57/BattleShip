@@ -21,7 +21,7 @@ public class HumanPlayer extends Player {
                                 rival.water[coord.row][coord.col].getChildren().get(3).setVisible(false);
                                 foundShip = enemyField.grid[coord.row][coord.col].getLinkShip();
                                 foundShip.setHit();
-                                if (false == foundShip.stateОk()) {
+                                if (!foundShip.stateОk()) {
                                     for(int i = 0; i < foundShip.deck.size(); i++){
                                         byte row = foundShip.deck.get(i).getRow();
                                         byte col = foundShip.deck.get(i).getCol();
