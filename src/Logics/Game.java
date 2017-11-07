@@ -2,7 +2,6 @@ package Logics;
 import Logics.coord.Coord;
 import loading.Loading;
 
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -17,10 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -496,13 +491,78 @@ class Game {
     void humanVsComputer(Pane gameHvC, MainStPain msp) {
         HumanPlayer hp = new HumanPlayer();
         prepareForBattle(hp, gameHvC, msp);
-        Main.MenuItem ready = new Main.MenuItem("BATTLE!", 400, 50);
-        ready.setTranslateX(800);
+        Main.MenuItem ready = new Main.MenuItem("BATTLE!", 100, 70);
+        ready.setTranslateX(1100);
         ready.setTranslateY(615);
-        gameHvC.getChildren().add(ready);
+        Main.MenuItem easy = new Main.MenuItem("EASY", 100, 70);
+        easy.setTranslateX(770);
+        easy.setTranslateY(615);
+        Main.MenuItem normal = new Main.MenuItem("NORMAL", 100, 70);
+        normal.bg.setFill(Color.valueOf("#A93927"));
+        normal.text.setFill(Color.WHITE);
+        normal.setDisable(true);
+        normal.setTranslateX(880);
+        normal.setTranslateY(615);
+        Main.MenuItem hard = new Main.MenuItem("HARD", 100, 70);
+        hard.setTranslateX(990);
+        hard.setTranslateY(615);
 
+        gameHvC.getChildren().addAll(ready, easy, normal, hard);
+
+        ComputerPlayer cp = new ComputerPlayer();
+        easy.setOnMouseClicked(event -> {
+            cp.level.delete(0, cp.level.length());
+            cp.level.append("easy");
+
+            easy.setDisable(true);
+            easy.bg.setFill(Color.valueOf("#A93927"));
+            easy.text.setFill(Color.WHITE);
+
+            normal.setDisable(false);
+            normal.bg.setFill(Color.BLACK);
+            normal.text.setFill(Color.DARKGRAY);
+
+            hard.setDisable(false);
+            hard.bg.setFill(Color.BLACK);
+            hard.text.setFill(Color.DARKGRAY);
+        });
+
+        normal.setOnMouseClicked(event -> {
+            cp.level.delete(0, cp.level.length());
+            cp.level.append("normal");
+
+            normal.bg.setFill(Color.valueOf("#A93927"));
+            normal.text.setFill(Color.WHITE);
+            normal.setDisable(true);
+
+            easy.setDisable(false);
+            easy.bg.setFill(Color.BLACK);
+            easy.text.setFill(Color.DARKGRAY);
+
+            hard.setDisable(false);
+            hard.bg.setFill(Color.BLACK);
+            hard.text.setFill(Color.DARKGRAY);
+        });
+
+        hard.setOnMouseClicked(event -> {
+            cp.level.delete(0, cp.level.length());
+            cp.level.append("hard");
+
+            hard.bg.setFill(Color.valueOf("#A93927"));
+            hard.text.setFill(Color.WHITE);
+            hard.setDisable(true);
+
+            easy.setDisable(false);
+            easy.bg.setFill(Color.BLACK);
+            easy.text.setFill(Color.DARKGRAY);
+
+            normal.setDisable(false);
+            normal.bg.setFill(Color.BLACK);
+            normal.text.setFill(Color.DARKGRAY);
+        });
 
         ready.setOnMouseClicked(event -> {
+            if (hp.field.fleet.size() == 10) {
             if(first_click_auto) {
                 hp.field.initEmptyTiles();
             }
@@ -513,7 +573,6 @@ class Game {
             msp.getChildren().add(playingFields);
             playingFields.setVisible(true);
 
-            if (hp.field.fleet.size() == 10) {
                 if (!hp.namePlayer.getText().isEmpty()) {
                     hp.name.delete(0, hp.name.length());
                     hp.name.append(hp.namePlayer.getText());
@@ -521,7 +580,6 @@ class Game {
                         hp.name.delete(15, hp.name.length());
                     }
                 }
-                ComputerPlayer cp = new ComputerPlayer();
                 cp.setPlaceShipRand();
                 gameHvC.setVisible(false);
 

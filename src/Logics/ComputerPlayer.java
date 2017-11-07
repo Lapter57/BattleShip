@@ -22,6 +22,7 @@ public class ComputerPlayer extends Player {
     private boolean firstHit = true;
     private byte rs = 0;
     private ArrayList<Coord> randomSteps = new ArrayList<>();
+    StringBuilder level = new StringBuilder("normal");
     {
         for(byte i = 0; i < 10; i++){
             for(byte j = 0; j < 10; j++){
@@ -220,27 +221,50 @@ public class ComputerPlayer extends Player {
     // Method for getting coordinates for a shot
     public Coord getCoord(){
         Coord coord = new Coord();
-        if(rs < 2) {
-            while (coordForStep.isEmpty() || enemyField.grid[coordForStep.get(0).row][coordForStep.get(0).col].getState() != ' ') {
-                if (coordForStep.isEmpty()) {
-                    updateCoord(sizeShip);
-                    sizeShip = (sizeShip == 4) ? (byte) 3 : (byte) 1;
-                } else
+        switch (level.toString()){
+            case "hard":
+                if(rs < 2) {
+                    while (coordForStep.isEmpty() || enemyField.grid[coordForStep.get(0).row][coordForStep.get(0).col].getState() != ' ') {
+                        if (coordForStep.isEmpty()) {
+                            updateCoord(sizeShip);
+                            sizeShip = (sizeShip == 4) ? (byte) 3 : (byte) 1;
+                        } else
+                            coordForStep.remove(0);
+                    }
+                    coord.row = coordForStep.get(0).row;
+                    coord.col = coordForStep.get(0).col;
                     coordForStep.remove(0);
-            }
-            coord.row = coordForStep.get(0).row;
-            coord.col = coordForStep.get(0).col;
-            coordForStep.remove(0);
-            rs++;
+                    rs++;
+                }
+                else{
+                    while (enemyField.grid[randomSteps.get(0).row][randomSteps.get(0).col].getState() != ' '){
+                        randomSteps.remove(0);
+                    }
+                    coord.row = randomSteps.get(0).row;
+                    coord.col = randomSteps.get(0).col;
+                    Collections.shuffle(randomSteps);
+                    rs = 0;
+                }
+                return coord;
+            case "normal":
+                while (coordForStep.isEmpty() || enemyField.grid[coordForStep.get(0).row][coordForStep.get(0).col].getState() != ' ') {
+                    if (coordForStep.isEmpty()) {
+                        updateCoord(sizeShip);
+                        sizeShip = (sizeShip == 4) ? (byte) 3 : (byte) 1;
+                    } else
+                        coordForStep.remove(0);
+                }
+                coord.row = coordForStep.get(0).row;
+                coord.col = coordForStep.get(0).col;
+                coordForStep.remove(0);
+                return coord;
         }
-        else{
-            while (enemyField.grid[randomSteps.get(0).row][randomSteps.get(0).col].getState() != ' '){
-                randomSteps.remove(0);
-            }
-            coord.row = randomSteps.get(0).row;
-            coord.col = randomSteps.get(0).col;
-            rs = 0;
+        while (enemyField.grid[randomSteps.get(0).row][randomSteps.get(0).col].getState() != ' '){
+            randomSteps.remove(0);
         }
+        coord.row = randomSteps.get(0).row;
+        coord.col = randomSteps.get(0).col;
+        Collections.shuffle(randomSteps);
         return coord;
     }
 }

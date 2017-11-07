@@ -66,6 +66,8 @@ public class Main extends Application {
 
 
     static class MenuItem extends StackPane{
+        Rectangle bg;
+        Text text;
         public  MenuItem(String name,int x,int y){
             LinearGradient gradient = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, new Stop[]{
                     new Stop(0, Color.valueOf("#A93927")),
@@ -73,11 +75,11 @@ public class Main extends Application {
                     new Stop(0.9, Color.BLACK),
                     new Stop(1, Color.valueOf("#A93927")),
             });
-            Rectangle bg = new Rectangle(x,y);
+            bg = new Rectangle(x,y);
             bg.setOpacity(0.5);
             bg.setArcHeight(20);
             bg.setArcWidth(20);
-            Text text = new Text(name);
+            text = new Text(name);
             text.setFill(Color.DARKGRAY);
             text.setFont(Font.font("Tw Cen MT Condensed",FontWeight.SEMI_BOLD,26));
 
@@ -88,13 +90,16 @@ public class Main extends Application {
                 text.setFill(Color.WHITE);
             });
 
-            setOnMouseExited(event -> {
-                bg.setFill(Color.BLACK);
-                text.setFill(Color.DARKGRAY);
-            });
+                setOnMouseExited(event -> {
+                    if(!isDisable()) {
+                        bg.setFill(Color.BLACK);
+                        text.setFill(Color.DARKGRAY);
+                    }
+                });
 
             setOnMousePressed(event -> {
                 bg.setFill(Color.valueOf("#A93927"));
+                text.setFill(Color.WHITE);
             });
 
             setOnMouseReleased(event -> {
