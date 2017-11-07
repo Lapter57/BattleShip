@@ -90,7 +90,7 @@ public static String getClassName() {
     Field getRefField() { return field; }
 
     // Getting the player's name
-    public StringBuilder getName() { return name; }
+    public String getName() { return name.toString(); }
 
     //-------------------------------------------------------------------------------------
 
