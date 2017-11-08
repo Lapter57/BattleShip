@@ -30,7 +30,7 @@ public class Main extends Application {
         msp.getChildren().add(statsPane);
         Main.MenuItem back = new Main.MenuItem("BACK", 100, 70);
         back.setTranslateX(10);
-        back.setTranslateY(10);
+        back.setTranslateY(640);
         statsPane.getChildren().add(back);
         statsPane.setVisible(false);
         back.setOnMouseClicked(event -> {
