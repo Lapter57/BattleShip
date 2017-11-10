@@ -4,7 +4,7 @@ import Logics.coord.Coord;
 
 public class HumanPlayer extends Player {
     private byte numWinShots = 0;
-
+    private Integer level = 1;
 
     public HumanPlayer(){super(new StringBuilder("NO_NAME"));}
     public HumanPlayer(StringBuilder name){ super(name); }
@@ -41,8 +41,22 @@ public class HumanPlayer extends Player {
                         return  hit;
     }
 
-    public void addShot(){numWinShots++;}
-    public byte getNumWinShots(){return numWinShots;}
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level){
+        this.level = level;
+    }
+
+    public void addShot(){
+        numWinShots++;
+    }
+
+    public byte getNumWinShots(){
+        return numWinShots;
+    }
+
     public void checkName(){
         if (this.field.fleet.size() == 10) {
             if (!this.namePlayer.getText().isEmpty()) {

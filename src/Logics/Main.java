@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import statistics.PlayerStats;
 
 public class Main extends Application {
 
@@ -27,6 +28,10 @@ public class Main extends Application {
         msp.newGame.setOnMouseClicked(event->msp.menuBox.setSubMenu(msp.newGameMenu));
         msp.exitGame.setOnMouseClicked(event-> System.exit(0));
         Pane statsPane = new Pane();
+        PlayerStats playerStats = new PlayerStats();
+        statsPane.getChildren().add(playerStats.getTable());
+
+
         msp.getChildren().add(statsPane);
         Main.MenuItem back = new Main.MenuItem("BACK", 100, 70);
         back.setTranslateX(10);
@@ -47,7 +52,7 @@ public class Main extends Application {
             msp.menuBox.setSubMenu(msp.mainMenu);
             msp.title.setVisible(true);
         });
-        Game game = new Game();
+        Game game = new Game(playerStats);
         msp.hvC.setOnMouseClicked(event -> {
             Pane gameHvC = new Pane();
             gameHvC.setMaxHeight(720);

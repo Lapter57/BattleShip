@@ -33,9 +33,10 @@ class Game {
     private Boolean first_click_auto = true;
     private StackPane pointer = new StackPane();
     private ArrayList<Rectangle> focusTiles = new ArrayList<>();
-    PlayerStats playerStats = new PlayerStats();
+    private PlayerStats playerStats;
 
-    Game() {
+    Game(PlayerStats playerStats) {
+        this.playerStats = playerStats;
         board.setPrefSize(10, 10);
         for(int i = 0; i < 4; i++){
             Rectangle rec = new Rectangle(45,45,Color.LIGHTGREEN);
@@ -106,6 +107,7 @@ class Game {
             removePane(gameArea);
             msp.menuBox.setVisible(true);
             msp.title.setVisible(true);
+            first_click_auto = true;
         });
 
         deployMenu.setSpacing(15);
@@ -454,6 +456,7 @@ class Game {
             removePane(playingFields);
             msp.menuBox.setVisible(true);
             msp.title.setVisible(true);
+            first_click_auto = true;
         });
     }
 
@@ -491,6 +494,7 @@ class Game {
 
     void humanVsComputer(Pane gameHvC, MainStPain msp) {
         HumanPlayer hp = new HumanPlayer();
+        hp.setLevel(1);
         prepareForBattle(hp, gameHvC, msp);
         Main.MenuItem ready = new Main.MenuItem("BATTLE!", 100, 70);
         ready.setTranslateX(1100);
@@ -514,6 +518,7 @@ class Game {
         easy.setOnMouseClicked(event -> {
             cp.level.delete(0, cp.level.length());
             cp.level.append("easy");
+            hp.setLevel(0);
 
             easy.setDisable(true);
             easy.bg.setFill(Color.valueOf("#A93927"));
@@ -531,6 +536,7 @@ class Game {
         normal.setOnMouseClicked(event -> {
             cp.level.delete(0, cp.level.length());
             cp.level.append("normal");
+            hp.setLevel(1);
 
             normal.bg.setFill(Color.valueOf("#A93927"));
             normal.text.setFill(Color.WHITE);
@@ -548,6 +554,7 @@ class Game {
         hard.setOnMouseClicked(event -> {
             cp.level.delete(0, cp.level.length());
             cp.level.append("hard");
+            hp.setLevel(2);
 
             hard.bg.setFill(Color.valueOf("#A93927"));
             hard.text.setFill(Color.WHITE);
@@ -669,7 +676,7 @@ class Game {
 
     void humanVsHuman(Pane gameHvH, MainStPain msp) {
         HumanPlayer hp1 = new HumanPlayer();
-
+        hp1.setLevel(3);
         prepareForBattle(hp1, gameHvH, msp);
         Main.MenuItem next = new Main.MenuItem("NEXT PLAYER", 400, 50);
         next.setTranslateX(800);
@@ -695,6 +702,7 @@ class Game {
                 msp.getChildren().add(gameHvH2);
 
                 HumanPlayer hp2 = new HumanPlayer();
+                hp2.setLevel(3);
                 prepareForBattle(hp2, gameHvH2, msp);
                 Main.MenuItem ready = new Main.MenuItem("BATTLE!", 400, 50);
                 ready.setTranslateX(800);
