@@ -51,6 +51,7 @@ public class TableStats{
         table.setMaxHeight(700);
         table.setTranslateX(250);
         table.setTranslateY(150);
+        table.setStyle("-fx-selection-bar: gray");
     }
 
     public void fillList(Statement statement){

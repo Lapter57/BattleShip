@@ -1,8 +1,10 @@
 package Logics;
-import java.awt.*;
+
+import Logics.coord.Coord;
+
 import java.util.ArrayList;
 import java.util.Random;
-import Logics.coord.Coord;
+
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -17,10 +19,6 @@ public abstract class Player {
     protected StackPane[][] water = new StackPane[10][10];
     protected StackPane name_area = new StackPane();
     protected StackPane stat_area = new StackPane();
-    {
-        stat_area.setMinHeight(135);
-        stat_area.setMaxWidth(360);
-    }
     protected Text cur_stat;
     protected Field enemyField = new Field();
     protected Field field = new Field();
@@ -30,7 +28,8 @@ public abstract class Player {
     protected ArrayList<Byte> ships = new ArrayList<>(4);
     protected TextField namePlayer = new TextField();
 
-    public Player(StringBuilder name){
+
+    Player(StringBuilder name){
         this.name = name;
         byte j = 4;
         for(int i = 0; i < 4; i++)
@@ -39,51 +38,61 @@ public abstract class Player {
         cur_stat = new Text(str);
         cur_stat.setFill(Color.valueOf("#455760"));
         cur_stat.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD,30));
+
+        stat_area.setMinHeight(135);
+        stat_area.setMaxWidth(360);
     }
 
-    public void updateCurStat(){
+    void updateCurStat(){
         String str = "CARRIER: " + ships.get(3) + "\n" + "SUBMARINE: " + ships.get(2) + "\n" + "DESTROYED: " + ships.get(1) + "\n" +  "FRIGATE: " + ships.get(0) + "\n";
         cur_stat.setText(str);
     }
-    // Checking the correctness of coordinates input
-    public boolean checkC(final byte check){ return(check >=0 && check < 10); }
-    public boolean checkC(final byte check1, final byte check2){
-        return ( check1 >=0 && check1 < 10 && check2 >=0 && check2 < 10);
+
+    boolean gameOver(){
+        return field.numShipAfloat == 0;
     }
 
-    // Checking that the tile has not yet been shot
-    //public boolean checkEmptyTile(final Coord coord){ return field.grid[coord.row][coord.col].getState() != ' '; }
+    public byte getNumShipAfloat(){
+        return field.numShipAfloat;
+    }
 
-    // The player did not lose until the number of ships afloat became zero
-    public boolean gameOver(){ return field.numShipAfloat == 0; }
-    public byte getNumShipAfloat(){return field.numShipAfloat;}
+    void setEnemyField(Field field) {
+        enemyField = field;
+    }
 
-    // Abstract method for implementing the player's turn
+    public String getName() {
+        return name.toString();
+    }
 
+    Field getRefField() {
+        return field;
+    }
 
-    // Communication with the enemy field
-    public void setEnemyField(Field field) { enemyField = field; }
-
-    // Destruction of the number of ships of a certain type
-    public void destroy(final byte sizeShip) {
+    void destroy(final byte sizeShip) {
         Byte temp = ships.get(sizeShip - 1);
         ships.set(sizeShip - 1, --temp);
     }
-    // Getting a reference to the playing field
-    Field getRefField() { return field; }
 
-    // Getting the player's name
-    public String getName() { return name.toString(); }
+    private boolean checkCoord(final Coord ... coords){
+        boolean check = true;
+        for(Coord crd: coords){
+            check = crd.row >=0 && crd.row < 10 && crd.col >=0 && crd.col < 10;
+            if(!check)
+                break;
+        }
+        return check;
+    }
 
-    //-------------------------------------------------------------------------------------
+    private boolean nearShip(byte row, byte col){
+        return checkCoord(new Coord(row,col)) && field.grid[row][col] != null && field.grid[row][col].getLinkShip() != null;
+    }
 
-    // Checking the correct location of ships ( not a Frigate (size == 1) )
-    public boolean checkCollision(final Coord coord1, final Coord coord2) {
+    boolean checkCollision(final Coord coord1, final Coord coord2) {
         byte checkStart, checkEnd;
-        char disription;
+        char direction;
 
         if (coord1.row == coord2.row) {
-            disription = 'h';
+            direction = 'h';
             if (coord1.col < coord2.col) {
                 checkStart = (byte)(coord1.col - 1);
                 checkEnd = (byte)(coord2.col + 1);
@@ -94,7 +103,7 @@ public abstract class Player {
             }
         }
         else {
-            disription = 'v';
+            direction = 'v';
             if (coord1.row < coord2.row) {
                 checkStart = (byte)(coord1.row - 1);
                 checkEnd = (byte)(coord2.row + 1);
@@ -104,61 +113,28 @@ public abstract class Player {
                 checkEnd = (byte)(coord1.row + 1);
             }
         }
-
-        if(checkC(coord1.col,coord1.row) && checkC(coord2.col,coord2.row)) {
-            boolean check = true;
-            byte i = checkStart;
+        boolean check = false;
+        if(checkCoord(coord1,coord2)) {
+            check = true;
+            byte i = (checkStart >= 0 && checkStart < 10) ? checkStart : ++checkStart;
+            checkEnd = (checkEnd >= 0 && checkEnd < 10) ? checkEnd : --checkEnd;
             while (check && i <= checkEnd) {
-                if (checkC(i)) {
-                    if (disription == 'h') {
-                        if (field.grid[coord1.row][i] != null && field.grid[coord1.row][i].getLinkShip() != null)
-                            check = false;
-                        if (check && checkC((byte) (coord1.row + 1)) && field.grid[coord1.row + 1][i] != null && field.grid[coord1.row + 1][i].getLinkShip() != null)
-                            check = false;
-                        if (check && checkC((byte) (coord1.row - 1)) && field.grid[coord1.row - 1][i] != null && field.grid[coord1.row - 1][i].getLinkShip() != null)
-                            check = false;
-                    } else {
-                        if (field.grid[i][coord1.col] != null && field.grid[i][coord1.col].getLinkShip() != null)
-                            check = false;
-                        if (check && checkC((byte) (coord1.col + 1)) && field.grid[i][coord1.col + 1] != null && field.grid[i][coord1.col + 1].getLinkShip() != null)
-                            check = false;
-                        if (check && checkC((byte) (coord1.col - 1)) && field.grid[i][coord1.col - 1] != null && field.grid[i][coord1.col - 1].getLinkShip() != null)
-                            check = false;
-                    }
-                } // if (checkC(i))
+                if (direction == 'h') {
+                    if (nearShip(coord1.row, i) || nearShip((byte) (coord1.row + 1), i) || nearShip((byte) (coord1.row - 1), i))
+                        check = false;
+                } else if (nearShip(i, coord1.col) || nearShip(i, (byte) (coord1.col + 1)) || nearShip(i, (byte) (coord1.col - 1)))
+                    check = false;
                 i++;
-            } // while (check && i <= checkEnd)
-            return check;
-        }
-        return false;
-    }
-
-    //-------------------------------------------------------------------------------------
-
-    // Checking the correct location of ships ( Frigate (size == 1) )
-    boolean checkCollision(final Coord coord) {
-        boolean check = true;
-        byte i = (byte)(coord.col - 1);
-        while (check && i <= coord.col + 1) {
-            if (checkC(i)) {
-                if (field.grid[coord.row][i] != null && field.grid[coord.row][i].getLinkShip() != null) check = false;
-                if (check && checkC((byte)(coord.row + 1)) && field.grid[coord.row + 1][i] != null && field.grid[coord.row + 1][i].getLinkShip() != null) check = false;
-                if (check && checkC((byte)(coord.row - 1)) && field.grid[coord.row - 1][i] != null && field.grid[coord.row - 1][i].getLinkShip() != null) check = false;
             }
-            i++;
         }
         return check;
     }
 
-    //-------------------------------------------------------------------------------------
-
-    // Method that implements a random arrangement of ships on the playing field
-    public void setPlaceShipRand() {
-        byte row, col, shift, way = 0, direction = 0;
-        Coord coor1 = new Coord(), coor2 = new Coord();
-        boolean OK = false;
+    void setPlaceShipRand() {
+        byte row, col, shift, stern,  way = 0, direction = 0;
+        Coord crd1 = new Coord(), crd2 = new Coord();
+        boolean established;
         Ship ship;
-        //final Random random = new Random();
 
         for (byte i = 4; i > 0; i--)
             for (byte j = 1; j <= (5 - i); j++) {
@@ -169,48 +145,41 @@ public abstract class Player {
                         direction = (new Random().nextInt(2) == 0) ? (byte)1 : (byte)-1;
                         way = (new Random().nextInt(2) == 0) ? (byte)1 : (byte)-1;
                         shift = (direction == 1) ?  col : row;
-                        if (!checkC((byte)(shift + way * (i - 1)))) way *= -1;
+                        stern = (byte) ( shift + way * (i - 1) );
+                        if (!(stern >= 0 && stern < 10))
+                            way *= -1;
                     }
 
-                    switch (i) {
-                        case 1: {
-                            coor1.row = row;
-                            coor1.col = col;
-                            OK = checkCollision(coor1);
-                            break;
-                        }
-                        default:
-                            if (direction == 1) {
-                                coor1.row = row;
-                                coor2.row = row;
-                                coor1.col = col;
-                                coor2.col = (byte)(col + way *(i - 1));
-                                OK = checkCollision(coor1, coor2);
-                            }
-                            else {
-                                coor1.row = row;
-                                coor2.row = (byte)(row + way * (i - 1));
-                                coor1.col = col;
-                                coor2.col = col;
-                                OK = checkCollision(coor1, coor2);
-                            }
-                    } // switch (i)
-                } while (!OK);
+                    if (direction == 1) {
+                        crd1.row = row;
+                        crd2.row = row;
+                        crd1.col = col;
+                        crd2.col = (byte)(col + way *(i - 1));
+                        established = checkCollision(crd1, crd2);
+                    }
+                    else {
+                        crd1.row = row;
+                        crd2.row = (byte)(row + way * (i - 1));
+                        crd1.col = col;
+                        crd2.col = col;
+                        established = checkCollision(crd1, crd2);
+                    }
+                } while (!established);
 
 
                 if (i > 1) {
-                    ship = new Ship(i, new Coord(coor1),new Coord(coor2), field);
+                    ship = new Ship(i, new Coord(crd1),new Coord(crd2), field);
                     ship.linkTilesWithDeck(field);
                     ship.linkTilesWithHalo(field);
                     field.fleet.add(ship);
                 }
                 else {
-                    ship = new Ship(i, new Coord(coor1), field);
+                    ship = new Ship(i, new Coord(crd1), field);
                     ship.linkTilesWithDeck(field);
                     ship.linkTilesWithHalo(field);
                     field.fleet.add(ship);
                 }
-            } // for (unsigned char j = 1; j <= (5 - i); j++)
+            }
         field.initEmptyTiles();
     }
 }

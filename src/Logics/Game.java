@@ -571,34 +571,25 @@ class Game {
 
         ready.setOnMouseClicked(event -> {
             if (hp.field.fleet.size() == 10) {
-            if(first_click_auto) {
-                hp.field.initEmptyTiles();
-            }
-
-            Pane playingFields = new Pane();
-            playingFields.setMaxHeight(720);
-            playingFields.setMaxWidth(1280);
-            msp.getChildren().add(playingFields);
-            playingFields.setVisible(true);
-
-                if (!hp.namePlayer.getText().isEmpty()) {
-                    hp.name.delete(0, hp.name.length());
-                    hp.name.append(hp.namePlayer.getText());
-                    if (hp.name.length() > 15) {
-                        hp.name.delete(15, hp.name.length());
-                    }
+                if(first_click_auto) {
+                    hp.field.initEmptyTiles();
                 }
+
+                Pane playingFields = new Pane();
+                playingFields.setMaxHeight(720);
+                playingFields.setMaxWidth(1280);
+                msp.getChildren().add(playingFields);
+                playingFields.setVisible(true);
+
+                hp.checkName();
                 cp.setPlaceShipRand();
                 gameHvC.setVisible(false);
-
                 cp.setEnemyField(hp.getRefField());
                 hp.setEnemyField(cp.getRefField());
-
                 createPointer(playingFields, msp, hp, cp);
                 createPlayingFields(hp, playingFields, 150, 115);
                 createPlayingFields(cp, playingFields, 750, 115);
                 showLocationOfShips(hp);
-
                 for(int i = 0; i < 10; i++){
                     for(int j = 0; j < 10; j++){
                         int row = i;
@@ -621,7 +612,6 @@ class Game {
                         });
                     }
                 }
-
                 cp.board.setOnMouseClicked(event1 -> {
                     boolean f = false;
                     byte row;
@@ -648,11 +638,9 @@ class Game {
                         if (!hp.yourTurn(this, cp, coord)) {
                             pointer.getChildren().get(1).setVisible(false);
                             pointer.getChildren().get(0).setVisible(true);
-
-                            cp.yourTurn(this, hp);
+                            cp.yourTurn(hp);
                             pointer.getChildren().get(0).setVisible(false);
                             pointer.getChildren().get(1).setVisible(true);
-
                             if (hp.gameOver()) {
                                 printShipLocation(cp);
                                 cp.board.setDisable(true);
@@ -668,8 +656,8 @@ class Game {
                         }
                     }
                 });
-
             }
+
         });
 
     }
@@ -726,64 +714,65 @@ class Game {
 
 
                 ready.setOnMouseClicked(event2 -> {
-                    if(first_click_auto) {
-                        hp2.field.initEmptyTiles();
-                    }
-                    Pane playingFields = new Pane();
-                    playingFields.setMaxHeight(720);
-                    playingFields.setMaxWidth(1280);
-                    msp.getChildren().add(playingFields);
-                    playingFields.setVisible(true);
-                    hp1.checkName();
-                    hp2.checkName();
-                    gameHvH2.setVisible(false);
-                    hp1.setEnemyField(hp2.getRefField());
-                    hp2.setEnemyField(hp1.getRefField());
-                    createPointer(playingFields, msp, hp1, hp2);
-                    createPlayingFields(hp1, playingFields, 150, 115);
-                    createPlayingFields(hp2, playingFields, 750, 115);
-                    hp2.board.setDisable(false);
-                    hp1.board.setDisable(true);
-
-                    for(int i = 0; i < 10; i++){
-                        for(int j = 0; j < 10; j++){
-                            int row = i;
-                            int col = j;
-                            hp1.water[i][j].setOnMouseEntered(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent event) {
-                                    focusTiles.get(0).setVisible(true);
-                                    if (hp1.water[row][col].getChildren().get(4).isVisible() && !hp1.water[row][col].getChildren().contains(focusTiles.get(0)))
-                                        hp1.water[row][col].getChildren().add(focusTiles.get(0));
-                                    else
-                                        focusTiles.get(0).setVisible(false);
-                                }
-                            });
-                            hp1.water[i][j].setOnMouseExited(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent event) {
-                                    focusTiles.get(0).setVisible(false);
-                                }
-                            });
-
-                            hp2.water[i][j].setOnMouseEntered(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent event) {
-                                    focusTiles.get(0).setVisible(true);
-                                    if (hp2.water[row][col].getChildren().get(4).isVisible() && !hp2.water[row][col].getChildren().contains(focusTiles.get(0)))
-                                        hp2.water[row][col].getChildren().add(focusTiles.get(0));
-                                    else
-                                        focusTiles.get(0).setVisible(false);
-                                }
-                            });
-                            hp2.water[i][j].setOnMouseExited(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent event) {
-                                    focusTiles.get(0).setVisible(false);
-                                }
-                            });
+                    if (hp2.field.fleet.size() == 10) {
+                        if (first_click_auto) {
+                            hp2.field.initEmptyTiles();
                         }
-                    }
+                        Pane playingFields = new Pane();
+                        playingFields.setMaxHeight(720);
+                        playingFields.setMaxWidth(1280);
+                        msp.getChildren().add(playingFields);
+                        playingFields.setVisible(true);
+                        hp1.checkName();
+                        hp2.checkName();
+                        gameHvH2.setVisible(false);
+                        hp1.setEnemyField(hp2.getRefField());
+                        hp2.setEnemyField(hp1.getRefField());
+                        createPointer(playingFields, msp, hp1, hp2);
+                        createPlayingFields(hp1, playingFields, 150, 115);
+                        createPlayingFields(hp2, playingFields, 750, 115);
+                        hp2.board.setDisable(false);
+                        hp1.board.setDisable(true);
+
+                        for (int i = 0; i < 10; i++) {
+                            for (int j = 0; j < 10; j++) {
+                                int row = i;
+                                int col = j;
+                                hp1.water[i][j].setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        focusTiles.get(0).setVisible(true);
+                                        if (hp1.water[row][col].getChildren().get(4).isVisible() && !hp1.water[row][col].getChildren().contains(focusTiles.get(0)))
+                                            hp1.water[row][col].getChildren().add(focusTiles.get(0));
+                                        else
+                                            focusTiles.get(0).setVisible(false);
+                                    }
+                                });
+                                hp1.water[i][j].setOnMouseExited(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        focusTiles.get(0).setVisible(false);
+                                    }
+                                });
+
+                                hp2.water[i][j].setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        focusTiles.get(0).setVisible(true);
+                                        if (hp2.water[row][col].getChildren().get(4).isVisible() && !hp2.water[row][col].getChildren().contains(focusTiles.get(0)))
+                                            hp2.water[row][col].getChildren().add(focusTiles.get(0));
+                                        else
+                                            focusTiles.get(0).setVisible(false);
+                                    }
+                                });
+                                hp2.water[i][j].setOnMouseExited(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        focusTiles.get(0).setVisible(false);
+                                    }
+                                });
+                            }
+                        }
 
                         hp2.board.setOnMouseClicked(event1 -> {
                             boolean f = false;
@@ -799,8 +788,7 @@ class Game {
                                     if (hp2.water[row][col].getChildren().size() == 6 && node == hp2.water[row][col].getChildren().get(5)) {
                                         focusTiles.get(0).setVisible(false);
                                         f = true;
-                                    }
-                                    else
+                                    } else
                                         col++;
                                 }
                                 if (!f)
@@ -829,8 +817,7 @@ class Game {
                                                 if (hp1.water[r][c].getChildren().size() == 6 && nde == hp1.water[r][c].getChildren().get(5)) {
                                                     focusTiles.get(0).setVisible(false);
                                                     f2 = true;
-                                                }
-                                                else
+                                                } else
                                                     c++;
                                             }
                                             if (!f2)
@@ -844,8 +831,7 @@ class Game {
                                                 pointer.getChildren().get(1).setVisible(true);
                                                 hp2.board.setDisable(false);
                                                 hp1.board.setDisable(true);
-                                            }
-                                            else{
+                                            } else {
                                                 hp2.addShot();
                                                 if (hp1.gameOver()) {
                                                     printShipLocation(hp2);
@@ -856,8 +842,7 @@ class Game {
                                             }
                                         }
                                     });
-                                }
-                                else{
+                                } else {
                                     hp1.addShot();
                                     if (hp2.gameOver()) {
                                         printShipLocation(hp1);
@@ -868,7 +853,7 @@ class Game {
                                 }
                             }
                         });
-
+                    }
 
                 });
 
