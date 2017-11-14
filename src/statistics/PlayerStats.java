@@ -1,6 +1,6 @@
 package statistics;
 
-import Logics.HumanPlayer;
+import Logics.players.HumanPlayer;
 import javafx.scene.control.TableView;
 
 import java.sql.*;

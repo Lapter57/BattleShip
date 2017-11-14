@@ -1,12 +1,21 @@
-package Logics;
+package Logics.players;
 
+import Logics.Field;
+import Logics.Game;
+import Logics.Ship;
 import Logics.coord.Coord;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import graphics.CurrentStats;
+import graphics.Graphic;
+import graphics.GraphicField;
+import graphics.NameArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -15,18 +24,15 @@ import javafx.scene.text.Text;
 
 
 public abstract class Player {
-    protected GridPane board = new GridPane(); {board.setPrefSize(10, 10);}
-    protected StackPane[][] water = new StackPane[10][10];
-    protected StackPane name_area = new StackPane();
-    protected StackPane stat_area = new StackPane();
-    protected Text cur_stat;
+    protected GraphicField graphicField = new GraphicField();
+    protected NameArea nameArea;
+    protected CurrentStats currentStats;
     protected Field enemyField = new Field();
     protected Field field = new Field();
     protected Byte estabShip = 0;
     protected StringBuilder name;
     protected Ship foundShip = null;
     protected ArrayList<Byte> ships = new ArrayList<>(4);
-    protected TextField namePlayer = new TextField();
 
 
     Player(StringBuilder name){
@@ -34,29 +40,36 @@ public abstract class Player {
         byte j = 4;
         for(int i = 0; i < 4; i++)
             ships.add(j--);
-        String str = "CARRIER: " + ships.get(3) + "\n" + "SUBMARINE: " + ships.get(2) + "\n" + "DESTROYED: " + ships.get(1) + "\n" + "FRIGATE: " + ships.get(0) + "\n";
-        cur_stat = new Text(str);
-        cur_stat.setFill(Color.valueOf("#455760"));
-        cur_stat.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD,30));
-
-        stat_area.setMinHeight(135);
-        stat_area.setMaxWidth(360);
+        currentStats = new CurrentStats(this);
+        nameArea = new NameArea(this);
     }
 
-    void updateCurStat(){
-        String str = "CARRIER: " + ships.get(3) + "\n" + "SUBMARINE: " + ships.get(2) + "\n" + "DESTROYED: " + ships.get(1) + "\n" +  "FRIGATE: " + ships.get(0) + "\n";
-        cur_stat.setText(str);
+    public ArrayList<Byte> getShips() {
+        return ships;
     }
 
-    boolean gameOver(){
-        return field.numShipAfloat == 0;
+    public void updateCurStat(){
+        currentStats.update();
+    }
+
+    public void customizeCurrentStats(Pane playingFields, int b_x){
+        currentStats.customize(playingFields, b_x);
+    }
+
+    public void customizeNameArea(Pane playingFields, int b_x){
+        nameArea.customize(playingFields, b_x);
+    }
+
+
+    public boolean gameOver(){
+        return field.getNumShipAfloat() == 0;
     }
 
     public byte getNumShipAfloat(){
-        return field.numShipAfloat;
+        return field.getNumShipAfloat();
     }
 
-    void setEnemyField(Field field) {
+    public void setEnemyField(Field field) {
         enemyField = field;
     }
 
@@ -64,13 +77,49 @@ public abstract class Player {
         return name.toString();
     }
 
-    Field getRefField() {
+    public TextField getNamePlayer(){
+        return nameArea.getNamePlayer();
+    }
+
+    public Field getField() {
         return field;
+    }
+
+    public Byte getEstabShip() {
+        return estabShip;
+    }
+
+    public void addEstabShip(){
+        estabShip++;
+    }
+
+    public GraphicField getGraphicField() {
+        return graphicField;
     }
 
     void destroy(final byte sizeShip) {
         Byte temp = ships.get(sizeShip - 1);
         ships.set(sizeShip - 1, --temp);
+    }
+
+    public void clearField(){
+        field.clearField();
+        estabShip = 0;
+    }
+
+    public void fillNameArea(Pane gameArea){
+        nameArea.fillNameArea(gameArea);
+    }
+
+    public void printShipLocation() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (field.getGrid()[i][j].getLinkShip() != null && field.getGrid()[i][j].getState() != 'x') {
+                    ImageView img_ss = new ImageView(Graphic.map_img.get("ss"));
+                    graphicField.getWater()[i][j].getChildren().add(img_ss);
+                }
+            }
+        }
     }
 
     private boolean checkCoord(final Coord ... coords){
@@ -84,10 +133,10 @@ public abstract class Player {
     }
 
     private boolean nearShip(byte row, byte col){
-        return checkCoord(new Coord(row,col)) && field.grid[row][col] != null && field.grid[row][col].getLinkShip() != null;
+        return checkCoord(new Coord(row,col)) && field.getGrid()[row][col] != null && field.getGrid()[row][col].getLinkShip() != null;
     }
 
-    boolean checkCollision(final Coord coord1, final Coord coord2) {
+    public boolean checkCollision(final Coord coord1, final Coord coord2) {
         byte checkStart, checkEnd;
         char direction;
 
@@ -130,7 +179,7 @@ public abstract class Player {
         return check;
     }
 
-    void setPlaceShipRand() {
+    public void setPlaceShipRand() {
         byte row, col, shift, stern,  way = 0, direction = 0;
         Coord crd1 = new Coord(), crd2 = new Coord();
         boolean established;
@@ -171,13 +220,13 @@ public abstract class Player {
                     ship = new Ship(i, new Coord(crd1),new Coord(crd2), field);
                     ship.linkTilesWithDeck(field);
                     ship.linkTilesWithHalo(field);
-                    field.fleet.add(ship);
+                    field.getFleet().add(ship);
                 }
                 else {
                     ship = new Ship(i, new Coord(crd1), field);
                     ship.linkTilesWithDeck(field);
                     ship.linkTilesWithHalo(field);
-                    field.fleet.add(ship);
+                    field.getFleet().add(ship);
                 }
             }
         field.initEmptyTiles();

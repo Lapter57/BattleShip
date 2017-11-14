@@ -1,10 +1,11 @@
-package Logics;
+package Logics.players;
 
 
 import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Collections;
 
+import Logics.Field;
 import Logics.coord.Coord;
 
 public class ComputerPlayer extends Player {
@@ -65,7 +66,7 @@ public class ComputerPlayer extends Player {
             num_tiles_diag = (diag <= 9) ? (byte) (diag + 1) : (byte) (9 - diag % 10);
             for (byte tile_num = 0; tile_num < num_tiles_diag; ++tile_num) {
                 row = (diag <= 9) ? tile_num : (byte) (tile_num + diag - 9);
-                if (enemyField.grid[row][diag - row].getState() == ' ') {
+                if (enemyField.getGrid()[row][diag - row].getState() == ' ') {
                     Coord coord = new Coord();
                     coord.row = row;
                     coord.col = (byte) (diag - row);
@@ -82,7 +83,7 @@ public class ComputerPlayer extends Player {
     }
 
     private void chooseCoordForShot(){
-        while (coordForNewShot.isEmpty() || enemyField.grid[coordForNewShot.get(0).row][coordForNewShot.get(0).col].getState() != ' ') {
+        while (coordForNewShot.isEmpty() || enemyField.getGrid()[coordForNewShot.get(0).row][coordForNewShot.get(0).col].getState() != ' ') {
             if (coordForNewShot.isEmpty()) {
                 updateCoord(sizeShip);
                 sizeShip = (sizeShip == 4) ? (byte) 3 : (byte) 1;
@@ -103,7 +104,7 @@ public class ComputerPlayer extends Player {
                     shotsByAlgorithm++;
                 }
                 else{
-                    while (enemyField.grid[randomSteps.get(0).row][randomSteps.get(0).col].getState() != ' '){
+                    while (enemyField.getGrid()[randomSteps.get(0).row][randomSteps.get(0).col].getState() != ' '){
                         randomSteps.remove(0);
                     }
                     coord.row = randomSteps.get(0).row;
@@ -120,7 +121,7 @@ public class ComputerPlayer extends Player {
                 return coord;
         }
 
-        while (enemyField.grid[randomSteps.get(0).row][randomSteps.get(0).col].getState() != ' '){
+        while (enemyField.getGrid()[randomSteps.get(0).row][randomSteps.get(0).col].getState() != ' '){
             randomSteps.remove(0);
         }
         coord.row = randomSteps.get(0).row;
@@ -145,10 +146,10 @@ public class ComputerPlayer extends Player {
             else
                 coord = coordForToShell.get(0);
 
-            if (enemyField.grid[coord.row][coord.col].getLinkShip() == null) {
-                enemyField.grid[coord.row][coord.col].setState('*');
-                rival.water[coord.row][coord.col].getChildren().get(4).setVisible(false);
-                rival.water[coord.row][coord.col].getChildren().get(3).setVisible(true);
+            if (enemyField.getGrid()[coord.row][coord.col].getLinkShip() == null) {
+                enemyField.getGrid()[coord.row][coord.col].setState('*');
+                rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(4).setVisible(false);
+                rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(3).setVisible(true);
                 if (!coordForToShell.isEmpty())
                     coordForToShell.remove(0);
                 hit = false;
@@ -163,23 +164,23 @@ public class ComputerPlayer extends Player {
                 continue;
             }
 
-            enemyField.grid[coord.row][coord.col].setState('x');
-            rival.water[coord.row][coord.col].getChildren().get(4).setVisible(false);
-            rival.water[coord.row][coord.col].getChildren().get(3).setVisible(false);
-            rival.water[coord.row][coord.col].getChildren().get(2).setVisible(true);
+            enemyField.getGrid()[coord.row][coord.col].setState('x');
+            rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(4).setVisible(false);
+            rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(3).setVisible(false);
+            rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(2).setVisible(true);
             if (foundShip == null)
-                foundShip = enemyField.grid[coord.row][coord.col].getLinkShip();
+                foundShip = enemyField.getGrid()[coord.row][coord.col].getLinkShip();
             foundShip.setHit();
 
             if (foundShip.destroyed()) {
-                for (int i = 0; i < foundShip.deck.size(); i++) {
-                    byte row = foundShip.deck.get(i).getRow();
-                    byte col = foundShip.deck.get(i).getCol();
-                    rival.water[row][col].getChildren().get(2).setVisible(false);
-                    rival.water[row][col].getChildren().get(1).setVisible(true);
+                for (int i = 0; i < foundShip.getDeck().size(); i++) {
+                    byte row = foundShip.getDeck().get(i).getRow();
+                    byte col = foundShip.getDeck().get(i).getCol();
+                    rival.graphicField.getWater()[row][col].getChildren().get(2).setVisible(false);
+                    rival.graphicField.getWater()[row][col].getChildren().get(1).setVisible(true);
                 }
                 enemyField.shipDestroy();
-                foundShip.setStateHalo(rival.water);
+                foundShip.setStateHalo(rival.graphicField.getWater());
                 rival.destroy(foundShip.getSizeShip());
                 rival.updateCurStat();
                 foundShip = null;
@@ -195,7 +196,7 @@ public class ComputerPlayer extends Player {
                 tempCrd.col = coord.col;
                 for (int i = 0; i < 2; i++) {
                     tempCrd.row = (byte) (coord.row + offset);
-                    if (checkCoord(tempCrd.row) && enemyField.grid[tempCrd.row][tempCrd.col].getState() == ' ')
+                    if (checkCoord(tempCrd.row) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
                         coordForToShell.add(new Coord(tempCrd));
                     offset *= -1;
                 }
@@ -203,7 +204,7 @@ public class ComputerPlayer extends Player {
                 tempCrd.row = coord.row;
                 for (int i = 0; i < 2; i++) {
                     tempCrd.col = (byte) (coord.col + offset);
-                    if (checkCoord(tempCrd.col) && enemyField.grid[tempCrd.row][tempCrd.col].getState() == ' ')
+                    if (checkCoord(tempCrd.col) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
                         coordForToShell.add(new Coord(tempCrd));
                     offset *= -1;
                 }
@@ -222,13 +223,13 @@ public class ComputerPlayer extends Player {
                     offset = (coord.col < firstFoundTileOfShip.col) ? (byte) -1 : (byte) 1;
                     if (!lastShotOnCarrier) {
                         coord.col += offset;
-                        if (checkCoord(coord.col) && enemyField.grid[coord.row][coord.col].getState() == ' ')
+                        if (checkCoord(coord.col) && enemyField.getGrid()[coord.row][coord.col].getState() == ' ')
                             tilesAfterSecondHit.addLast(new Coord(coord));
                         offset *= -1;
                         tempCrd.row = firstFoundTileOfShip.row;
                         tempCrd.col = firstFoundTileOfShip.col;
                         tempCrd.col += offset;
-                        if (checkCoord(tempCrd.col) && enemyField.grid[tempCrd.row][tempCrd.col].getState() == ' ')
+                        if (checkCoord(tempCrd.col) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
                             tilesAfterSecondHit.addLast(new Coord(tempCrd));
                         lastShotOnCarrier = true;
                     }
@@ -241,13 +242,13 @@ public class ComputerPlayer extends Player {
                 offset = (coord.row < firstFoundTileOfShip.row) ? (byte) -1 : (byte) 1;
                 if (!lastShotOnCarrier) {
                     coord.row += offset;
-                    if (checkCoord(coord.row) && enemyField.grid[coord.row][coord.col].getState() == ' ')
+                    if (checkCoord(coord.row) && enemyField.getGrid()[coord.row][coord.col].getState() == ' ')
                         tilesAfterSecondHit.addLast(new Coord(coord));
                     offset *= -1;
                     tempCrd.row = firstFoundTileOfShip.row;
                     tempCrd.col = firstFoundTileOfShip.col;
                     tempCrd.row += offset;
-                    if (checkCoord(tempCrd.row) && enemyField.grid[tempCrd.row][tempCrd.col].getState() == ' ')
+                    if (checkCoord(tempCrd.row) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
                         tilesAfterSecondHit.addLast(new Coord(tempCrd));
                     lastShotOnCarrier = true;
                 } else {
@@ -255,6 +256,6 @@ public class ComputerPlayer extends Player {
                     tilesAfterSecondHit.addLast(new Coord(coord));
                 }
             }
-        } while (hit && enemyField.numShipAfloat != 0);
+        } while (hit && enemyField.getNumShipAfloat() != 0);
     }
 }

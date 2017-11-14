@@ -3,9 +3,9 @@ package Logics;
 import java.util.ArrayList;
 
 public class Field {
-    Tile[][] grid = new Tile[10][10];
-    ArrayList<Ship> fleet = new ArrayList<>();
-    Byte numShipAfloat = 10;
+    private Tile[][] grid = new Tile[10][10];
+    private ArrayList<Ship> fleet = new ArrayList<>();
+    private Byte numShipAfloat = 10;
 
     public enum TypeShip{
 
@@ -23,6 +23,18 @@ public class Field {
         public int getSize() {
             return size;
         }
+    }
+
+    public ArrayList<Ship> getFleet() {
+        return fleet;
+    }
+
+    public Byte getNumShipAfloat() {
+        return numShipAfloat;
+    }
+
+    public Tile[][] getGrid() {
+        return grid;
     }
 
     public Field() {

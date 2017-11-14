@@ -25,17 +25,18 @@ public class Tile {
         return col;
     }
 
-    void setState(final Character state){
+    public void setState(final Character state){
         this.state = state;
     }
-    Character getState(){
+    public Character getState(){
         return state;
     }
 
-    void linkShip(Ship ship){
+    public void linkShip(Ship ship){
         typeShip = ship;
     }
-    Ship getLinkShip(){
+
+    public Ship getLinkShip(){
         return typeShip;
     }
 

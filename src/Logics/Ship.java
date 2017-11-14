@@ -54,7 +54,21 @@ public class Ship {
         fillHalo((byte)(coord.row - 1), coord.col, size, 'v', field);
     }
 
+    public ArrayList<Tile> getDeck() {
+        return deck;
+    }
 
+    public boolean destroyed(){
+        return (sizeShip == hits);
+    }
+
+    public void setHit(){
+        ++hits;
+    }
+
+    public byte getSizeShip(){
+        return sizeShip;
+    }
 
     public void fillHalo(byte row, byte col, byte size, char direction, Field field){
         byte travel_width;
@@ -71,8 +85,8 @@ public class Ship {
         byte max_path = (byte)(size * 2 + 6);
         for (int i = 1; i <= (max_path); i++) {
             if (checkCoord(travel_width) && checkCoord(travel_length)) {
-                if (((direction == 'h') && field.grid[travel_width][travel_length] == null) ||
-                        ((direction == 'v') && field.grid[travel_length][travel_width] == null)) {
+                if (((direction == 'h') && field.getGrid()[travel_width][travel_length] == null) ||
+                        ((direction == 'v') && field.getGrid()[travel_length][travel_width] == null)) {
                     Tile tile = new Tile();
                     if (direction == 'h') {
                         tile.setRow(travel_width);
@@ -83,9 +97,9 @@ public class Ship {
                     }
                     halo.add(tile);
                 } else if (direction == 'h')
-                    halo.add(field.grid[travel_width][travel_length]);
+                    halo.add(field.getGrid()[travel_width][travel_length]);
                 else
-                    halo.add(field.grid[travel_length][travel_width]);
+                    halo.add(field.getGrid()[travel_length][travel_width]);
             }
 
             if (i == 1 || i == max_path)
@@ -99,7 +113,7 @@ public class Ship {
         }
     }
 
-    public boolean checkCoord(final byte check){ return(check >= 0 && check < 10); }
+    boolean checkCoord(final byte check){ return(check >= 0 && check < 10); }
 
     public void linkTilesWithDeck(Field field) {
         for(int i = 0; i < deck.size(); i++) {
@@ -108,10 +122,9 @@ public class Ship {
         }
     }
 
-
     public void linkTilesWithHalo(Field field) {
         for(int i = 0; i < halo.size(); i++)
-            if(field.grid[halo.get(i).getRow()][halo.get(i).getCol()] == null)
+            if(field.getGrid()[halo.get(i).getRow()][halo.get(i).getCol()] == null)
                 field.addTile(halo.get(i));
     }
 
@@ -123,18 +136,5 @@ public class Ship {
             }
     }
 
-    public boolean destroyed(){
-        return (sizeShip == hits);
-    }
-
-
-    public void setHit(){
-        ++hits;
-    }
-
-
-    byte getSizeShip(){
-        return sizeShip;
-    }
 
 }

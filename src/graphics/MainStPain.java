@@ -1,5 +1,6 @@
-package Logics;
+package graphics;
 
+import graphics.Graphic;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -13,26 +14,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class MainStPain extends StackPane{
-    Main.Title title = new Main.Title("B A T T L E S H I P");
+    Graphic.Title title = new Graphic.Title("B A T T L E S H I P");
     {
         title.setTranslateX(-20);
         title.setTranslateY(-200);
     }
-    Main.MenuItem newGame = new Main.MenuItem("NEW GAME", 400, 50);
-    Main.MenuItem statistics = new Main.MenuItem("STATISTICS", 400, 50);
-    Main.MenuItem exitGame = new Main.MenuItem("EXIT", 400, 50);
-    Main.SubMenu mainMenu = new Main.SubMenu(
+    Graphic.MenuItem newGame = new Graphic.MenuItem("NEW GAME", 400, 50);
+    Graphic.MenuItem statistics = new Graphic.MenuItem("STATISTICS", 400, 50);
+    Graphic.MenuItem exitGame = new Graphic.MenuItem("EXIT", 400, 50);
+    Graphic.SubMenu mainMenu = new Graphic.SubMenu(
             newGame, statistics, exitGame
     );
-    Main.MenuItem hvC = new Main.MenuItem("     HUMAN     VS     COMPUTER", 400, 50);
-    Main.MenuItem hvH = new Main.MenuItem("HUMAN     VS     HUMAN", 400, 50);
-    Main.MenuItem bck = new Main.MenuItem("BACK", 400, 50);
-    Main.SubMenu newGameMenu = new Main.SubMenu(
-            hvC, hvH, bck
+    Graphic.MenuItem playWithComputer = new Graphic.MenuItem("     HUMAN     VS     COMPUTER", 400, 50);
+    Graphic.MenuItem playWithHuman = new Graphic.MenuItem("HUMAN     VS     HUMAN", 400, 50);
+    Graphic.MenuItem bck = new Graphic.MenuItem("BACK", 400, 50);
+    Graphic.SubMenu newGameMenu = new Graphic.SubMenu(
+            playWithComputer, playWithHuman, bck
     );
 
 
-    Main.MenuBox menuBox = new Main.MenuBox(mainMenu);
+    Graphic.MenuBox menuBox = new Graphic.MenuBox(mainMenu);
 
     MainStPain() {
         setMaxWidth(1280);
@@ -50,6 +51,8 @@ public class MainStPain extends StackPane{
         bg.setOpacity(0.3);
         getChildren().addAll(bg, title, menuBox);
 
+        newGame.setOnMouseClicked(event->menuBox.setSubMenu(newGameMenu));
+        exitGame.setOnMouseClicked(event-> System.exit(0));
 
     }
 }
