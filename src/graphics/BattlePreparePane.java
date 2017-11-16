@@ -1,8 +1,10 @@
 package graphics;
 
 import Logics.Game;
+import Logics.Main;
 import Logics.Ship;
 import Logics.coord.Coord;
+import Logics.players.ComputerPlayer;
 import Logics.players.HumanPlayer;
 import Logics.players.Player;
 import javafx.event.EventHandler;
@@ -18,7 +20,6 @@ import javafx.scene.shape.Rectangle;
 import loading.Loading;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class BattlePreparePane {
     private ArrayList<ImageView> ships_img = new ArrayList<>();
@@ -28,7 +29,7 @@ public class BattlePreparePane {
     private StackPane[][] water = new StackPane[10][10];
     private byte cur_size_ship;
     private char cur_direction;
-    private ArrayList<Rectangle> focusTiles = new ArrayList<>();
+    static ArrayList<Rectangle> focusTiles = new ArrayList<>();
     {
         for(int i = 0; i < 4; i++){
             Rectangle rec = new Rectangle(45,45, Color.LIGHTGREEN);
@@ -38,6 +39,14 @@ public class BattlePreparePane {
     private GridPane board = new GridPane();{
         board.setPrefSize(10, 10);
     }
+
+    private Graphic.MenuItem autoChoice = new Graphic.MenuItem("AUTO", 400, 50);
+    private Graphic.MenuItem clear = new Graphic.MenuItem("CLEAR", 400, 50);
+    private Graphic.MenuItem quit = new Graphic.MenuItem("QUIT", 90, 90);
+    private Graphic.MenuItem rot90 = new Graphic.MenuItem("Rot90", 90, 90);
+    private Graphic.MenuItem ready = new Graphic.MenuItem("BATTLE!", 100, 70);
+    Graphic.MenuItem next = new Graphic.MenuItem("NEXT PLAYER", 400, 50);
+
 
     public BattlePreparePane(){
         Loading.loadIMG(Graphic.map_img, ships_img);
@@ -56,7 +65,19 @@ public class BattlePreparePane {
         }
     }
 
+    public void createReadyBottom(int x, int y, Pane gameArea){
+        ready.setTranslateX(x);
+        ready.setTranslateY(y);
+        gameArea.getChildren().add(ready);
+    }
+
+
+
     public void prepare(HumanPlayer hp, Pane gameArea, Game game){
+
+        clearWater();
+        repairShips();
+
         gameArea.getChildren().addAll(board, all_fleet);
         all_fleet.setTranslateY(70);
         all_fleet.setTranslateX(750);
@@ -76,11 +97,12 @@ public class BattlePreparePane {
 
         gameArea.getChildren().addAll(numB,letB);
 
+
+
         customizeDragAndDrop(hp);
     }
 
-    private void createBottoms(HumanPlayer hp, Pane gameArea, Game game){
-        Graphic.MenuItem autoChoice = new Graphic.MenuItem("AUTO", 400, 50);
+    private void createBottoms(Player hp, Pane gameArea, Game game){
         autoChoice.setOnMouseClicked(event -> {
             game.clearBoard(hp);
             hp.setPlaceShipRand();
@@ -97,12 +119,10 @@ public class BattlePreparePane {
 
         });
 
-        Graphic.MenuItem clear = new Graphic.MenuItem("CLEAR", 400, 50);
         clear.setOnMouseClicked(event -> {
             game.clearBoard(hp);
         });
 
-        Graphic.MenuItem quit = new Graphic.MenuItem("QUIT", 90, 90);
         quit.setTranslateX(0);
         quit.setTranslateY(630);
         gameArea.getChildren().add(quit);
@@ -123,7 +143,6 @@ public class BattlePreparePane {
         deployMenu.setTranslateY(550);
         gameArea.getChildren().add(deployMenu);
 
-        Graphic.MenuItem rot90 = new Graphic.MenuItem("Rot90", 90, 90);
         gameArea.getChildren().add(rot90);
         rot90.setTranslateX(660);
         rot90.setTranslateY(70);
@@ -135,6 +154,105 @@ public class BattlePreparePane {
                 fleet_h.setVisible(true);
                 fleet_v.setVisible(false);
             }
+        });
+    }
+
+    public Graphic.MenuItem getReadyBottom() {
+        return ready;
+    }
+
+    public void createNextBottom(Pane gameArea){
+        next.setTranslateX(800);
+        next.setTranslateY(615);
+        gameArea.getChildren().add(next);
+    }
+
+    public Graphic.MenuItem getNextBottom() {
+        return next;
+    }
+
+    public void changeQuitBottom(Game game, Pane[] panes, Player...players){
+        panes[1].getChildren().add(quit);
+
+        quit.setOnMouseClicked(event1 -> {
+            for (Player pl: players) {
+                game.clearBoard(pl);
+            }
+            for (Pane p: panes) {
+                game.getGraphic().removePane(p);
+            }
+            game.getGraphic().getMainStPain().menuBox.setVisible(true);
+            game.getGraphic().getMainStPain().title.setVisible(true);
+        });
+    }
+
+    public void createLevelBottoms(Pane gameArea, HumanPlayer hp, ComputerPlayer cp){
+        Graphic.MenuItem easy = new Graphic.MenuItem("EASY", 100, 70);
+        easy.setTranslateX(770);
+        easy.setTranslateY(615);
+        Graphic.MenuItem normal = new Graphic.MenuItem("NORMAL", 100, 70);
+        normal.bg.setFill(Color.valueOf("#A93927"));
+        normal.text.setFill(Color.WHITE);
+        normal.setDisable(true);
+        normal.setTranslateX(880);
+        normal.setTranslateY(615);
+        Graphic.MenuItem hard = new Graphic.MenuItem("HARD", 100, 70);
+        hard.setTranslateX(990);
+        hard.setTranslateY(615);
+
+        gameArea.getChildren().addAll(easy, normal, hard);
+        easy.setOnMouseClicked(event -> {
+            cp.getLevel().delete(0, cp.getLevel().length());
+            cp.getLevel().append("easy");
+            hp.setLevel(Game.Level.EASY);
+
+            easy.setDisable(true);
+            easy.bg.setFill(Color.valueOf("#A93927"));
+            easy.text.setFill(Color.WHITE);
+
+            normal.setDisable(false);
+            normal.bg.setFill(Color.BLACK);
+            normal.text.setFill(Color.DARKGRAY);
+
+            hard.setDisable(false);
+            hard.bg.setFill(Color.BLACK);
+            hard.text.setFill(Color.DARKGRAY);
+        });
+
+        normal.setOnMouseClicked(event -> {
+            cp.getLevel().delete(0, cp.getLevel().length());
+            cp.getLevel().append("normal");
+            hp.setLevel(Game.Level.NORMAL);
+
+            normal.bg.setFill(Color.valueOf("#A93927"));
+            normal.text.setFill(Color.WHITE);
+            normal.setDisable(true);
+
+            easy.setDisable(false);
+            easy.bg.setFill(Color.BLACK);
+            easy.text.setFill(Color.DARKGRAY);
+
+            hard.setDisable(false);
+            hard.bg.setFill(Color.BLACK);
+            hard.text.setFill(Color.DARKGRAY);
+        });
+
+        hard.setOnMouseClicked(event -> {
+            cp.getLevel().delete(0, cp.getLevel().length());
+            cp.getLevel().append("hard");
+            hp.setLevel(Game.Level.HARD);
+
+            hard.bg.setFill(Color.valueOf("#A93927"));
+            hard.text.setFill(Color.WHITE);
+            hard.setDisable(true);
+
+            easy.setDisable(false);
+            easy.bg.setFill(Color.BLACK);
+            easy.text.setFill(Color.DARKGRAY);
+
+            normal.setDisable(false);
+            normal.bg.setFill(Color.BLACK);
+            normal.text.setFill(Color.DARKGRAY);
         });
     }
 

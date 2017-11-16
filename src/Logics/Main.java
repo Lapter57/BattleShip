@@ -4,7 +4,6 @@ import graphics.Graphic;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import statistics.PlayerStats;
 
 public class Main extends Application {
 

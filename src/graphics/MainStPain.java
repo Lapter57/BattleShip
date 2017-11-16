@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class MainStPain extends StackPane{
-    Graphic.Title title = new Graphic.Title("B A T T L E S H I P");
+    public Graphic.Title title = new Graphic.Title("B A T T L E S H I P");
     {
         title.setTranslateX(-20);
         title.setTranslateY(-200);
@@ -33,7 +33,7 @@ public class MainStPain extends StackPane{
     );
 
 
-    Graphic.MenuBox menuBox = new Graphic.MenuBox(mainMenu);
+    public Graphic.MenuBox menuBox = new Graphic.MenuBox(mainMenu);
 
     MainStPain() {
         setMaxWidth(1280);

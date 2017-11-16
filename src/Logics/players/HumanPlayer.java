@@ -5,17 +5,17 @@ import Logics.coord.Coord;
 
 public class HumanPlayer extends Player {
     private byte numWinShots = 0;
-    private Integer level = 1;
+    private Game.Level level = Game.Level.NORMAL ;
 
     public HumanPlayer(){
         super(new StringBuilder("NO_NAME"));
     }
 
-    public Integer getLevel() {
+    public Game.Level getLevel() {
         return level;
     }
 
-    public void setLevel(Integer level){
+    public void setLevel(Game.Level level){
         this.level = level;
     }
 

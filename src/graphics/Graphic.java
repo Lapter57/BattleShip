@@ -24,10 +24,15 @@ import java.util.HashMap;
 public class Graphic {
     private MainStPain mainStPain = new MainStPain();
     public static HashMap<String, Image> map_img = new HashMap<>();
+    private StackPane pointer = new StackPane();
+
     public MainStPain getMainStPain() {
         return mainStPain;
     }
-    private StackPane pointer = new StackPane();
+
+    public StackPane getPointer() {
+        return pointer;
+    }
 
     public void createStatsPane(PlayerStats playerStats){
         Pane statsPane = new Pane();
@@ -56,7 +61,7 @@ public class Graphic {
         });
     }
 
-    public void createPointer(Pane playingFields, Player p1, Player p2, Game game) {
+    public void createPointer(Pane playingFields) {
         if(pointer.getChildren().size() == 0) {
             ImageView rp = new ImageView(Graphic.map_img.get("rp"));
             ImageView gp = new ImageView(Graphic.map_img.get("gp"));
@@ -78,19 +83,6 @@ public class Graphic {
             pointer.getChildren().get(0).setVisible(false);
             pointer.getChildren().get(1).setVisible(true);
         }
-
-        MenuItem bck = new MenuItem("BACK", 90, 90);
-        bck.setTranslateX(0);
-        bck.setTranslateY(630);
-        playingFields.getChildren().add(bck);
-        bck.setOnMouseClicked(event -> {
-            game.clearBoard(p1);
-            game.clearBoard(p2);
-            removePane(playingFields);
-            mainStPain.menuBox.setVisible(true);
-            mainStPain.title.setVisible(true);
-            game.setFirstClickAuto(true);
-        });
     }
 
     public void removePane(Pane pane) {
@@ -110,7 +102,7 @@ public class Graphic {
             gameHvC.setVisible(true);
             mainStPain.menuBox.setVisible(false);
             mainStPain.title.setVisible(false);
-            game.humanVsComputer(gameHvC,mainStPain);
+            game.humanVsComputer(gameHvC);
         });
 
         mainStPain.playWithHuman.setOnMouseClicked(event -> {
@@ -122,7 +114,7 @@ public class Graphic {
             gameHvH.setVisible(true);
             mainStPain.menuBox.setVisible(false);
             mainStPain.title.setVisible(false);
-            game.humanVsHuman(gameHvH,mainStPain);
+            game.humanVsHuman(gameHvH);
         });
 
         mainStPain.menuBox.setVisible(true);

@@ -17,7 +17,7 @@ public class ComputerPlayer extends Player {
     private boolean firstHit = true;
     private byte shotsByAlgorithm = 0;
     private Coord firstFoundTileOfShip;
-    StringBuilder level = new StringBuilder("normal");
+    private StringBuilder level = new StringBuilder("normal");
 
     public ComputerPlayer() {
         super(new StringBuilder("Computer"));
@@ -27,6 +27,10 @@ public class ComputerPlayer extends Player {
             }
         }
         Collections.shuffle(randomSteps);
+    }
+
+    public StringBuilder getLevel() {
+        return level;
     }
 
     public void updateCoord(final byte search) {

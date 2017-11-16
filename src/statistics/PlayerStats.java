@@ -1,5 +1,6 @@
 package statistics;
 
+import Logics.Game;
 import Logics.players.HumanPlayer;
 import javafx.scene.control.TableView;
 
@@ -30,20 +31,25 @@ public class PlayerStats {
         try {
             String hpName = hp.getName();
             double hpScore = (double)(hp.getNumShipAfloat() + hp.getNumWinShots())/2;
-            Integer hpLevel = hp.getLevel();
+            Game.Level hpLevel = hp.getLevel();
+            int hlevel = 1;
             String strLevel = null;
             switch (hpLevel){
-                case 0:
+                case EASY:
                     strLevel = new String("Easy");
+                    hlevel = 0;
                     break;
-                case 1:
+                case NORMAL:
                     strLevel = new String("Normal");
+                    hlevel = 1;
                     break;
-                case 2:
+                case HARD:
                     strLevel = new String("Hard");
+                    hlevel = 2;
                     break;
-                case 3:
+                case HUMAN:
                     strLevel = new String("Human");
+                    hlevel = 3;
                     break;
             }
             int cntRow = 0;
@@ -68,22 +74,22 @@ public class PlayerStats {
                 resultSet = statement.executeQuery("select * from stats order by score asc");
                 boolean addPlayer = false;
                 while(resultSet.next() && !addPlayer){
-                    int lev = 0;
+                    int level = 0;
                     switch (resultSet.getString("level")){
                         case "Easy":
-                            lev = 0;
+                            level = 0;
                             break;
                         case "Normal":
-                            lev = 1;
+                            level = 1;
                             break;
                         case "Hard":
-                            lev = 2;
+                            level = 2;
                             break;
                         case "Human":
-                            lev = 3;
+                            level = 3;
                             break;
                     }
-                    if(resultSet.getDouble("score") > hpScore && lev <= hpLevel || resultSet.getDouble("score") >= hpScore && lev < hpLevel){
+                    if(resultSet.getDouble("score") > hpScore && level <= hlevel || resultSet.getDouble("score") >= hpScore && level < hlevel){
                         String str = "update stats set nickname = ?, score = ?, level = ?, datetime = ? where id = ?";
                         PreparedStatement preparedStatement = connection.prepareStatement(str);
                         preparedStatement.setInt(5, resultSet.getInt("id"));

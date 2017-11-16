@@ -1,7 +1,6 @@
 package Logics.players;
 
 import Logics.Field;
-import Logics.Game;
 import Logics.Ship;
 import Logics.coord.Coord;
 
@@ -14,13 +13,8 @@ import graphics.GraphicField;
 import graphics.NameArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.Node;
 
 
 public abstract class Player {
@@ -60,7 +54,6 @@ public abstract class Player {
         nameArea.customize(playingFields, b_x);
     }
 
-
     public boolean gameOver(){
         return field.getNumShipAfloat() == 0;
     }
@@ -71,6 +64,10 @@ public abstract class Player {
 
     public void setEnemyField(Field field) {
         enemyField = field;
+    }
+
+    public Field getEnemyField() {
+        return enemyField;
     }
 
     public String getName() {
@@ -97,6 +94,10 @@ public abstract class Player {
         return graphicField;
     }
 
+    public Coord searchPressedImg(Node node){
+        return graphicField.searchPressedImg(node);
+    }
+
     void destroy(final byte sizeShip) {
         Byte temp = ships.get(sizeShip - 1);
         ships.set(sizeShip - 1, --temp);
@@ -120,6 +121,8 @@ public abstract class Player {
                 }
             }
         }
+
+        graphicField.getBoard().setDisable(true);
     }
 
     private boolean checkCoord(final Coord ... coords){
