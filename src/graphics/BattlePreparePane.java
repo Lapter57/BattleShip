@@ -180,6 +180,7 @@ public class BattlePreparePane {
             }
             game.getGraphic().getMainStPain().menuBox.setVisible(true);
             game.getGraphic().getMainStPain().title.setVisible(true);
+            ready.changeSize(100, 70);
         });
     }
 

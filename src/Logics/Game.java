@@ -82,6 +82,7 @@ public class Game {
                     }
                     if (found) {
                         if (!hp.yourTurn(this, cp, coord)) {
+                            hp.addShot();
                             graphic.getPointer().getChildren().get(1).setVisible(false);
                             graphic.getPointer().getChildren().get(0).setVisible(true);
                             cp.yourTurn(hp);
@@ -123,6 +124,7 @@ public class Game {
             first_click_auto = true;
 
             if (hp1.getField().getFleet().size() == 10) {
+                preparePane.getReadyBottom().changeSize(400, 50);
                 gameHvH.setVisible(false);
                 gameHvH2.setMaxHeight(720);
                 gameHvH2.setMaxWidth(1280);
@@ -166,8 +168,9 @@ public class Game {
                             if (found) {
 
                                 if (!hp1.yourTurn(this, hp2, coord)) {
-                                    graphic.getMainStPain().getChildren().get(1).setVisible(false);
-                                    graphic.getMainStPain().getChildren().get(0).setVisible(true);
+                                    hp1.addShot();
+                                    graphic.getPointer().getChildren().get(1).setVisible(false);
+                                    graphic.getPointer().getChildren().get(0).setVisible(true);
 
                                     hp1.getGraphicField().getBoard().setDisable(false);
                                     hp2.getGraphicField().getBoard().setDisable(true);
@@ -183,6 +186,7 @@ public class Game {
                                         if (found2) {
 
                                             if (!hp2.yourTurn(this, hp1, coord2)) {
+                                                hp2.addShot();
                                                 graphic.getPointer().getChildren().get(0).setVisible(false);
                                                 graphic.getPointer().getChildren().get(1).setVisible(true);
                                                 hp2.getGraphicField().getBoard().setDisable(false);

@@ -23,6 +23,8 @@ public class Graphic {
     private MainStPain mainStPain = new MainStPain();
     public static HashMap<String, Image> map_img = new HashMap<>();
     private StackPane pointer = new StackPane();
+    private ImageView rp = new ImageView(Graphic.map_img.get("rp"));
+    private ImageView gp = new ImageView(Graphic.map_img.get("gp"));
 
     public MainStPain getMainStPain() {
         return mainStPain;
@@ -121,9 +123,14 @@ public class Graphic {
 
     }
 
-    static class MenuItem extends StackPane {
+    public static class MenuItem extends StackPane {
         Rectangle bg;
         Text text;
+
+        public void changeSize(int x, int y){
+            bg.setWidth(x);
+            bg.setHeight(y);
+        }
         public  MenuItem(String name,int x,int y){
             LinearGradient gradient = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, new Stop[]{
                     new Stop(0, Color.valueOf("#A93927")),
