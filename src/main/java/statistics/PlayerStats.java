@@ -30,7 +30,7 @@ public class PlayerStats {
     public void updateStats(HumanPlayer hp){
         try {
             String hpName = hp.getName();
-            double hpScore = (double)(hp.getNumShipAfloat() + hp.getNumWinShots())/2;
+            double hpScore = (double)(10 - hp.getNumShipAfloat() + hp.getNumWinShots())/2;
             Game.Level hpLevel = hp.getLevel();
             int hlevel = 1;
             String strLevel = null;
