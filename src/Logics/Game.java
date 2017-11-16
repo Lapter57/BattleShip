@@ -1,18 +1,14 @@
-package Logics;
-import Logics.coord.Coord;
-import Logics.players.ComputerPlayer;
-import Logics.players.HumanPlayer;
-import Logics.players.Player;
+package logics;
+import logics.coord.Coord;
+import logics.players.ComputerPlayer;
+import logics.players.HumanPlayer;
+import logics.players.Player;
 import graphics.BattlePane;
 import graphics.BattlePreparePane;
 import graphics.Graphic;
-import graphics.MainStPain;
 
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.input.*;
 import javafx.scene.layout.*;
-import javafx.scene.image.ImageView;
 import statistics.PlayerStats;
 
 
@@ -115,7 +111,7 @@ public class Game {
         HumanPlayer hp1 = new HumanPlayer();
         hp1.setLevel(Level.HUMAN);
         prepareForBattle(hp1, gameHvH);
-        preparePane.createNextBottom(gameHvH);
+        preparePane.createNextBottom(800, 615, gameHvH);
 
         Pane gameHvH2 = new Pane();
         preparePane.getNextBottom().setOnMouseClicked(event -> {
@@ -137,7 +133,6 @@ public class Game {
                 prepareForBattle(hp2, gameHvH2);
                 preparePane.createReadyBottom(800, 615, gameHvH2);
                 preparePane.changeQuitBottom(this, new Pane[]{gameHvH, gameHvH2}, hp1, hp2);
-
 
                 preparePane.getReadyBottom().setOnMouseClicked(event2 -> {
                     if (hp2.getField().getFleet().size() == 10) {
@@ -202,6 +197,7 @@ public class Game {
                                             }
                                         }
                                     });
+
                                 } else {
                                     hp1.addShot();
                                     if (hp2.gameOver()) {

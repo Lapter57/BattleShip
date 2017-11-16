@@ -1,6 +1,6 @@
 package graphics;
 
-import Logics.coord.Coord;
+import logics.coord.Coord;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;

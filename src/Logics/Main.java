@@ -1,4 +1,4 @@
-package Logics;
+package logics;
 
 import graphics.Graphic;
 import javafx.application.Application;

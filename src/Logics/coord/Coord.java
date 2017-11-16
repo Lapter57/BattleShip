@@ -1,4 +1,4 @@
-package Logics.coord;
+package logics.coord;
 
 public class Coord {
     public byte row = 0;

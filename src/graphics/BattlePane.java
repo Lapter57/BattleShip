@@ -1,7 +1,7 @@
 package graphics;
 
-import Logics.Game;
-import Logics.players.Player;
+import logics.Game;
+import logics.players.Player;
 import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -12,7 +12,6 @@ public class BattlePane {
     private Pane playingFields = new Pane();
 
     public BattlePane(Graphic graphic, Game game, Player...players){
-        Pane playingFields = new Pane();
         playingFields.setMaxHeight(720);
         playingFields.setMaxWidth(1280);
         playingFields.setVisible(true);

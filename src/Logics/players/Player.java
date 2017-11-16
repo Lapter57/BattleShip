@@ -1,8 +1,8 @@
-package Logics.players;
+package logics.players;
 
-import Logics.Field;
-import Logics.Ship;
-import Logics.coord.Coord;
+import logics.Field;
+import logics.Ship;
+import logics.coord.Coord;
 
 import java.util.ArrayList;
 import java.util.Random;

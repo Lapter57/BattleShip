@@ -1,6 +1,6 @@
-package Logics.players;
-import Logics.Game;
-import Logics.coord.Coord;
+package logics.players;
+import logics.Game;
+import logics.coord.Coord;
 
 
 public class HumanPlayer extends Player {

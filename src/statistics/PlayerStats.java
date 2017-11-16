@@ -1,7 +1,7 @@
 package statistics;
 
-import Logics.Game;
-import Logics.players.HumanPlayer;
+import logics.Game;
+import logics.players.HumanPlayer;
 import javafx.scene.control.TableView;
 
 import java.sql.*;

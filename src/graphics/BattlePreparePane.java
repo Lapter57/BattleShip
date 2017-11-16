@@ -1,12 +1,11 @@
 package graphics;
 
-import Logics.Game;
-import Logics.Main;
-import Logics.Ship;
-import Logics.coord.Coord;
-import Logics.players.ComputerPlayer;
-import Logics.players.HumanPlayer;
-import Logics.players.Player;
+import logics.Game;
+import logics.Ship;
+import logics.coord.Coord;
+import logics.players.ComputerPlayer;
+import logics.players.HumanPlayer;
+import logics.players.Player;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -17,7 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import loading.Loading;
+import graphics.loading.*;
 
 import java.util.ArrayList;
 
@@ -45,7 +44,7 @@ public class BattlePreparePane {
     private Graphic.MenuItem quit = new Graphic.MenuItem("QUIT", 90, 90);
     private Graphic.MenuItem rot90 = new Graphic.MenuItem("Rot90", 90, 90);
     private Graphic.MenuItem ready = new Graphic.MenuItem("BATTLE!", 100, 70);
-    Graphic.MenuItem next = new Graphic.MenuItem("NEXT PLAYER", 400, 50);
+    private Graphic.MenuItem next = new Graphic.MenuItem("NEXT PLAYER", 400, 50);
 
 
     public BattlePreparePane(){
@@ -69,6 +68,20 @@ public class BattlePreparePane {
         ready.setTranslateX(x);
         ready.setTranslateY(y);
         gameArea.getChildren().add(ready);
+    }
+
+    public Graphic.MenuItem getReadyBottom() {
+        return ready;
+    }
+
+    public void createNextBottom(int x, int y, Pane gameArea){
+        next.setTranslateX(x);
+        next.setTranslateY(y);
+        gameArea.getChildren().add(next);
+    }
+
+    public Graphic.MenuItem getNextBottom() {
+        return next;
     }
 
 
@@ -157,23 +170,7 @@ public class BattlePreparePane {
         });
     }
 
-    public Graphic.MenuItem getReadyBottom() {
-        return ready;
-    }
-
-    public void createNextBottom(Pane gameArea){
-        next.setTranslateX(800);
-        next.setTranslateY(615);
-        gameArea.getChildren().add(next);
-    }
-
-    public Graphic.MenuItem getNextBottom() {
-        return next;
-    }
-
     public void changeQuitBottom(Game game, Pane[] panes, Player...players){
-        panes[1].getChildren().add(quit);
-
         quit.setOnMouseClicked(event1 -> {
             for (Player pl: players) {
                 game.clearBoard(pl);
@@ -392,10 +389,6 @@ public class BattlePreparePane {
                 @Override
                 public void handle(MouseEvent event) {
                     int i = ships_img.indexOf(ship);
-                   /* int i = 0;
-                    while (ships_img.get(i) != ship) {
-                        i++;
-                    }*/
                     switch (i) {
                         case 0:
                         case 6:
@@ -440,10 +433,6 @@ public class BattlePreparePane {
                             ship.setVisible(false);
                         else {
                             int i = ships_img.indexOf(ship);
-                            /*int i = 0;
-                            while (ships_img.get(i) != ship) {
-                                i++;
-                            }*/
                             switch (i) {
                                 case 0:
                                 case 6:

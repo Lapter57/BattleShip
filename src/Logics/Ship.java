@@ -1,6 +1,6 @@
-package Logics;
+package logics;
 
-import Logics.coord.Coord;
+import logics.coord.Coord;
 import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;

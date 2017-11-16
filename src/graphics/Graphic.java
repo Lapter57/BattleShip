@@ -1,7 +1,5 @@
 package graphics;
 
-import Logics.Main;
-import Logics.players.Player;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import statistics.PlayerStats;
-import Logics.Game;
+import logics.Game;
 
 import java.util.HashMap;
 
@@ -61,7 +59,7 @@ public class Graphic {
         });
     }
 
-    public void createPointer(Pane playingFields) {
+    void createPointer(Pane playingFields) {
         if(pointer.getChildren().size() == 0) {
             ImageView rp = new ImageView(Graphic.map_img.get("rp"));
             ImageView gp = new ImageView(Graphic.map_img.get("gp"));
@@ -79,13 +77,14 @@ public class Graphic {
             pointer.getChildren().get(1).setVisible(true);
         }
         else{
-            playingFields.getChildren().add(pointer);
+            if(!playingFields.getChildren().contains(pointer))
+                playingFields.getChildren().add(pointer);
             pointer.getChildren().get(0).setVisible(false);
             pointer.getChildren().get(1).setVisible(true);
         }
     }
 
-    public void removePane(Pane pane) {
+    void removePane(Pane pane) {
         pane.getChildren().clear();
         pane.setVisible(false);
         pane = null;
@@ -122,7 +121,7 @@ public class Graphic {
 
     }
 
-    public static class MenuItem extends StackPane {
+    static class MenuItem extends StackPane {
         Rectangle bg;
         Text text;
         public  MenuItem(String name,int x,int y){
@@ -167,9 +166,7 @@ public class Graphic {
         }
     }
 
-
-
-    public static class Title extends StackPane{
+    static class Title extends StackPane{
         public Title(String name){
             setVisible(false);
             Rectangle bg = new Rectangle(420,100);
@@ -185,7 +182,7 @@ public class Graphic {
         }
     }
 
-    public static class MenuBox extends Pane {
+    static class MenuBox extends Pane {
         static VBox subMenu;
         public MenuBox(VBox subMenu){
             MenuBox.subMenu = subMenu;
@@ -200,7 +197,7 @@ public class Graphic {
 
     }
 
-    public static class SubMenu extends VBox{
+    static class SubMenu extends VBox{
         public SubMenu(MenuItem...items){
             setSpacing(15);
             setTranslateY(250);

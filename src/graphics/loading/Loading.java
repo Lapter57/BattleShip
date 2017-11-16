@@ -1,4 +1,4 @@
-package loading;
+package graphics.loading;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

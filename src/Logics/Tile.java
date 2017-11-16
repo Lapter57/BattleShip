@@ -1,4 +1,4 @@
-package Logics;
+package logics;
 
 public class Tile {
     private Byte row = null;

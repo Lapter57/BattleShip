@@ -1,12 +1,12 @@
-package Logics.players;
+package logics.players;
 
 
 import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Collections;
 
-import Logics.Field;
-import Logics.coord.Coord;
+import logics.Field;
+import logics.coord.Coord;
 
 public class ComputerPlayer extends Player {
     private ArrayList<Coord> coordForNewShot = new ArrayList<>();

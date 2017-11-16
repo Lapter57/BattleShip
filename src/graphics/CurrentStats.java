@@ -1,7 +1,6 @@
 package graphics;
 
-import Logics.players.HumanPlayer;
-import Logics.players.Player;
+import logics.players.Player;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;

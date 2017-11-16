@@ -1,7 +1,6 @@
 package graphics;
 
-import Logics.Game;
-import Logics.players.Player;
+import logics.players.Player;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
