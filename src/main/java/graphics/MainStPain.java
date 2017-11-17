@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-class MainStPain extends StackPane{
+public class MainStPain extends StackPane{
     Graphic.Title title = new Graphic.Title("B A T T L E S H I P");
     {
         title.setTranslateX(-20);

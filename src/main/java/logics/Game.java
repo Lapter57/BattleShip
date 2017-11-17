@@ -62,11 +62,11 @@ public class Game {
                 }
 
                 gameHvsC.setVisible(false);
+                hp.checkName();
                 BattlePane battlePane = new BattlePane(graphic, this, hp, cp);
                 battlePane.createPlayingFields(hp, 150, 115, graphic);
                 battlePane.createPlayingFields(cp, 750, 115, graphic);
-
-                hp.checkName();
+                
                 hp.showLocationOfShips();
 
                 cp.setPlaceShipRand();
