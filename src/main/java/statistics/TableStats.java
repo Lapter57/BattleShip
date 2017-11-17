@@ -10,34 +10,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class TableStats{
+class TableStats{
     private TableView<PlayerAccount> table = new TableView<>();
     private ObservableList<PlayerAccount> list = FXCollections.observableArrayList();
 
-    public TableStats(){
+    TableStats(){
         TableColumn<PlayerAccount, String> nickNameCol = new TableColumn<>("Nickname");
         nickNameCol.setPrefWidth(200);
         nickNameCol.minWidthProperty().bind(nickNameCol.prefWidthProperty());
         nickNameCol.setStyle("-fx-font-size: 18");
-        //nickNameCol.setStyle("-fx-alignment: CENTER");
 
         TableColumn<PlayerAccount, Double> scoreCol = new TableColumn<>("Score");
         scoreCol.setPrefWidth(200);
         scoreCol.minWidthProperty().bind(nickNameCol.prefWidthProperty());
         scoreCol.setStyle("-fx-font-size: 18");
-        //scoreCol.setStyle("-fx-alignment: CENTER");
 
         TableColumn<PlayerAccount, String> levelCol = new TableColumn<>("Level");
         levelCol.setPrefWidth(200);
         levelCol.minWidthProperty().bind(nickNameCol.prefWidthProperty());
         levelCol.setStyle("-fx-font-size: 18");
-        //levelCol.setStyle("-fx-alignment: CENTER");
 
         TableColumn<PlayerAccount, String> dateCol = new TableColumn<>("Date");
         dateCol.setPrefWidth(200);
         dateCol.minWidthProperty().bind(nickNameCol.prefWidthProperty());
         dateCol.setStyle("-fx-font-size: 18");
-        //dateCol.setStyle("-fx-alignment: CENTER");
 
         nickNameCol.setCellValueFactory(new PropertyValueFactory<>("nickName"));
         scoreCol.setCellValueFactory(new PropertyValueFactory<>("score"));
@@ -53,7 +49,7 @@ public class TableStats{
         table.setStyle("-fx-selection-bar: gray");
     }
 
-    public void fillList(Statement statement){
+    void fillList(Statement statement){
         if(!list.isEmpty()){
             list.removeAll();
             table.getItems().clear();
@@ -73,7 +69,7 @@ public class TableStats{
         }
     }
 
-    public TableView<PlayerAccount> getTable() {
+    TableView<PlayerAccount> getTable() {
         return table;
     }
 }

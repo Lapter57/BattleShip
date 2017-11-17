@@ -36,19 +36,19 @@ public class PlayerStats {
             String strLevel = null;
             switch (hpLevel){
                 case EASY:
-                    strLevel = new String("Easy");
+                    strLevel = "Easy";
                     hlevel = 0;
                     break;
                 case NORMAL:
-                    strLevel = new String("Normal");
+                    strLevel = "Normal";
                     hlevel = 1;
                     break;
                 case HARD:
-                    strLevel = new String("Hard");
+                    strLevel = "Hard";
                     hlevel = 2;
                     break;
                 case HUMAN:
-                    strLevel = new String("Human");
+                    strLevel = "Human";
                     hlevel = 3;
                     break;
             }

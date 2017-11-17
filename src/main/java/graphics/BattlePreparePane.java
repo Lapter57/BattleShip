@@ -26,7 +26,7 @@ public class BattlePreparePane {
     private Pane fleet_h = new Pane();
     private Pane fleet_v = new Pane();
     private StackPane[][] water = new StackPane[10][10];
-    private byte cur_size_ship;
+    private int cur_size_ship;
     private char cur_direction;
     static ArrayList<Rectangle> focusTiles = new ArrayList<>();
     {
@@ -270,8 +270,8 @@ public class BattlePreparePane {
                 if (db.hasImage()) {
                     event.acceptTransferModes(TransferMode.COPY);
                     Node node = event.getPickResult().getIntersectedNode();
-                    byte row = 0;
-                    byte col = 0;
+                    int row = 0;
+                    int col = 0;
                     boolean f = false;
                     while (row < 10 && !f) {
                         col = 0;
@@ -289,8 +289,8 @@ public class BattlePreparePane {
                     }
                     if (f) {
                         Coord crd1 = new Coord(row, col);
-                        Coord crd2 = new Coord((cur_direction == 'h') ? row : (byte) (row + cur_size_ship - 1),
-                                               (cur_direction == 'v') ? col : (byte) (col + cur_size_ship - 1));
+                        Coord crd2 = new Coord((cur_direction == 'h') ? row : row + cur_size_ship - 1,
+                                               (cur_direction == 'v') ? col : col + cur_size_ship - 1);
                         if (hp.checkCollision(crd1, crd2)) {
                             int shift;
                             if (cur_direction == 'h') {
@@ -329,8 +329,8 @@ public class BattlePreparePane {
                 Dragboard db = event.getDragboard();
                 if (db.hasImage() && hp.getEstabShip() != 10) {
                     Node node = event.getPickResult().getIntersectedNode();
-                    byte row = 0;
-                    byte col = 0;
+                    int row = 0;
+                    int col = 0;
                     boolean f = false;
                     while (row < 10 && !f) {
                         col = 0;
@@ -345,8 +345,8 @@ public class BattlePreparePane {
                     }
                     if (f) {
                         Coord crd1 = new Coord(row, col);
-                        Coord crd2 = new Coord((cur_direction == 'h') ? row : (byte) (row + cur_size_ship - 1),
-                                               (cur_direction == 'v') ? col : (byte) (col + cur_size_ship - 1));
+                        Coord crd2 = new Coord((cur_direction == 'h') ? row : row + cur_size_ship - 1,
+                                               (cur_direction == 'v') ? col : col + cur_size_ship - 1);
 
                         if (cur_size_ship > 1) {
                             Ship ship = new Ship(cur_size_ship, crd1, crd2, hp.getField());

@@ -23,8 +23,6 @@ public class Graphic {
     private MainStPain mainStPain = new MainStPain();
     public static HashMap<String, Image> map_img = new HashMap<>();
     private StackPane pointer = new StackPane();
-    private ImageView rp = new ImageView(Graphic.map_img.get("rp"));
-    private ImageView gp = new ImageView(Graphic.map_img.get("gp"));
 
     public MainStPain getMainStPain() {
         return mainStPain;
@@ -131,13 +129,11 @@ public class Graphic {
             bg.setWidth(x);
             bg.setHeight(y);
         }
-        public  MenuItem(String name,int x,int y){
-            LinearGradient gradient = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, new Stop[]{
-                    new Stop(0, Color.valueOf("#A93927")),
+        MenuItem(String name, int x, int y){
+            LinearGradient gradient = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, new Stop(0, Color.valueOf("#A93927")),
                     new Stop(0.1, Color.BLACK),
                     new Stop(0.9, Color.BLACK),
-                    new Stop(1, Color.valueOf("#A93927")),
-            });
+                    new Stop(1, Color.valueOf("#A93927")));
             bg = new Rectangle(x,y);
             bg.setOpacity(0.5);
             bg.setArcHeight(20);
@@ -174,7 +170,7 @@ public class Graphic {
     }
 
     static class Title extends StackPane{
-        public Title(String name){
+        Title(String name){
             setVisible(false);
             Rectangle bg = new Rectangle(420,100);
             bg.setStroke(Color.valueOf("#0D1C25"));
@@ -191,12 +187,12 @@ public class Graphic {
 
     static class MenuBox extends Pane {
         static VBox subMenu;
-        public MenuBox(VBox subMenu){
+        MenuBox(VBox subMenu){
             MenuBox.subMenu = subMenu;
             setVisible(false);
             getChildren().addAll(subMenu);
         }
-        public void setSubMenu(VBox subMenu){
+        void setSubMenu(VBox subMenu){
             getChildren().remove(MenuBox.subMenu);
             MenuBox.subMenu = subMenu;
             getChildren().add(MenuBox.subMenu);
@@ -205,7 +201,7 @@ public class Graphic {
     }
 
     static class SubMenu extends VBox{
-        public SubMenu(MenuItem...items){
+        SubMenu(MenuItem... items){
             setSpacing(15);
             setTranslateY(250);
             setTranslateX(420);

@@ -61,7 +61,7 @@ public class BattlePane {
             graphic.getMainStPain().getChildren().add(playingFields);
     }
 
-    public void createQuitBottom(Game game, Player...players){
+    private void createQuitBottom(Game game, Player... players){
         Graphic.MenuItem bck = new Graphic.MenuItem("BACK", 90, 90);
         bck.setTranslateX(0);
         bck.setTranslateY(630);

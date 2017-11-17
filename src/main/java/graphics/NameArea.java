@@ -43,7 +43,7 @@ public class NameArea{
 
         name_area.setLayoutX((b_x == 150) ? 150 : 750);
         name_area.setLayoutY(20);
-        Text name = new Text(player.getName().toString());
+        Text name = new Text(player.getName());
         name.setFill(Color.valueOf("#455760"));
         name.setFont(Font.font("Tw Cen MT Condensed", FontWeight.SEMI_BOLD, 30));
         name_area.getChildren().addAll(na, name);

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Field {
     private Tile[][] grid = new Tile[10][10];
     private ArrayList<Ship> fleet = new ArrayList<>();
-    private Byte numShipAfloat = 10;
+    private int numShipAfloat = 10;
 
     public enum TypeShip{
 
@@ -29,7 +29,7 @@ public class Field {
         return fleet;
     }
 
-    public Byte getNumShipAfloat() {
+    public int getNumShipAfloat() {
         return numShipAfloat;
     }
 
@@ -46,7 +46,7 @@ public class Field {
     }
 
     public void initEmptyTiles() {
-        byte i = 0, j = 0;
+        int i = 0, j = 0;
         for (Tile[] el1 : grid) {
             for (Tile el2 : el1) {
                 if (el2 == null) {
@@ -66,7 +66,7 @@ public class Field {
         fleet.clear();
     }
 
-    public void addTile(Tile tile) {
+    void addTile(Tile tile) {
         grid[(tile.getRow())][tile.getCol()] = tile;
     }
 

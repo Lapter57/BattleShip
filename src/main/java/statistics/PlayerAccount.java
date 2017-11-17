@@ -8,7 +8,7 @@ public class PlayerAccount {
     private String level;
     private String date;
 
-    public PlayerAccount(String nickName, Double score, String level, String date){
+    PlayerAccount(String nickName, Double score, String level, String date){
         this.nickName = nickName;
         this.score = score;
         this.level = level;

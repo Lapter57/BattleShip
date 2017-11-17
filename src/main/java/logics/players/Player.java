@@ -22,26 +22,26 @@ public abstract class Player {
     protected CurrentStats currentStats;
     protected Field enemyField = new Field();
     protected Field field = new Field();
-    protected Byte estabShip = 0;
+    protected int estabShip = 0;
     protected StringBuilder name;
     protected Ship foundShip = null;
-    protected ArrayList<Byte> ships = new ArrayList<>(4);
+    protected ArrayList<Integer> ships = new ArrayList<>(4);
 
 
     Player(StringBuilder name){
         this.name = name;
-        byte j = 4;
+        int j = 4;
         for(int i = 0; i < 4; i++)
             ships.add(j--);
         currentStats = new CurrentStats(this);
         nameArea = new NameArea(this);
     }
 
-    public ArrayList<Byte> getShips() {
+    public ArrayList<Integer> getShips() {
         return ships;
     }
 
-    public void updateCurStat(){
+    void updateCurStat(){
         currentStats.update();
     }
 
@@ -57,7 +57,7 @@ public abstract class Player {
         return field.getNumShipAfloat() == 0;
     }
 
-    public byte getNumShipAfloat(){
+    public int getNumShipAfloat(){
         return field.getNumShipAfloat();
     }
 
@@ -65,15 +65,11 @@ public abstract class Player {
         enemyField = field;
     }
 
-    public Field getEnemyField() {
-        return enemyField;
-    }
-
     public String getName() {
         return name.toString();
     }
 
-    public TextField getNamePlayer(){
+    TextField getNamePlayer(){
         return nameArea.getNamePlayer();
     }
 
@@ -81,7 +77,7 @@ public abstract class Player {
         return field;
     }
 
-    public Byte getEstabShip() {
+    public int getEstabShip() {
         return estabShip;
     }
 
@@ -97,8 +93,8 @@ public abstract class Player {
         return graphicField.searchPressedImg(node);
     }
 
-    void destroy(final byte sizeShip) {
-        Byte temp = ships.get(sizeShip - 1);
+    void destroy(final int sizeShip) {
+        int temp = ships.get(sizeShip - 1);
         ships.set(sizeShip - 1, --temp);
     }
 
@@ -134,46 +130,46 @@ public abstract class Player {
         return check;
     }
 
-    private boolean nearShip(byte row, byte col){
+    private boolean nearShip(int row, int col){
         return checkCoord(new Coord(row,col)) && field.getGrid()[row][col] != null && field.getGrid()[row][col].getLinkShip() != null;
     }
 
     public boolean checkCollision(final Coord coord1, final Coord coord2) {
-        byte checkStart, checkEnd;
+        int checkStart, checkEnd;
         char direction;
 
         if (coord1.row == coord2.row) {
             direction = 'h';
             if (coord1.col < coord2.col) {
-                checkStart = (byte)(coord1.col - 1);
-                checkEnd = (byte)(coord2.col + 1);
+                checkStart = coord1.col - 1;
+                checkEnd = coord2.col + 1;
             }
             else {
-                checkStart = (byte)(coord2.col - 1);
-                checkEnd = (byte)(coord1.col + 1);
+                checkStart = coord2.col - 1;
+                checkEnd = coord1.col + 1;
             }
         }
         else {
             direction = 'v';
             if (coord1.row < coord2.row) {
-                checkStart = (byte)(coord1.row - 1);
-                checkEnd = (byte)(coord2.row + 1);
+                checkStart = coord1.row - 1;
+                checkEnd = coord2.row + 1;
             }
             else {
-                checkStart = (byte)(coord2.row - 1);
-                checkEnd = (byte)(coord1.row + 1);
+                checkStart = coord2.row - 1;
+                checkEnd = coord1.row + 1;
             }
         }
         boolean check = false;
         if(checkCoord(coord1,coord2)) {
             check = true;
-            byte i = (checkStart >= 0 && checkStart < 10) ? checkStart : ++checkStart;
+            int i = (checkStart >= 0 && checkStart < 10) ? checkStart : ++checkStart;
             checkEnd = (checkEnd >= 0 && checkEnd < 10) ? checkEnd : --checkEnd;
             while (check && i <= checkEnd) {
                 if (direction == 'h') {
-                    if (nearShip(coord1.row, i) || nearShip((byte) (coord1.row + 1), i) || nearShip((byte) (coord1.row - 1), i))
+                    if (nearShip(coord1.row, i) || nearShip(coord1.row + 1, i) || nearShip(coord1.row - 1, i))
                         check = false;
-                } else if (nearShip(i, coord1.col) || nearShip(i, (byte) (coord1.col + 1)) || nearShip(i, (byte) (coord1.col - 1)))
+                } else if (nearShip(i, coord1.col) || nearShip(i, coord1.col + 1) || nearShip(i, coord1.col - 1))
                     check = false;
                 i++;
             }
@@ -182,21 +178,21 @@ public abstract class Player {
     }
 
     public void setPlaceShipRand() {
-        byte row, col, shift, stern,  way = 0, direction = 0;
+        int row, col, shift, stern,  way = 0, direction = 0;
         Coord crd1 = new Coord(), crd2 = new Coord();
         boolean established;
         Ship ship;
 
-        for (byte i = 4; i > 0; i--)
-            for (byte j = 1; j <= (5 - i); j++) {
+        for (int i = 4; i > 0; i--)
+            for (int j = 1; j <= (5 - i); j++) {
                 do {
-                    row = (byte) new Random().nextInt(10);
-                    col = (byte) new Random().nextInt(10);
+                    row = new Random().nextInt(10);
+                    col = new Random().nextInt(10);
                     if (i > 1) {
-                        direction = (new Random().nextInt(2) == 0) ? (byte)1 : (byte)-1;
-                        way = (new Random().nextInt(2) == 0) ? (byte)1 : (byte)-1;
+                        direction = (new Random().nextInt(2) == 0) ? 1 : -1;
+                        way = (new Random().nextInt(2) == 0) ? 1 : -1;
                         shift = (direction == 1) ?  col : row;
-                        stern = (byte) ( shift + way * (i - 1) );
+                        stern =  shift + way * (i - 1);
                         if (!(stern >= 0 && stern < 10))
                             way *= -1;
                     }
@@ -205,12 +201,12 @@ public abstract class Player {
                         crd1.row = row;
                         crd2.row = row;
                         crd1.col = col;
-                        crd2.col = (byte)(col + way *(i - 1));
+                        crd2.col = col + way *(i - 1);
                         established = checkCollision(crd1, crd2);
                     }
                     else {
                         crd1.row = row;
-                        crd2.row = (byte)(row + way * (i - 1));
+                        crd2.row = row + way * (i - 1);
                         crd1.col = col;
                         crd2.col = col;
                         established = checkCollision(crd1, crd2);

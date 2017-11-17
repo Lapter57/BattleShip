@@ -21,8 +21,8 @@ public class GraphicField {
 
 
     public Coord searchPressedImg(Node node) {
-        byte row = 0;
-        byte col = 0;
+        int row = 0;
+        int col = 0;
         boolean found = false;
         while (row < 10 && !found) {
             col = 0;

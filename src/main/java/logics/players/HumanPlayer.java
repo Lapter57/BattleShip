@@ -23,7 +23,7 @@ public class HumanPlayer extends Player {
         numWinShots++;
     }
 
-    public byte getNumWinShots(){
+    public int getNumWinShots(){
         return numWinShots;
     }
 
@@ -54,7 +54,7 @@ public class HumanPlayer extends Player {
         }
     }
 
-    public boolean yourTurn(Game game, Player rival, Coord coord){
+    public boolean yourTurn(Player rival, Coord coord){
         boolean hit = true;
         if (enemyField.getGrid()[coord.row][coord.col].getState() == ' ') {
             if (enemyField.getGrid()[coord.row][coord.col].getLinkShip() == null) {
@@ -70,8 +70,8 @@ public class HumanPlayer extends Player {
                 foundShip.setHit();
                 if (foundShip.destroyed()) {
                     for(int i = 0; i < foundShip.getDeck().size(); i++){
-                        byte row = foundShip.getDeck().get(i).getRow();
-                        byte col = foundShip.getDeck().get(i).getCol();
+                        int row = foundShip.getDeck().get(i).getRow();
+                        int col = foundShip.getDeck().get(i).getCol();
                         rival.graphicField.getWater()[row][col].getChildren().get(2).setVisible(false);
                     }
                     enemyField.shipDestroy();

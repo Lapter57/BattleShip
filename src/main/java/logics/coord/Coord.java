@@ -1,10 +1,10 @@
 package logics.coord;
 
 public class Coord {
-    public byte row = 0;
-    public byte col = 0;
+    public int row = 0;
+    public int col = 0;
     public Coord(){}
-    public Coord(byte row, byte col){
+    public Coord(int row, int col){
         this.row = row;
         this.col = col;
     }

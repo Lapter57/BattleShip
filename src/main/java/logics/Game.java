@@ -81,7 +81,7 @@ public class Game {
                         found = true;
                     }
                     if (found) {
-                        if (!hp.yourTurn(this, cp, coord)) {
+                        if (!hp.yourTurn(cp, coord)) {
                             hp.addShot();
                             graphic.getPointer().getChildren().get(1).setVisible(false);
                             graphic.getPointer().getChildren().get(0).setVisible(true);
@@ -167,7 +167,7 @@ public class Game {
 
                             if (found) {
 
-                                if (!hp1.yourTurn(this, hp2, coord)) {
+                                if (!hp1.yourTurn(hp2, coord)) {
                                     hp1.addShot();
                                     graphic.getPointer().getChildren().get(1).setVisible(false);
                                     graphic.getPointer().getChildren().get(0).setVisible(true);
@@ -185,7 +185,7 @@ public class Game {
 
                                         if (found2) {
 
-                                            if (!hp2.yourTurn(this, hp1, coord2)) {
+                                            if (!hp2.yourTurn(hp1, coord2)) {
                                                 hp2.addShot();
                                                 graphic.getPointer().getChildren().get(0).setVisible(false);
                                                 graphic.getPointer().getChildren().get(1).setVisible(true);

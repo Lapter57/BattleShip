@@ -1,38 +1,38 @@
 package logics;
 
 public class Tile {
-    private Byte row = null;
-    private Byte col = null;
-    private Character state = ' ';
-    Ship typeShip = null;
+    private int row = 0;
+    private int col = 0;
+    private char state = ' ';
+    private Ship typeShip = null;
 
-    public Tile(){}
-    public Tile(Byte row, Byte col){
+    Tile(){}
+    Tile(int row, int col){
         this.row = row;
         this.col = col;
 
     }
-    public void setRow(final Byte row){
+    public void setRow(final int row){
         this.row = row;
     }
-    public Byte getRow(){
+    public int getRow(){
         return row;
     }
-    public void setCol(final Byte col){
+    void setCol(final int col){
         this.col = col;
     }
-    public Byte getCol(){
+    public int getCol(){
         return col;
     }
 
-    public void setState(final Character state){
+    public void setState(final char state){
         this.state = state;
     }
     public Character getState(){
         return state;
     }
 
-    public void linkShip(Ship ship){
+    void linkShip(Ship ship){
         typeShip = ship;
     }
 
