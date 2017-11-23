@@ -66,7 +66,7 @@ public class Game {
                 BattlePane battlePane = new BattlePane(graphic, this, hp, cp);
                 battlePane.createPlayingFields(hp, 150, 115, graphic);
                 battlePane.createPlayingFields(cp, 750, 115, graphic);
-                
+
                 hp.showLocationOfShips();
 
                 cp.setPlaceShipRand();

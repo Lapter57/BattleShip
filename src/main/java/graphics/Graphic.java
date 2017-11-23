@@ -1,5 +1,6 @@
 package graphics;
 
+import graphics.animation.Animation;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +24,7 @@ public class Graphic {
     private MainStPain mainStPain = new MainStPain();
     public static HashMap<String, Image> map_img = new HashMap<>();
     private StackPane pointer = new StackPane();
-
+    public static Animation animation = new Animation();
     public MainStPain getMainStPain() {
         return mainStPain;
     }

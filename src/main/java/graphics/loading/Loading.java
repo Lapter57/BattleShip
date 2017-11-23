@@ -34,7 +34,9 @@ public class Loading {
              InputStream sub_v = Files.newInputStream(Paths.get("src/main/resources/ships/Sub_ver.png"));
              InputStream frig = Files.newInputStream(Paths.get("src/main/resources/ships/Frigate.png"));
              InputStream gr_p = Files.newInputStream(Paths.get("src/main/resources/pointer/Green_Pointer.png"));
-             InputStream red_p = Files.newInputStream(Paths.get("src/main/resources/pointer/Red_Pointer.png"))) {
+             InputStream red_p = Files.newInputStream(Paths.get("src/main/resources/pointer/Red_Pointer.png"));
+             InputStream expl = Files.newInputStream(Paths.get("src/main/resources/animation/Explosion.png"));
+             InputStream an_p = Files.newInputStream(Paths.get("src/main/resources/animation/pointerAnimation.png"))) {
             map_img.put("ot", new Image(ot));
             map_img.put("dt", new Image(dt));
             map_img.put("ft", new Image(ft));
@@ -46,6 +48,8 @@ public class Loading {
             map_img.put("ss", new Image(ss));
             map_img.put("gp", new Image(gr_p));
             map_img.put("rp", new Image(red_p));
+            map_img.put("expl", new Image(expl));
+            map_img.put("an_p", new Image(an_p));
 
             Image ch = new Image(car_h);
             Image cv = new Image(car_v);
