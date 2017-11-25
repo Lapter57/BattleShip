@@ -4,7 +4,9 @@ package logics.players;
 import graphics.Graphic;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
+import javafx.util.Duration;
 import logics.Field;
 import logics.coord.Coord;
 
@@ -171,12 +173,11 @@ public class ComputerPlayer extends Player {
                 }
                 continue;
             }
-
             enemyField.getGrid()[coord.row][coord.col].setState('x');
             rival.graphicField.getWater()[coord.row][coord.col].getChildren().add(Graphic.animation.getImageExpl());
             Graphic.animation.playExplosive();
-            rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(4).setVisible(false);
-            rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(3).setVisible(false);
+            rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(2).setVisible(true);
+
             if (foundShip == null)
                 foundShip = enemyField.getGrid()[coord.row][coord.col].getLinkShip();
             foundShip.setHit();
@@ -267,4 +268,5 @@ public class ComputerPlayer extends Player {
             }
         } while (hit && enemyField.getNumShipAfloat() != 0);
     }
+
 }

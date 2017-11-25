@@ -1,5 +1,7 @@
 package graphics.animation;
 import graphics.Graphic;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
@@ -12,6 +14,10 @@ import java.io.File;
 public class Animation {
     private javafx.animation.Animation explosive;
     private javafx.animation.Animation pointer;
+
+    public javafx.animation.Animation getExplosive() {
+        return explosive;
+    }
 
     public void playExplosive(){
         explosive.setCycleCount(1);

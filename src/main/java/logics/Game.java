@@ -83,6 +83,7 @@ public class Game {
                 cp.setEnemyField(hp.getField());
                 hp.setEnemyField(cp.getField());
                 battlePane.useFocusTilesOnField(cp);
+
                 cp.getGraphicField().getBoard().setOnMouseClicked(event1 -> {
                     Node node = event1.getPickResult().getIntersectedNode();
                     boolean found = false;
@@ -93,17 +94,21 @@ public class Game {
                     if (found) {
                         if (!hp.yourTurn(cp, coord)) {
                             hp.addShot();
+
                             graphic.getPointer().getChildren().clear();
                             graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(0, 200));
                             graphic.getPointer().getChildren().get(0).setTranslateX(25);
                             graphic.getPointer().getChildren().get(0).setTranslateY(-30);
                             Graphic.animation.playPointer();
+
                             cp.yourTurn(hp);
+
                             graphic.getPointer().getChildren().clear();
                             graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(175, 200));
                             graphic.getPointer().getChildren().get(0).setTranslateX(30);
                             graphic.getPointer().getChildren().get(0).setTranslateY(-30);
                             Graphic.animation.playPointer();
+
                             if (hp.gameOver()) {
                                 cp.printShipLocation();
                             }
@@ -161,6 +166,12 @@ public class Game {
                         BattlePane battlePane = new BattlePane(graphic, this, hp1, hp2);
                         battlePane.createPlayingFields(hp1, 150, 115, graphic);
                         battlePane.createPlayingFields(hp2, 750, 115, graphic);
+
+                        graphic.getPointer().getChildren().clear();
+                        ImageView gp = new ImageView(Graphic.map_img.get("gp"));
+                        graphic.getPointer().getChildren().add(gp);
+                        gp.setTranslateX(45);
+                        gp.setTranslateY(-20);
 
                         hp1.checkName();
                         hp2.checkName();
