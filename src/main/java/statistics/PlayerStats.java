@@ -58,7 +58,7 @@ public class PlayerStats {
                 cntRow = resultSet.getInt(1);
             }
 
-            if(cntRow < 2){
+            if(cntRow < 11){
 
                 String str = "insert into stats(nickname, score, level, datetime) values(?,?,?,?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(str);

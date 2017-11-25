@@ -73,7 +73,6 @@ public class BattlePane {
             game.getGraphic().removePane(playingFields);
             game.getGraphic().getMainStPain().menuBox.setVisible(true);
             game.getGraphic().getMainStPain().title.setVisible(true);
-            game.setFirstClickAuto(true);
             game.getPreparePane().getReadyBottom().changeSize(100, 70);
         });
     }

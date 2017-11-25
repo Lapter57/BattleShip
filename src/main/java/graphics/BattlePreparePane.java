@@ -128,7 +128,6 @@ public class BattlePreparePane {
             for (ImageView img : ships_img) {
                 img.setVisible(false);
             }
-            game.setFirstClickAuto(false);
 
         });
 
@@ -145,7 +144,6 @@ public class BattlePreparePane {
             game.getGraphic().removePane(gameArea);
             game.getGraphic().getMainStPain().menuBox.setVisible(true);
             game.getGraphic().getMainStPain().title.setVisible(true);
-            game.setFirstClickAuto(true);
         });
 
         VBox deployMenu = new VBox(

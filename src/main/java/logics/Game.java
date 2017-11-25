@@ -14,7 +14,6 @@ import statistics.PlayerStats;
 
 
 public class Game {
-    private Boolean first_click_auto = true;
     private PlayerStats playerStats = new PlayerStats();
     private BattlePreparePane preparePane = new BattlePreparePane();
     private Graphic graphic;
@@ -33,10 +32,6 @@ public class Game {
         preparePane.clearWater();
         preparePane.repairShips();
         player.clearField();
-    }
-
-    public void setFirstClickAuto(Boolean fca) {
-        first_click_auto = fca;
     }
 
     public Graphic getGraphic() {
@@ -62,10 +57,7 @@ public class Game {
         preparePane.getReadyBottom().setOnMouseClicked(event -> {
 
             if (hp.getField().getFleet().size() == 10) {
-                if(first_click_auto) {
-                    hp.getField().initEmptyTiles();
-                }
-
+                hp.getField().initEmptyTiles();
                 gameHvsC.setVisible(false);
                 hp.checkName();
                 BattlePane battlePane = new BattlePane(graphic, this, hp, cp);
@@ -137,13 +129,7 @@ public class Game {
 
         Pane gameHvH2 = new Pane();
         preparePane.getNextBottom().setOnMouseClicked(event -> {
-
-            if(first_click_auto) {
-                hp1.getField().initEmptyTiles();
-            }
-
-            first_click_auto = true;
-
+            hp1.getField().initEmptyTiles();
             if (hp1.getField().getFleet().size() == 10) {
                 preparePane.getReadyBottom().changeSize(400, 50);
                 gameHvH.setVisible(false);
@@ -159,9 +145,7 @@ public class Game {
 
                 preparePane.getReadyBottom().setOnMouseClicked(event2 -> {
                     if (hp2.getField().getFleet().size() == 10) {
-                        if (first_click_auto) {
-                            hp2.getField().initEmptyTiles();
-                        }
+                        hp2.getField().initEmptyTiles();
                         gameHvH2.setVisible(false);
                         BattlePane battlePane = new BattlePane(graphic, this, hp1, hp2);
                         battlePane.createPlayingFields(hp1, 150, 115, graphic);
