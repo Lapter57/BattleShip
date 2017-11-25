@@ -62,7 +62,7 @@ public class BattlePane {
     }
 
     private void createQuitBottom(Game game, Player... players){
-        Graphic.MenuItem bck = new Graphic.MenuItem("BACK", 90, 90);
+        Graphic.MenuItem bck = new Graphic.MenuItem("QUIT", 90, 90);
         bck.setTranslateX(0);
         bck.setTranslateY(630);
         playingFields.getChildren().add(bck);
@@ -74,6 +74,7 @@ public class BattlePane {
             game.getGraphic().getMainStPain().menuBox.setVisible(true);
             game.getGraphic().getMainStPain().title.setVisible(true);
             game.setFirstClickAuto(true);
+            game.getPreparePane().getReadyBottom().changeSize(100, 70);
         });
     }
 
@@ -84,24 +85,17 @@ public class BattlePane {
                     int row = i;
                     int col = j;
                     for (Player pl: players) {
-                        pl.getGraphicField().getWater()[i][j].setOnMouseEntered(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent event) {
-                                BattlePreparePane.focusTiles.get(0).setVisible(true);
-                                if (pl.getGraphicField().getWater()[row][col].getChildren().get(4).isVisible() &&
-                                        !pl.getGraphicField().getWater()[row][col].getChildren().contains(BattlePreparePane.focusTiles.get(0)))
-                                    pl.getGraphicField().getWater()[row][col].getChildren().add(BattlePreparePane.focusTiles.get(0));
-                                else
-                                    BattlePreparePane.focusTiles.get(0).setVisible(false);
-                            }
+                        pl.getGraphicField().getWater()[i][j].setOnMouseEntered(event -> {
+                            BattlePreparePane.focusTiles.get(0).setVisible(true);
+                            if (pl.getGraphicField().getWater()[row][col].getChildren().get(4).isVisible() &&
+                                    !pl.getGraphicField().getWater()[row][col].getChildren().contains(BattlePreparePane.focusTiles.get(0)))
+                                pl.getGraphicField().getWater()[row][col].getChildren().add(BattlePreparePane.focusTiles.get(0));
+                            else
+                                BattlePreparePane.focusTiles.get(0).setVisible(false);
                         });
 
-                        pl.getGraphicField().getWater()[i][j].setOnMouseExited(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent event) {
-                                BattlePreparePane.focusTiles.get(0).setVisible(false);
-                            }
-                        });
+                        pl.getGraphicField().getWater()[i][j].setOnMouseExited(event ->
+                                BattlePreparePane.focusTiles.get(0).setVisible(false));
                     }
                 }
             }

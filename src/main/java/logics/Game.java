@@ -4,6 +4,7 @@ import graphics.BattlePane;
 import graphics.BattlePreparePane;
 import graphics.Graphic;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import logics.coord.Coord;
 import logics.players.ComputerPlayer;
@@ -22,6 +23,10 @@ public class Game {
     Game(Graphic graphic) {
         graphic.createStatsPane(playerStats);
         this.graphic = graphic;
+    }
+
+    public BattlePreparePane getPreparePane() {
+        return preparePane;
     }
 
     public void clearBoard(Player player) {
@@ -67,6 +72,11 @@ public class Game {
                 battlePane.createPlayingFields(hp, 150, 115, graphic);
                 battlePane.createPlayingFields(cp, 750, 115, graphic);
 
+                graphic.getPointer().getChildren().clear();
+                ImageView gp = new ImageView(Graphic.map_img.get("gp"));
+                graphic.getPointer().getChildren().add(gp);
+                gp.setTranslateX(45);
+                gp.setTranslateY(-20);
                 hp.showLocationOfShips();
 
                 cp.setPlaceShipRand();
@@ -83,11 +93,17 @@ public class Game {
                     if (found) {
                         if (!hp.yourTurn(cp, coord)) {
                             hp.addShot();
-                            graphic.getPointer().getChildren().get(1).setVisible(false);
-                            graphic.getPointer().getChildren().get(0).setVisible(true);
+                            graphic.getPointer().getChildren().clear();
+                            graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(0, 200));
+                            graphic.getPointer().getChildren().get(0).setTranslateX(25);
+                            graphic.getPointer().getChildren().get(0).setTranslateY(-30);
+                            Graphic.animation.playPointer();
                             cp.yourTurn(hp);
-                            graphic.getPointer().getChildren().get(0).setVisible(false);
-                            graphic.getPointer().getChildren().get(1).setVisible(true);
+                            graphic.getPointer().getChildren().clear();
+                            graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(175, 200));
+                            graphic.getPointer().getChildren().get(0).setTranslateX(30);
+                            graphic.getPointer().getChildren().get(0).setTranslateY(-30);
+                            Graphic.animation.playPointer();
                             if (hp.gameOver()) {
                                 cp.printShipLocation();
                             }
@@ -169,8 +185,12 @@ public class Game {
 
                                 if (!hp1.yourTurn(hp2, coord)) {
                                     hp1.addShot();
-                                    graphic.getPointer().getChildren().get(1).setVisible(false);
-                                    graphic.getPointer().getChildren().get(0).setVisible(true);
+
+                                    graphic.getPointer().getChildren().clear();
+                                    graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(0, 1));
+                                    graphic.getPointer().getChildren().get(0).setTranslateX(25);
+                                    graphic.getPointer().getChildren().get(0).setTranslateY(-30);
+                                    Graphic.animation.playPointer();
 
                                     hp1.getGraphicField().getBoard().setDisable(false);
                                     hp2.getGraphicField().getBoard().setDisable(true);
@@ -187,8 +207,12 @@ public class Game {
 
                                             if (!hp2.yourTurn(hp1, coord2)) {
                                                 hp2.addShot();
-                                                graphic.getPointer().getChildren().get(0).setVisible(false);
-                                                graphic.getPointer().getChildren().get(1).setVisible(true);
+                                                graphic.getPointer().getChildren().clear();
+                                                graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(175, 1));
+                                                graphic.getPointer().getChildren().get(0).setTranslateX(30);
+                                                graphic.getPointer().getChildren().get(0).setTranslateY(-30);
+                                                Graphic.animation.playPointer();
+
                                                 hp2.getGraphicField().getBoard().setDisable(false);
                                                 hp1.getGraphicField().getBoard().setDisable(true);
                                             } else {

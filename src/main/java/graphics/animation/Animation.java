@@ -2,7 +2,12 @@ package graphics.animation;
 import graphics.Graphic;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+
+import java.io.File;
+
 
 public class Animation {
     private javafx.animation.Animation explosive;
@@ -11,6 +16,10 @@ public class Animation {
     public void playExplosive(){
         explosive.setCycleCount(1);
         explosive.play();
+        String soundExpl = "src/main/resources/sound/Explosion.mp3";
+        Media expl = new Media(new File(soundExpl).toURI().toString());
+        MediaPlayer mp = new MediaPlayer(expl);
+        mp.play();
     }
 
     public void playPointer(){
@@ -19,7 +28,7 @@ public class Animation {
     }
 
     public ImageView getImageExpl() {
-        final ImageView imageExpl = new ImageView(Graphic.map_img.get("expl"));
+        ImageView imageExpl = new ImageView(Graphic.map_img.get("expl"));
         int count = 11;
         int columns = 11;
         int offsetX = 0;
@@ -38,22 +47,28 @@ public class Animation {
         return imageExpl;
     }
 
-    public ImageView getImagePointers() {
-        final ImageView imagePointers = new ImageView(Graphic.map_img.get("an_p"));
+    public ImageView getImagePointers(int offsetY, int dur) {
+        ImageView imagePointers = new ImageView(Graphic.map_img.get("an_p"));
         int count = 2;
         int columns = 2;
         int offsetX = 0;
-        int offsetY = 0;
         int width = 90;
         int height = 175;
         imagePointers.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
         pointer = new SpriteAnimation(
                 imagePointers,
-                Duration.millis(350),
+                Duration.millis(dur),
                 count, columns,
                 offsetX, offsetY,
                 width, height
         );
         return imagePointers;
+    }
+
+    public void sounWater(){
+        String soundExpl = "src/main/resources/sound/Water.mp3";
+        Media expl = new Media(new File(soundExpl).toURI().toString());
+        MediaPlayer mp = new MediaPlayer(expl);
+        mp.play();
     }
 }

@@ -61,6 +61,7 @@ public class HumanPlayer extends Player {
         if (enemyField.getGrid()[coord.row][coord.col].getState() == ' ') {
             if (enemyField.getGrid()[coord.row][coord.col].getLinkShip() == null) {
                 enemyField.getGrid()[coord.row][coord.col].setState('*');
+                Graphic.animation.sounWater();
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(4).setVisible(false);
                 hit = false;
             }
@@ -68,7 +69,6 @@ public class HumanPlayer extends Player {
                 enemyField.getGrid()[coord.row][coord.col].setState('x');
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().add(Graphic.animation.getImageExpl());
                 Graphic.animation.playExplosive();
-                rival.graphicField.getWater()[coord.row][coord.col].getChildren().remove(5);
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(4).setVisible(false);
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(3).setVisible(false);
                 foundShip = enemyField.getGrid()[coord.row][coord.col].getLinkShip();

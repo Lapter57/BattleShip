@@ -255,217 +255,202 @@ public class BattlePreparePane {
     }
 
     private void customizeDragAndDrop(HumanPlayer hp){
-        board.setOnDragExited(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                for(int k = 0; k < 4; k++) {
-                    focusTiles.get(k).setVisible(false);
-                }
+        board.setOnDragExited(event -> {
+            for(int k = 0; k < 4; k++) {
+                focusTiles.get(k).setVisible(false);
             }
         });
-        board.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if (db.hasImage()) {
-                    event.acceptTransferModes(TransferMode.COPY);
-                    Node node = event.getPickResult().getIntersectedNode();
-                    int row = 0;
-                    int col = 0;
-                    boolean f = false;
-                    while (row < 10 && !f) {
-                        col = 0;
-                        while (col < 10 && !f) {
-                            if (node == water[row][col].getChildren().get(1))
-                                f = true;
-                            else
-                            if(water[row][col].getChildren().size() == 3 && node == water[row][col].getChildren().get(2) && node != focusTiles.get(0))
-                                f = true;
-                            else
-                                col++;
-                        }
-                        if (!f)
-                            row++;
+        board.setOnDragOver(event -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasImage()) {
+                event.acceptTransferModes(TransferMode.COPY);
+                Node node = event.getPickResult().getIntersectedNode();
+                int row = 0;
+                int col = 0;
+                boolean f = false;
+                while (row < 10 && !f) {
+                    col = 0;
+                    while (col < 10 && !f) {
+                        if (node == water[row][col].getChildren().get(1))
+                            f = true;
+                        else
+                        if(water[row][col].getChildren().size() == 3 && node == water[row][col].getChildren().get(2) && node != focusTiles.get(0))
+                            f = true;
+                        else
+                            col++;
                     }
-                    if (f) {
-                        Coord crd1 = new Coord(row, col);
-                        Coord crd2 = new Coord((cur_direction == 'h') ? row : row + cur_size_ship - 1,
-                                               (cur_direction == 'v') ? col : col + cur_size_ship - 1);
-                        if (hp.checkCollision(crd1, crd2)) {
-                            int shift;
-                            if (cur_direction == 'h') {
-                                shift = col + cur_size_ship;
-                                for (int j = col; j < shift; j++) {
-                                    if(water[row][j].getChildren().size() != 3) {
-                                        water[row][j].getChildren().add(focusTiles.get(j - col));
-                                    }
-                                    water[row][j].getChildren().get(2).setVisible(true);
-
-                                }
-                            } else {
-                                shift = row + cur_size_ship;
-                                for (int i = row; i < shift; i++) {
-                                    if(water[i][col].getChildren().size() != 3) {
-                                        water[i][col].getChildren().add(focusTiles.get(i - row));
-                                    }
-                                    water[i][col].getChildren().get(2).setVisible(true);
-                                }
-                            }
-                        }
-                        else{
-                            for(int k = 0; k < 4; k++) {
-                                focusTiles.get(k).setVisible(false);
-                            }
-                        }
-                    }
+                    if (!f)
+                        row++;
                 }
-                event.consume();
-            }
-        });
-
-        board.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if (db.hasImage() && hp.getEstabShip() != 10) {
-                    Node node = event.getPickResult().getIntersectedNode();
-                    int row = 0;
-                    int col = 0;
-                    boolean f = false;
-                    while (row < 10 && !f) {
-                        col = 0;
-                        while (col < 10 && !f) {
-                            if (water[row][col].getChildren().size() == 3 && node == water[row][col].getChildren().get(2))
-                                f = true;
-                            else
-                                col++;
-                        }
-                        if (!f)
-                            row++;
-                    }
-                    if (f) {
-                        Coord crd1 = new Coord(row, col);
-                        Coord crd2 = new Coord((cur_direction == 'h') ? row : row + cur_size_ship - 1,
-                                               (cur_direction == 'v') ? col : col + cur_size_ship - 1);
-
-                        if (cur_size_ship > 1) {
-                            Ship ship = new Ship(cur_size_ship, crd1, crd2, hp.getField());
-                            ship.linkTilesWithDeck(hp.getField());
-                            ship.linkTilesWithHalo(hp.getField());
-                            hp.getField().getFleet().add(ship);
-                        } else {
-                            Ship ship = new Ship(cur_size_ship, crd1, hp.getField());
-                            ship.linkTilesWithDeck(hp.getField());
-                            ship.linkTilesWithHalo(hp.getField());
-                            hp.getField().getFleet().add(ship);
-                        }
-                        hp.addEstabShip();
+                if (f) {
+                    Coord crd1 = new Coord(row, col);
+                    Coord crd2 = new Coord((cur_direction == 'h') ? row : row + cur_size_ship - 1,
+                                           (cur_direction == 'v') ? col : col + cur_size_ship - 1);
+                    if (hp.checkCollision(crd1, crd2)) {
                         int shift;
-                        for (int k = 0; k < cur_size_ship; k++) {
-                            focusTiles.get(k).setVisible(false);
-                        }
                         if (cur_direction == 'h') {
                             shift = col + cur_size_ship;
                             for (int j = col; j < shift; j++) {
-                                water[row][j].getChildren().get(1).setVisible(false);
-                                water[row][j].getChildren().get(0).setVisible(true);
+                                if(water[row][j].getChildren().size() != 3) {
+                                    water[row][j].getChildren().add(focusTiles.get(j - col));
+                                }
+                                water[row][j].getChildren().get(2).setVisible(true);
+
                             }
                         } else {
                             shift = row + cur_size_ship;
                             for (int i = row; i < shift; i++) {
-                                water[i][col].getChildren().get(1).setVisible(false);
-                                water[i][col].getChildren().get(0).setVisible(true);
+                                if(water[i][col].getChildren().size() != 3) {
+                                    water[i][col].getChildren().add(focusTiles.get(i - row));
+                                }
+                                water[i][col].getChildren().get(2).setVisible(true);
                             }
                         }
-                        event.setDropCompleted(true);
-                    } else {
-                        event.setDropCompleted(false);
                     }
+                    else{
+                        for(int k = 0; k < 4; k++) {
+                            focusTiles.get(k).setVisible(false);
+                        }
+                    }
+                }
+            }
+            event.consume();
+        });
+
+        board.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasImage() && hp.getEstabShip() != 10) {
+                Node node = event.getPickResult().getIntersectedNode();
+                int row = 0;
+                int col = 0;
+                boolean f = false;
+                while (row < 10 && !f) {
+                    col = 0;
+                    while (col < 10 && !f) {
+                        if (water[row][col].getChildren().size() == 3 && node == water[row][col].getChildren().get(2))
+                            f = true;
+                        else
+                            col++;
+                    }
+                    if (!f)
+                        row++;
+                }
+                if (f) {
+                    Coord crd1 = new Coord(row, col);
+                    Coord crd2 = new Coord((cur_direction == 'h') ? row : row + cur_size_ship - 1,
+                                           (cur_direction == 'v') ? col : col + cur_size_ship - 1);
+
+                    if (cur_size_ship > 1) {
+                        Ship ship = new Ship(cur_size_ship, crd1, crd2, hp.getField());
+                        ship.linkTilesWithDeck(hp.getField());
+                        ship.linkTilesWithHalo(hp.getField());
+                        hp.getField().getFleet().add(ship);
+                    } else {
+                        Ship ship = new Ship(cur_size_ship, crd1, hp.getField());
+                        ship.linkTilesWithDeck(hp.getField());
+                        ship.linkTilesWithHalo(hp.getField());
+                        hp.getField().getFleet().add(ship);
+                    }
+                    hp.addEstabShip();
+                    int shift;
+                    for (int k = 0; k < cur_size_ship; k++) {
+                        focusTiles.get(k).setVisible(false);
+                    }
+                    if (cur_direction == 'h') {
+                        shift = col + cur_size_ship;
+                        for (int j = col; j < shift; j++) {
+                            water[row][j].getChildren().get(1).setVisible(false);
+                            water[row][j].getChildren().get(0).setVisible(true);
+                        }
+                    } else {
+                        shift = row + cur_size_ship;
+                        for (int i = row; i < shift; i++) {
+                            water[i][col].getChildren().get(1).setVisible(false);
+                            water[i][col].getChildren().get(0).setVisible(true);
+                        }
+                    }
+                    event.setDropCompleted(true);
+                } else {
+                    event.setDropCompleted(false);
                 }
             }
         });
 
         for (ImageView ship : ships_img) {
-            ship.setOnDragDetected(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    int i = ships_img.indexOf(ship);
-                    switch (i) {
-                        case 0:
-                        case 6:
-                            cur_size_ship = 4;
-                            break;
-                        case 1:
-                        case 2:
-                        case 7:
-                        case 8:
-                            cur_size_ship = 3;
-                            break;
-                        case 12:
-                        case 13:
-                        case 14:
-                        case 15:
-                            cur_size_ship = 1;
-                            break;
-                        default:
-                            cur_size_ship = 2;
+            ship.setOnDragDetected(event -> {
+                int i = ships_img.indexOf(ship);
+                switch (i) {
+                    case 0:
+                    case 6:
+                        cur_size_ship = 4;
+                        break;
+                    case 1:
+                    case 2:
+                    case 7:
+                    case 8:
+                        cur_size_ship = 3;
+                        break;
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                        cur_size_ship = 1;
+                        break;
+                    default:
+                        cur_size_ship = 2;
 
-                    }
-                    if (i < 6 || (i > 11 && i < 16))
-                        cur_direction = 'h';
-                    else
-                        cur_direction = 'v';
-
-                    Dragboard db = ship.startDragAndDrop(TransferMode.COPY);
-                    ClipboardContent content = new ClipboardContent();
-                    db.setDragView(ship.getImage(), 20, 20);
-                    content.putImage(ship.getImage());
-                    db.setContent(content);
-                    event.consume();
                 }
+                if (i < 6 || (i > 11 && i < 16))
+                    cur_direction = 'h';
+                else
+                    cur_direction = 'v';
+
+                Dragboard db = ship.startDragAndDrop(TransferMode.COPY);
+                ClipboardContent content = new ClipboardContent();
+                db.setDragView(ship.getImage(), 20, 20);
+                content.putImage(ship.getImage());
+                db.setContent(content);
+                event.consume();
             });
 
-            ship.setOnDragDone(new EventHandler<DragEvent>() {
-                @Override
-                public void handle(DragEvent event) {
-                    TransferMode modeUsed = event.getTransferMode();
-                    if (modeUsed == TransferMode.COPY) {
-                        if (cur_size_ship == 1)
-                            ship.setVisible(false);
-                        else {
-                            int i = ships_img.indexOf(ship);
-                            switch (i) {
-                                case 0:
-                                case 6:
-                                    ships_img.get(0).setVisible(false);
-                                    ships_img.get(6).setVisible(false);
-                                    break;
-                                case 1:
-                                case 7:
-                                    ships_img.get(1).setVisible(false);
-                                    ships_img.get(7).setVisible(false);
-                                    break;
-                                case 2:
-                                case 8:
-                                    ships_img.get(2).setVisible(false);
-                                    ships_img.get(8).setVisible(false);
-                                    break;
-                                case 3:
-                                case 9:
-                                    ships_img.get(3).setVisible(false);
-                                    ships_img.get(9).setVisible(false);
-                                    break;
-                                case 4:
-                                case 10:
-                                    ships_img.get(4).setVisible(false);
-                                    ships_img.get(10).setVisible(false);
-                                    break;
-                                case 5:
-                                case 11:
-                                    ships_img.get(5).setVisible(false);
-                                    ships_img.get(11).setVisible(false);
-                                    break;
-                            }
+            ship.setOnDragDone(event -> {
+                TransferMode modeUsed = event.getTransferMode();
+                if (modeUsed == TransferMode.COPY) {
+                    if (cur_size_ship == 1)
+                        ship.setVisible(false);
+                    else {
+                        int i = ships_img.indexOf(ship);
+                        switch (i) {
+                            case 0:
+                            case 6:
+                                ships_img.get(0).setVisible(false);
+                                ships_img.get(6).setVisible(false);
+                                break;
+                            case 1:
+                            case 7:
+                                ships_img.get(1).setVisible(false);
+                                ships_img.get(7).setVisible(false);
+                                break;
+                            case 2:
+                            case 8:
+                                ships_img.get(2).setVisible(false);
+                                ships_img.get(8).setVisible(false);
+                                break;
+                            case 3:
+                            case 9:
+                                ships_img.get(3).setVisible(false);
+                                ships_img.get(9).setVisible(false);
+                                break;
+                            case 4:
+                            case 10:
+                                ships_img.get(4).setVisible(false);
+                                ships_img.get(10).setVisible(false);
+                                break;
+                            case 5:
+                            case 11:
+                                ships_img.get(5).setVisible(false);
+                                ships_img.get(11).setVisible(false);
+                                break;
                         }
                     }
                 }

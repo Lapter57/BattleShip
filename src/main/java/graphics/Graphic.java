@@ -62,28 +62,19 @@ public class Graphic {
 
     void createPointer(Pane playingFields) {
         if(pointer.getChildren().size() == 0) {
-            ImageView rp = new ImageView(Graphic.map_img.get("rp"));
-            ImageView gp = new ImageView(Graphic.map_img.get("gp"));
-            pointer.getChildren().addAll(rp, gp);
             playingFields.getChildren().add(pointer);
             pointer.setMaxWidth(150);
             pointer.setMaxHeight(225);
             pointer.setLayoutX(600);
             pointer.setLayoutY(295);
-            rp.setTranslateX(25);
-            rp.setTranslateY(-20);
-            gp.setTranslateX(45);
-            gp.setTranslateY(-20);
-            pointer.getChildren().get(0).setVisible(false);
-            pointer.getChildren().get(1).setVisible(true);
         }
         else{
             if(!playingFields.getChildren().contains(pointer))
                 playingFields.getChildren().add(pointer);
-            pointer.getChildren().get(0).setVisible(false);
-            pointer.getChildren().get(1).setVisible(true);
         }
     }
+
+
 
     void removePane(Pane pane) {
         pane.getChildren().clear();
