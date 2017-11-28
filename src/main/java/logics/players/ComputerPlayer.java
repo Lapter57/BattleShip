@@ -175,7 +175,7 @@ public class ComputerPlayer extends Player {
             }
             enemyField.getGrid()[coord.row][coord.col].setState('x');
             rival.graphicField.getWater()[coord.row][coord.col].getChildren().add(Graphic.animation.getImageExpl());
-            Graphic.animation.playExplosive();
+            Graphic.animation.playExplosive(false);
             rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(2).setVisible(true);
 
             if (foundShip == null)

@@ -68,7 +68,7 @@ public class HumanPlayer extends Player {
             else {
                 enemyField.getGrid()[coord.row][coord.col].setState('x');
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().add(Graphic.animation.getImageExpl());
-                Graphic.animation.playExplosive();
+                Graphic.animation.playExplosive(true);
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(4).setVisible(false);
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(3).setVisible(false);
                 foundShip = enemyField.getGrid()[coord.row][coord.col].getLinkShip();
