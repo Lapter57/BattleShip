@@ -1,9 +1,5 @@
 package graphics.animation;
 import graphics.Graphic;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
@@ -11,44 +7,17 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 
 public class Animation {
     private javafx.animation.Animation explosive;
     private javafx.animation.Animation pointer;
-    private Deque<javafx.animation.Animation> explosives = new ArrayDeque<>();
-    
-    public Animation() {
-        Timeline fxTimer = new Timeline(new KeyFrame(Duration.millis(400), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	javafx.animation.Animation expl = explosives.poll();
-                if (expl != null) {
-                	playExplosiveImpl(expl);
-                }
-            }
-        }));
-        fxTimer.setCycleCount(Timeline.INDEFINITE);
-        fxTimer.play();        
-    	
-    }
 
     public javafx.animation.Animation getExplosive() {
         return explosive;
     }
 
-    public void playExplosive(boolean isImmediate){
-    	if (isImmediate) {
-    		playExplosiveImpl(explosive);
-    	}
-    	else {
-    		explosives.add(explosive);
-    	}
-    }
-    
-    public void playExplosiveImpl(javafx.animation.Animation explosive){
+    public void playExplosive(){
         explosive.setCycleCount(1);
         explosive.play();
         String soundExpl = "src/main/resources/sound/Explosion.mp3";

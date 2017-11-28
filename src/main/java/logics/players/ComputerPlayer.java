@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.util.Duration;
 import logics.Field;
+import logics.Game;
 import logics.coord.Coord;
 
 import java.util.ArrayDeque;
@@ -24,6 +25,7 @@ public class ComputerPlayer extends Player {
     private int shotsByAlgorithm = 0;
     private Coord firstFoundTileOfShip;
     private StringBuilder level = new StringBuilder("normal");
+    private boolean lastShotOnCarrier;
 
     public ComputerPlayer() {
         super(new StringBuilder("Computer"));
@@ -141,14 +143,12 @@ public class ComputerPlayer extends Player {
     }
 
 
-    public void yourTurn(Player rival) {
+    public void yourTurn(Player rival, Game game) {
         Coord coord;
         Coord tempCrd = new Coord();
         int offset = 1;
-        boolean lastShotOnCarrier = false;
         boolean hit = true;
 
-        do {
             if (!tilesAfterSecondHit.isEmpty())
                 coord = tilesAfterSecondHit.pop();
             else if (coordForToShell.isEmpty())
@@ -170,103 +170,106 @@ public class ComputerPlayer extends Player {
                     else
                         firstFoundTileOfShip.row += offset;
                     tilesAfterSecondHit.addLast(firstFoundTileOfShip);
+                    lastShotOnCarrier = false;
                 }
-                continue;
             }
-            enemyField.getGrid()[coord.row][coord.col].setState('x');
-            rival.graphicField.getWater()[coord.row][coord.col].getChildren().add(Graphic.animation.getImageExpl());
-            Graphic.animation.playExplosive(false);
-            rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(2).setVisible(true);
+            else {
+                enemyField.getGrid()[coord.row][coord.col].setState('x');
+                rival.graphicField.getWater()[coord.row][coord.col].getChildren().add(Graphic.animation.getImageExpl());
+                Graphic.animation.playExplosive();
+                rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(2).setVisible(true);
 
-            if (foundShip == null)
-                foundShip = enemyField.getGrid()[coord.row][coord.col].getLinkShip();
-            foundShip.setHit();
+                if (foundShip == null)
+                    foundShip = enemyField.getGrid()[coord.row][coord.col].getLinkShip();
+                foundShip.setHit();
 
-            if (foundShip.destroyed()) {
-                for (int i = 0; i < foundShip.getDeck().size(); i++) {
-                    int row = foundShip.getDeck().get(i).getRow();
-                    int col = foundShip.getDeck().get(i).getCol();
-                    rival.graphicField.getWater()[row][col].getChildren().get(2).setVisible(false);
-                    rival.graphicField.getWater()[row][col].getChildren().get(1).setVisible(true);
-                }
-                enemyField.shipDestroy();
-                foundShip.setStateHalo(rival.graphicField.getWater());
-                rival.destroy(foundShip.getSizeShip());
-                rival.updateCurStat();
-                foundShip = null;
-                firstHit = true;
-                lastShotOnCarrier = false;
-                if (!tilesAfterSecondHit.isEmpty()) tilesAfterSecondHit.clear();
-                if (!coordForToShell.isEmpty())
-                    coordForToShell.clear();
-                continue;
-            }
-
-            if (firstHit) {
-                tempCrd.col = coord.col;
-                for (int i = 0; i < 2; i++) {
-                    tempCrd.row = coord.row + offset;
-                    if (checkCoord(tempCrd.row) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
-                        coordForToShell.add(new Coord(tempCrd));
-                    offset *= -1;
-                }
-
-                tempCrd.row = coord.row;
-                for (int i = 0; i < 2; i++) {
-                    tempCrd.col = coord.col + offset;
-                    if (checkCoord(tempCrd.col) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
-                        coordForToShell.add(new Coord(tempCrd));
-                    offset *= -1;
-                }
-
-                firstFoundTileOfShip = coord;
-                Collections.shuffle(coordForToShell);
-                firstHit = false;
-                continue;
-            }
-
-            if (!coordForToShell.isEmpty())
-                coordForToShell.clear();
-
-            if (tilesAfterSecondHit.isEmpty()) {
-                if (coord.row == firstFoundTileOfShip.row) {
-                    offset = (coord.col < firstFoundTileOfShip.col) ? -1 : 1;
-                    if (!lastShotOnCarrier) {
-                        coord.col += offset;
-                        if (checkCoord(coord.col) && enemyField.getGrid()[coord.row][coord.col].getState() == ' ')
-                            tilesAfterSecondHit.addLast(new Coord(coord));
-                        offset *= -1;
-                        tempCrd.row = firstFoundTileOfShip.row;
-                        tempCrd.col = firstFoundTileOfShip.col;
-                        tempCrd.col += offset;
-                        if (checkCoord(tempCrd.col) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
-                            tilesAfterSecondHit.addLast(new Coord(tempCrd));
-                        lastShotOnCarrier = true;
+                if (foundShip.destroyed()) {
+                    for (int i = 0; i < foundShip.getDeck().size(); i++) {
+                        int row = foundShip.getDeck().get(i).getRow();
+                        int col = foundShip.getDeck().get(i).getCol();
+                        rival.graphicField.getWater()[row][col].getChildren().get(2).setVisible(false);
+                        rival.graphicField.getWater()[row][col].getChildren().get(1).setVisible(true);
                     }
-                    else {
-                        coord.col += offset;
-                        tilesAfterSecondHit.addLast(new Coord(coord));
-                    }
-                    continue;
+                    enemyField.shipDestroy();
+                    foundShip.setStateHalo(rival.graphicField.getWater());
+                    rival.destroy(foundShip.getSizeShip());
+                    rival.updateCurStat();
+                    foundShip = null;
+                    firstHit = true;
+                    lastShotOnCarrier = false;
+                    if (!tilesAfterSecondHit.isEmpty()) tilesAfterSecondHit.clear();
+                    if (!coordForToShell.isEmpty())
+                        coordForToShell.clear();
                 }
-                offset = (coord.row < firstFoundTileOfShip.row) ? -1 : 1;
-                if (!lastShotOnCarrier) {
-                    coord.row += offset;
-                    if (checkCoord(coord.row) && enemyField.getGrid()[coord.row][coord.col].getState() == ' ')
-                        tilesAfterSecondHit.addLast(new Coord(coord));
-                    offset *= -1;
-                    tempCrd.row = firstFoundTileOfShip.row;
-                    tempCrd.col = firstFoundTileOfShip.col;
-                    tempCrd.row += offset;
-                    if (checkCoord(tempCrd.row) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
-                        tilesAfterSecondHit.addLast(new Coord(tempCrd));
-                    lastShotOnCarrier = true;
-                } else {
-                    coord.row += offset;
-                    tilesAfterSecondHit.addLast(new Coord(coord));
+                else {
+                    if (firstHit) {
+                        tempCrd.col = coord.col;
+                        for (int i = 0; i < 2; i++) {
+                            tempCrd.row = coord.row + offset;
+                            if (checkCoord(tempCrd.row) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
+                                coordForToShell.add(new Coord(tempCrd));
+                            offset *= -1;
+                        }
+
+                        tempCrd.row = coord.row;
+                        for (int i = 0; i < 2; i++) {
+                            tempCrd.col = coord.col + offset;
+                            if (checkCoord(tempCrd.col) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
+                                coordForToShell.add(new Coord(tempCrd));
+                            offset *= -1;
+                        }
+
+                        firstFoundTileOfShip = coord;
+                        Collections.shuffle(coordForToShell);
+                        firstHit = false;
+                    }
+                    else{
+                        if (!coordForToShell.isEmpty())
+                            coordForToShell.clear();
+
+                        if (tilesAfterSecondHit.isEmpty()) {
+                            if (coord.row == firstFoundTileOfShip.row) {
+                                offset = (coord.col < firstFoundTileOfShip.col) ? -1 : 1;
+                                if (!lastShotOnCarrier) {
+                                    coord.col += offset;
+                                    if (checkCoord(coord.col) && enemyField.getGrid()[coord.row][coord.col].getState() == ' ')
+                                        tilesAfterSecondHit.addLast(new Coord(coord));
+                                    offset *= -1;
+                                    tempCrd.row = firstFoundTileOfShip.row;
+                                    tempCrd.col = firstFoundTileOfShip.col;
+                                    tempCrd.col += offset;
+                                    if (checkCoord(tempCrd.col) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
+                                        tilesAfterSecondHit.addLast(new Coord(tempCrd));
+                                    lastShotOnCarrier = true;
+                                } else {
+                                    coord.col += offset;
+                                    tilesAfterSecondHit.addLast(new Coord(coord));
+                                }
+                            }
+                            else {
+                                offset = (coord.row < firstFoundTileOfShip.row) ? -1 : 1;
+                                if (!lastShotOnCarrier) {
+                                    coord.row += offset;
+                                    if (checkCoord(coord.row) && enemyField.getGrid()[coord.row][coord.col].getState() == ' ')
+                                        tilesAfterSecondHit.addLast(new Coord(coord));
+                                    offset *= -1;
+                                    tempCrd.row = firstFoundTileOfShip.row;
+                                    tempCrd.col = firstFoundTileOfShip.col;
+                                    tempCrd.row += offset;
+                                    if (checkCoord(tempCrd.row) && enemyField.getGrid()[tempCrd.row][tempCrd.col].getState() == ' ')
+                                        tilesAfterSecondHit.addLast(new Coord(tempCrd));
+                                    lastShotOnCarrier = true;
+                                } else {
+                                    coord.row += offset;
+                                    tilesAfterSecondHit.addLast(new Coord(coord));
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        } while (hit && enemyField.getNumShipAfloat() != 0);
+
+        game.setTurnOfComp(hit);
     }
 
 }

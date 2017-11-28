@@ -56,7 +56,7 @@ public class HumanPlayer extends Player {
         }
     }
 
-    public boolean yourTurn(Player rival, Coord coord){
+    public boolean yourTurn(Player rival, Coord coord, Game game){
         boolean hit = true;
         if (enemyField.getGrid()[coord.row][coord.col].getState() == ' ') {
             if (enemyField.getGrid()[coord.row][coord.col].getLinkShip() == null) {
@@ -68,7 +68,7 @@ public class HumanPlayer extends Player {
             else {
                 enemyField.getGrid()[coord.row][coord.col].setState('x');
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().add(Graphic.animation.getImageExpl());
-                Graphic.animation.playExplosive(true);
+                Graphic.animation.playExplosive();
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(4).setVisible(false);
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(3).setVisible(false);
                 foundShip = enemyField.getGrid()[coord.row][coord.col].getLinkShip();
@@ -87,6 +87,10 @@ public class HumanPlayer extends Player {
                 foundShip = null;
             }
         }
+
+        if(rival instanceof ComputerPlayer)
+            game.setTurnOfComp(!hit);
+
         return  hit;
     }
 }

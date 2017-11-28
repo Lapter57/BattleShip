@@ -3,9 +3,14 @@ package logics;
 import graphics.BattlePane;
 import graphics.BattlePreparePane;
 import graphics.Graphic;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import logics.coord.Coord;
 import logics.players.ComputerPlayer;
 import logics.players.HumanPlayer;
@@ -18,10 +23,19 @@ public class Game {
     private BattlePreparePane preparePane = new BattlePreparePane();
     private Graphic graphic;
     public enum Level{EASY,NORMAL,HARD,HUMAN}
+    private boolean turnOfComp = false;
 
     Game(Graphic graphic) {
         graphic.createStatsPane(playerStats);
         this.graphic = graphic;
+    }
+
+    public boolean getTurnOfComp(){
+        return turnOfComp;
+    }
+
+    public void setTurnOfComp(boolean turnOfComp) {
+        this.turnOfComp = turnOfComp;
     }
 
     public BattlePreparePane getPreparePane() {
@@ -76,6 +90,29 @@ public class Game {
                 hp.setEnemyField(cp.getField());
                 battlePane.useFocusTilesOnField(cp);
 
+                Timeline fxTimer = new Timeline(new KeyFrame(Duration.millis(600), event2 -> {
+                    if (turnOfComp) {
+                        if (!hp.gameOver()) {
+                            cp.yourTurn(hp,this);
+                        }
+                        else {
+                            cp.printShipLocation();
+                        }
+                    } else {
+                        cp.getGraphicField().getBoard().setDisable(false);
+                        if(!graphic.greenPoint) {
+                            graphic.getPointer().getChildren().clear();
+                            graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(175, 1));
+                            graphic.getPointer().getChildren().get(0).setTranslateX(30);
+                            graphic.getPointer().getChildren().get(0).setTranslateY(-30);
+                            Graphic.animation.playPointer();
+                            graphic.greenPoint = true;
+                        }
+                    }
+                }));
+                fxTimer.setCycleCount(Timeline.INDEFINITE);
+                fxTimer.play();
+
                 cp.getGraphicField().getBoard().setOnMouseClicked(event1 -> {
                     Node node = event1.getPickResult().getIntersectedNode();
                     boolean found = false;
@@ -84,26 +121,17 @@ public class Game {
                         found = true;
                     }
                     if (found) {
-                        if (!hp.yourTurn(cp, coord)) {
+                        if (!hp.yourTurn(cp, coord, this)) {
                             hp.addShot();
+                            cp.getGraphicField().getBoard().setDisable(true);
 
                             graphic.getPointer().getChildren().clear();
-                            graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(0, 200));
+                            graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(0, 1));
                             graphic.getPointer().getChildren().get(0).setTranslateX(25);
                             graphic.getPointer().getChildren().get(0).setTranslateY(-30);
                             Graphic.animation.playPointer();
+                            graphic.greenPoint = false;
 
-                            cp.yourTurn(hp);
-
-                            graphic.getPointer().getChildren().clear();
-                            graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(175, 200));
-                            graphic.getPointer().getChildren().get(0).setTranslateX(30);
-                            graphic.getPointer().getChildren().get(0).setTranslateY(-30);
-                            Graphic.animation.playPointer();
-
-                            if (hp.gameOver()) {
-                                cp.printShipLocation();
-                            }
                         }
                         else{
                             hp.addShot();
@@ -178,7 +206,7 @@ public class Game {
 
                             if (found) {
 
-                                if (!hp1.yourTurn(hp2, coord)) {
+                                if (!hp1.yourTurn(hp2, coord, this)) {
                                     hp1.addShot();
 
                                     graphic.getPointer().getChildren().clear();
@@ -200,7 +228,7 @@ public class Game {
 
                                         if (found2) {
 
-                                            if (!hp2.yourTurn(hp1, coord2)) {
+                                            if (!hp2.yourTurn(hp1, coord2, this)) {
                                                 hp2.addShot();
                                                 graphic.getPointer().getChildren().clear();
                                                 graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(175, 1));

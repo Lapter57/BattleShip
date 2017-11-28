@@ -24,6 +24,7 @@ public class Graphic {
     private MainStPain mainStPain = new MainStPain();
     public static HashMap<String, Image> map_img = new HashMap<>();
     private StackPane pointer = new StackPane();
+    public boolean greenPoint = true;
     public static Animation animation = new Animation();
     public MainStPain getMainStPain() {
         return mainStPain;
