@@ -69,7 +69,7 @@ public class Animation {
         return imagePointers;
     }
 
-    public void sounWater(){
+    public void soundWater(){
         String soundExpl = "src/main/resources/sound/Water.mp3";
         Media expl = new Media(new File(soundExpl).toURI().toString());
         MediaPlayer mp = new MediaPlayer(expl);

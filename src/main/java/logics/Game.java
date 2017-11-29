@@ -24,6 +24,7 @@ public class Game {
     private Graphic graphic;
     public enum Level{EASY,NORMAL,HARD,HUMAN}
     private boolean turnOfComp = false;
+    public boolean gameOver = false;
 
     Game(Graphic graphic) {
         graphic.createStatsPane(playerStats);
@@ -89,24 +90,27 @@ public class Game {
                 cp.setEnemyField(hp.getField());
                 hp.setEnemyField(cp.getField());
                 battlePane.useFocusTilesOnField(cp);
+                gameOver = false;
 
                 Timeline fxTimer = new Timeline(new KeyFrame(Duration.millis(600), event2 -> {
-                    if (turnOfComp) {
-                        if (!hp.gameOver()) {
-                            cp.yourTurn(hp,this);
-                        }
-                        else {
-                            cp.printShipLocation();
-                        }
-                    } else {
-                        cp.getGraphicField().getBoard().setDisable(false);
-                        if(!graphic.greenPoint) {
-                            graphic.getPointer().getChildren().clear();
-                            graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(175, 1));
-                            graphic.getPointer().getChildren().get(0).setTranslateX(30);
-                            graphic.getPointer().getChildren().get(0).setTranslateY(-30);
-                            Graphic.animation.playPointer();
-                            graphic.greenPoint = true;
+                    if(!gameOver) {
+                        if (turnOfComp) {
+                            if (!hp.gameOver()) {
+                                cp.yourTurn(hp, this);
+                            } else {
+                                cp.printShipLocation();
+                                gameOver = true;
+                            }
+                        } else {
+                            cp.getGraphicField().getBoard().setDisable(false);
+                            if (!graphic.greenPoint) {
+                                graphic.getPointer().getChildren().clear();
+                                graphic.getPointer().getChildren().add(Graphic.animation.getImagePointers(175, 1));
+                                graphic.getPointer().getChildren().get(0).setTranslateX(30);
+                                graphic.getPointer().getChildren().get(0).setTranslateY(-30);
+                                Graphic.animation.playPointer();
+                                graphic.greenPoint = true;
+                            }
                         }
                     }
                 }));
@@ -139,6 +143,7 @@ public class Game {
                                 hp.printShipLocation();
                                 cp.getGraphicField().getBoard().setDisable(true);
                                 playerStats.updateStats(hp);
+                                gameOver = true;
                             }
                         }
                     }

@@ -158,6 +158,7 @@ public class ComputerPlayer extends Player {
 
             if (enemyField.getGrid()[coord.row][coord.col].getLinkShip() == null) {
                 enemyField.getGrid()[coord.row][coord.col].setState('*');
+                Graphic.animation.soundWater();
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(4).setVisible(false);
                 rival.graphicField.getWater()[coord.row][coord.col].getChildren().get(3).setVisible(true);
                 if (!coordForToShell.isEmpty())
