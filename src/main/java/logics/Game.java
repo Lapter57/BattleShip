@@ -25,6 +25,7 @@ public class Game {
     public enum Level{EASY,NORMAL,HARD,HUMAN}
     private boolean turnOfComp = false;
     public boolean gameOver = false;
+    private Timeline fxTimer;
 
     Game(Graphic graphic) {
         graphic.createStatsPane(playerStats);
@@ -91,8 +92,9 @@ public class Game {
                 hp.setEnemyField(cp.getField());
                 battlePane.useFocusTilesOnField(cp);
                 gameOver = false;
-
-                Timeline fxTimer = new Timeline(new KeyFrame(Duration.millis(600), event2 -> {
+                if(fxTimer != null)
+                    fxTimer.stop();
+                fxTimer = new Timeline(new KeyFrame(Duration.millis(600), event2 -> {
                     if(!gameOver) {
                         if (turnOfComp) {
                             if (!hp.gameOver()) {

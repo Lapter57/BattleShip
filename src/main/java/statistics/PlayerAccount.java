@@ -1,6 +1,8 @@
 package statistics;
 
 
+import logics.players.Player;
+
 import java.util.Objects;
 
 public class PlayerAccount implements Comparable<PlayerAccount> {
@@ -48,6 +50,20 @@ public class PlayerAccount implements Comparable<PlayerAccount> {
 
     public void setDate(String date){
         this.date = date;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(score, level);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)return true;
+        if (!(obj instanceof PlayerAccount)) return false;
+        PlayerAccount pa = (PlayerAccount) obj;
+        return (Objects.equals(nickName, pa.nickName) && Objects.equals(score, pa.score) &&
+                Objects.equals(level, pa.level) && Objects.equals(date, pa.date));
     }
 
     @Override

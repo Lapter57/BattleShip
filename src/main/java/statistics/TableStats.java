@@ -10,9 +10,7 @@ import logics.players.Player;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.TreeSet;
+import java.util.*;
 
 class TableStats{
     private TableView<PlayerAccount> table = new TableView<>();
@@ -60,11 +58,14 @@ class TableStats{
         }
         try {
             ResultSet resultSet = statement.executeQuery("select * from stats order by score asc");
-            TreeSet<PlayerAccount> sortPlayer = new TreeSet<>();
+            Set<PlayerAccount> hset = new HashSet<>();
+
             while(resultSet.next()){
                 PlayerAccount plAccount = new PlayerAccount(resultSet.getString("nickname"), resultSet.getDouble("score"), resultSet.getString("level"), resultSet.getDate("datetime").toString());
-                sortPlayer.add(plAccount);
+                hset.add(plAccount);
+                //sortPlayer.add(plAccount);
             }
+            Set<PlayerAccount> sortPlayer = new TreeSet<>(hset);
             list.addAll(sortPlayer);
             if(!table.getItems().contains(list)){
                 table.setItems(list);
