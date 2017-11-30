@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import logics.players.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,7 +62,6 @@ class TableStats{
             while(resultSet.next()){
                 PlayerAccount plAccount = new PlayerAccount(resultSet.getString("nickname"), resultSet.getDouble("score"), resultSet.getString("level"), resultSet.getDate("datetime").toString());
                 hset.add(plAccount);
-                //sortPlayer.add(plAccount);
             }
             Set<PlayerAccount> sortPlayer = new TreeSet<>(hset);
             list.addAll(sortPlayer);

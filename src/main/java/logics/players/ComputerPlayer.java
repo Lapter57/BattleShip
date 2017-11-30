@@ -2,11 +2,6 @@ package logics.players;
 
 
 import graphics.Graphic;
-import javafx.animation.AnimationTimer;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
-import javafx.scene.Group;
-import javafx.util.Duration;
 import logics.Field;
 import logics.Game;
 import logics.coord.Coord;
