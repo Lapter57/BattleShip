@@ -1,7 +1,9 @@
 package statistics;
 
 
-public class PlayerAccount {
+import java.util.Objects;
+
+public class PlayerAccount implements Comparable<PlayerAccount> {
 
     private String nickName;
     private Double score;
@@ -46,5 +48,17 @@ public class PlayerAccount {
 
     public void setDate(String date){
         this.date = date;
+    }
+
+    @Override
+    public int compareTo(PlayerAccount pa) {
+        int level1 = PlayerStats.getNumLevel(level);
+        int level2 = PlayerStats.getNumLevel(pa.getLevel());
+        if(score > pa.getScore() && level1 <=level2 || score >= pa.getScore() && level1 < level2 )
+            return 1;
+        else if(Objects.equals(score, pa.getScore()) && level1 == level2)
+            return 0;
+        else
+            return -1;
     }
 }

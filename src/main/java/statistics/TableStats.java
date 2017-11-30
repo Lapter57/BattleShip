@@ -5,10 +5,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import logics.players.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 class TableStats{
     private TableView<PlayerAccount> table = new TableView<>();
@@ -56,10 +60,12 @@ class TableStats{
         }
         try {
             ResultSet resultSet = statement.executeQuery("select * from stats order by score asc");
+            TreeSet<PlayerAccount> sortPlayer = new TreeSet<>();
             while(resultSet.next()){
                 PlayerAccount plAccount = new PlayerAccount(resultSet.getString("nickname"), resultSet.getDouble("score"), resultSet.getString("level"), resultSet.getDate("datetime").toString());
-                list.add(plAccount);
+                sortPlayer.add(plAccount);
             }
+            list.addAll(sortPlayer);
             if(!table.getItems().contains(list)){
                 table.setItems(list);
             }

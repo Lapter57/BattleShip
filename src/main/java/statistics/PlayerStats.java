@@ -74,21 +74,7 @@ public class PlayerStats {
                 resultSet = statement.executeQuery("select * from stats order by score asc");
                 boolean addPlayer = false;
                 while(resultSet.next() && !addPlayer){
-                    int level = 0;
-                    switch (resultSet.getString("level")){
-                        case "Easy":
-                            level = 0;
-                            break;
-                        case "Normal":
-                            level = 1;
-                            break;
-                        case "Hard":
-                            level = 2;
-                            break;
-                        case "Human":
-                            level = 3;
-                            break;
-                    }
+                    int level = getNumLevel(resultSet.getString("level"));
                     if(resultSet.getDouble("score") > hpScore && level <= hlevel || resultSet.getDouble("score") >= hpScore && level < hlevel){
                         String str = "update stats set nickname = ?, score = ?, level = ?, datetime = ? where id = ?";
                         PreparedStatement preparedStatement = connection.prepareStatement(str);
@@ -114,5 +100,17 @@ public class PlayerStats {
 
     public TableView<PlayerAccount> getTable(){
         return table.getTable();
+    }
+
+    static public int getNumLevel(String level){
+        switch (level){
+            case "Easy":
+                return 0;
+            case "Normal":
+                return 1;
+            case "Hard":
+                return 2;
+        }
+        return 3;
     }
 }
