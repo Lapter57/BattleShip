@@ -22,7 +22,7 @@ public class Game {
     private Graphic graphic;
     public enum Level{EASY,NORMAL,HARD,HUMAN}
     private boolean turnOfComp = false;
-    public boolean gameOver = false;
+    private boolean gameOver = false;
     private Timeline fxTimer;
 
     Game(Graphic graphic) {

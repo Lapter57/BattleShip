@@ -1,7 +1,6 @@
 package graphics;
 
 import graphics.loading.Loading;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;

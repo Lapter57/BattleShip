@@ -11,7 +11,7 @@ public class PlayerStats {
     private static final String URL = "jdbc:mysql://localhost:3306/player_stats?autoReconnect=true&useSSL=false";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
-    Connection connection;
+    private Connection connection;
     private Statement statement;
     private TableStats table = new TableStats();
 
@@ -102,7 +102,7 @@ public class PlayerStats {
         return table.getTable();
     }
 
-    static public int getNumLevel(String level){
+    static int getNumLevel(String level){
         switch (level){
             case "Easy":
                 return 0;

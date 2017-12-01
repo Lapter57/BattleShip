@@ -3,7 +3,6 @@ package graphics;
 import graphics.animation.Animation;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -154,9 +153,7 @@ public class Graphic {
                 text.setFill(Color.WHITE);
             });
 
-            setOnMouseReleased(event -> {
-                bg.setFill(gradient);
-            });
+            setOnMouseReleased(event -> bg.setFill(gradient));
 
 
         }

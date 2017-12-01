@@ -11,9 +11,9 @@ import javafx.scene.text.Text;
 import logics.players.Player;
 
 public class CurrentStats {
-    Player player;
-    StackPane stat_area = new StackPane();
-    Text cur_stat;
+    private Player player;
+    private StackPane stat_area = new StackPane();
+    private Text cur_stat;
     public CurrentStats(Player player){
         String str = "CARRIER: " + player.getShips().get(3) + "\n" +
                      "SUBMARINE: " + player.getShips().get(2) + "\n" +
