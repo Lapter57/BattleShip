@@ -30,10 +30,6 @@ public class Game {
         this.graphic = graphic;
     }
 
-    public boolean getTurnOfComp(){
-        return turnOfComp;
-    }
-
     public void setTurnOfComp(boolean turnOfComp) {
         this.turnOfComp = turnOfComp;
     }
@@ -100,6 +96,7 @@ public class Game {
                             } else {
                                 cp.printShipLocation();
                                 gameOver = true;
+                                turnOfComp = false;
                             }
                         } else {
                             cp.getGraphicField().getBoard().setDisable(false);
@@ -144,6 +141,7 @@ public class Game {
                                 cp.getGraphicField().getBoard().setDisable(true);
                                 playerStats.updateStats(hp);
                                 gameOver = true;
+                                turnOfComp = false;
                             }
                         }
                     }
