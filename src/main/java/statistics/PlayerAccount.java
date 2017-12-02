@@ -69,7 +69,7 @@ public class PlayerAccount implements Comparable<PlayerAccount> {
         int level2 = PlayerStats.getNumLevel(pa.level);
         if(score > pa.score && level1 <=level2 || score >= pa.score && level1 < level2 )
             return 1;
-        else if(Objects.equals(score, pa.score) && level1 == level2)
+        else if(Objects.equals(score, pa.score) && level1 == level2 && Objects.equals(date, pa.date) )
             return 0;
         else
             return -1;
