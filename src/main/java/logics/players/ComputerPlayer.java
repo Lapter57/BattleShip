@@ -148,8 +148,10 @@ public class ComputerPlayer extends Player {
                 coord = tilesAfterSecondHit.pop();
             else if (coordForToShell.isEmpty())
                 coord = getCoord();
-            else
+            else {
+                Collections.shuffle(coordForToShell);
                 coord = coordForToShell.get(0);
+            }
 
             if (enemyField.getGrid()[coord.row][coord.col].getLinkShip() == null) {
                 enemyField.getGrid()[coord.row][coord.col].setState('*');
