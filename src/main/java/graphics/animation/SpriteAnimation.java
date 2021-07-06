@@ -2,9 +2,8 @@ package graphics.animation;
 
 import javafx.animation.Transition;
 import javafx.geometry.Rectangle2D;
-import javafx.util.Duration;
-
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 public class SpriteAnimation extends Transition {
 

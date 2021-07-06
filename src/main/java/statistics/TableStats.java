@@ -9,7 +9,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 class TableStats{
     private TableView<PlayerAccount> table = new TableView<>();
