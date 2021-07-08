@@ -162,11 +162,11 @@ public class ComputerPlayer extends Player {
                     coordForToShell.remove(0);
                 hit = false;
                 if (tilesAfterSecondHit.isEmpty() && lastShotOnCarrier) {
-                    offset *= (-3);
-                    if (coord.row == firstFoundTileOfShip.row)
-                        firstFoundTileOfShip.col += offset;
-                    else
-                        firstFoundTileOfShip.row += offset;
+                    if (coord.row == firstFoundTileOfShip.row) {
+                        firstFoundTileOfShip.col += coord.col < firstFoundTileOfShip.col ? 3 : -3;
+                    } else {
+                        firstFoundTileOfShip.row += coord.row < firstFoundTileOfShip.row ? 3 : -3;
+                    }
                     tilesAfterSecondHit.addLast(firstFoundTileOfShip);
                     lastShotOnCarrier = false;
                 }
