@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS players (
+    id BIGINT AUTO_INCREMENT,
+    nickname VARCHAR(100) UNIQUE NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS games (
+    id BIGINT AUTO_INCREMENT,
+    level INTEGER NOT NULL,
+    date TIMESTAMP NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS stats (
+    id BIGINT AUTO_INCREMENT,
+    player_id BIGINT NOT NULL,
+    game_id BIGINT NOT NULL,
+    score DOUBLE NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT player_fk FOREIGN KEY (player_id) REFERENCES players(id),
+    CONSTRAINT game_fk FOREIGN KEY (game_id) REFERENCES games(id)
+);
