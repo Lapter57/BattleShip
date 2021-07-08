@@ -38,7 +38,7 @@ public class Graphic {
         statsPane.getChildren().add(playerStats.getTable());
         mainStPain.getChildren().add(statsPane);
 
-        Graphic.MenuItem back = new Graphic.MenuItem("BACK", 100, 70);
+        MenuItem back = new MenuItem("BACK", 100, 70);
         back.setTranslateX(10);
         back.setTranslateY(640);
         statsPane.getChildren().add(back);

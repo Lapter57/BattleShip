@@ -1,6 +1,6 @@
 package logics.players;
-import graphics.Graphic;
 
+import graphics.Graphic;
 import logics.Game;
 import logics.coord.Coord;
 
