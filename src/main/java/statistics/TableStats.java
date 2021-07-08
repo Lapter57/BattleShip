@@ -62,7 +62,7 @@ class TableStats{
             Set<PlayerAccount> hset = new HashSet<>();
 
             while(resultSet.next()){
-                PlayerAccount plAccount = new PlayerAccount(resultSet.getString("nickname"), resultSet.getDouble("score"), resultSet.getString("level"), resultSet.getDate("datetime").toString());
+                PlayerAccount plAccount = new PlayerAccount(resultSet.getString("nickname"), resultSet.getDouble("score"), resultSet.getString("level"), resultSet.getDate("game_date").toString());
                 hset.add(plAccount);
             }
             Set<PlayerAccount> sortPlayer = new TreeSet<>(hset);

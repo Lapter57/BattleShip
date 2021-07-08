@@ -5,19 +5,21 @@ import logics.Game;
 import logics.players.HumanPlayer;
 
 import java.sql.*;
+import java.util.Objects;
 
 public class PlayerStats {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/player_stats?autoReconnect=true&useSSL=false";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+    private static final String INIT_SCRIPT_PATH = Objects.requireNonNull(PlayerStats.class.getClassLoader().getResource("sql/init.sql")).toString();
+    private static final String URL = String.format("jdbc:h2:~/battleship;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE;INIT=RUNSCRIPT FROM '%s'", INIT_SCRIPT_PATH);
+    private static final String USERNAME = "sa";
+    private static final String PASSWORD = "";
     private Connection connection;
     private Statement statement;
     private TableStats table = new TableStats();
 
     public PlayerStats(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             statement = connection.createStatement();
             table.fillList(statement);
@@ -60,7 +62,7 @@ public class PlayerStats {
 
             if(cntRow < 11){
 
-                String str = "insert into stats(nickname, score, level, datetime) values(?,?,?,?)";
+                String str = "insert into stats(nickname, score, level, game_date) values(?,?,?,?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(str);
                 preparedStatement.setString(1, hpName);
                 preparedStatement.setDouble(2, hpScore);
@@ -76,7 +78,7 @@ public class PlayerStats {
                 while(resultSet.next() && !addPlayer){
                     int level = getNumLevel(resultSet.getString("level"));
                     if(resultSet.getDouble("score") > hpScore && level <= hlevel || resultSet.getDouble("score") >= hpScore && level < hlevel){
-                        String str = "update stats set nickname = ?, score = ?, level = ?, datetime = ? where id = ?";
+                        String str = "update stats set nickname = ?, score = ?, level = ?, game_date = ? where id = ?";
                         PreparedStatement preparedStatement = connection.prepareStatement(str);
                         preparedStatement.setInt(5, resultSet.getInt("id"));
                         preparedStatement.setString(1, hpName);

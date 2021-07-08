@@ -26,7 +26,7 @@ configure<JavaPluginConvention> {
 
 dependencies {
     implementation("com.google.guava:guava:30.1.1-jre")
-    implementation("mysql:mysql-connector-java:5.1.44")
+    implementation("com.h2database:h2:1.4.200")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
@@ -47,17 +47,17 @@ tasks {
                 )
         )
     }
-}
 
-tasks.jar {
-    manifest {
-        attributes(
-                "Main-Class" to "logics.Main",
-        )
+    jar {
+        manifest {
+            attributes(
+                    "Main-Class" to "logics.Main",
+            )
+        }
+
+        from({
+            exclude("**/module-info.class")
+            configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        })
     }
-
-    from({
-        exclude("**/module-info.class")
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
 }
