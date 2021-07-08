@@ -2,6 +2,8 @@ plugins {
     java
     application
     id("org.openjfx.javafxplugin") version "0.0.10"
+    id("org.springframework.boot") version "2.5.2"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 
 group = "BattleShip"
@@ -9,10 +11,6 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-}
-
-application {
-    mainClass.set("logics.Main")
 }
 
 javafx {
@@ -27,9 +25,13 @@ configure<JavaPluginConvention> {
 dependencies {
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("com.h2database:h2:1.4.200")
+    implementation("org.flywaydb:flyway-core:7.11.0")
+    implementation("net.rgielen:javafx-weaver-spring-boot-starter:1.3.0")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
 
     val lombok = "org.projectlombok:lombok:1.18.20"
     compileOnly(lombok)
@@ -48,16 +50,16 @@ tasks {
         )
     }
 
-    jar {
-        manifest {
-            attributes(
-                    "Main-Class" to "logics.Main",
-            )
-        }
-
-        from({
-            exclude("**/module-info.class")
-            configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-        })
-    }
+//    jar {
+//        manifest {
+//            attributes(
+//                    "Main-Class" to "com.lapter57.logics.Main",
+//            )
+//        }
+//
+//        from({
+//            exclude("**/module-info.class")
+//            configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+//        })
+//    }
 }
